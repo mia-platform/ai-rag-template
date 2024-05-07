@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "SurvivorStatus",
+    "description": "A schema representing the status of a survivor in a zombie apocalypse.",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the survivor."
+      },
+      "location": {
+        "type": "string",
+        "description": "The survivor's current safe location."
+      },
+      "health": {
+        "type": "integer",
+        "description": "The health status of the survivor, from 0 (dead) to 100 (fully healthy).",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "equipment": {
+        "type": "array",
+        "description": "A list of equipment items the survivor has.",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["name", "location", "health", "equipment"]
+  }
+  

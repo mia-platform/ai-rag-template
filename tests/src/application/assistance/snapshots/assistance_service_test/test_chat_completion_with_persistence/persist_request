@@ -1,0 +1,42 @@
+{
+    "body": {
+        "message": "query",
+        "answer": "Answer from LLM",
+        "references": [
+            {
+                "page_content": "doc1",
+                "metadata": {
+                    "url": "www.mia-platform.eu",
+                    "score": 0.5
+                },
+                "type": "Document"
+            },
+            {
+                "page_content": "doc2",
+                "metadata": {
+                    "url": "www.mia-platform.eu",
+                    "score": 0.5
+                },
+                "type": "Document"
+            },
+            {
+                "page_content": "doc3",
+                "metadata": {
+                    "url": "www.mia-platform.eu",
+                    "score": 0.5
+                },
+                "type": "Document"
+            }
+        ],
+        "prompt": "System: \nYou are an AI assistant expert in Mia-Platform product.\n\n---\n\nBased on the information provided in this documentation:\n\ndoc1\n\ndoc2\n\ndoc3\n\n---\n \nReferring to the previous conversation messages:\n\nHuman: Chat message 1\nAI: Chat message 2\nHuman: Chat message 3\nAI: Chat message 4\n\n---\n\nYou MUST reply to Human question using the same language of the question.\n\nHuman: query"
+    },
+    "headers": {
+        "User-Agent": "python-requests/2.31.0",
+        "Accept-Encoding": "gzip, deflate",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Content-Length": "795",
+        "Content-Type": "application/json"
+    },
+    "uri": "http://localhost:8000/crud-endpoint/"
+}
