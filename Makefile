@@ -67,13 +67,13 @@ lint-fix:
 	autopep8 --in-place --aggressive --aggressive */**/*.py
 
 test:
-	python -m pytest -v tests --ignore="tests/integration"
+	python -m pytest -v tests
 
 snapshot:
-	python -m pytest -v --snapshot-update --ignore="tests/integration" tests
+	python -m pytest -v --snapshot-update
 
 coverage:
-	coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest --ignore="tests/integration" tests
+	coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest tests
 	coverage html --data-file ${COVERAGE_DATA_FILE} -d ${COVERAGE_HTML_DIR}
 	coverage xml --data-file ${COVERAGE_DATA_FILE} -o ${COVERAGE_XML_FILE}
 	genbadge coverage -i ${COVERAGE_XML_FILE} -o ${COVERAGE_BADGE_FILE}
