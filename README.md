@@ -1,20 +1,19 @@
-# ai-rag-template
+# mia_template_service_name_placeholder
 
 [![Python
-version](https://img.shields.io/badge/python-v3.12.3-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/python-v3.10-blue)](.coverage/html/index.html)
 [![FastAPI
-version](https://img.shields.io/badge/fastapi-v0.112.1-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/fastapi-v0.100.1-blue)](.coverage/html/index.html)
+[![Coverage](.badges/coverage-badge.svg)](.coverage/html/index.html)
 
 ---
 
-`ai-rag-template` is a template meant to be a based for the implementation of a RAG (retrieval augmented generation) system.  
+mia_template_service_name_placeholder is a template meant to be a based for the implementation of a RAG(retrieval augmented generation) system.  
 This repository contains the backend code, which consists of a web server that provides REST APIs to primarily support one type of operation:
 
 - **Chat**: Provides a conversation feature, allowing users to ask questions and get responses from the chatbot.
 
 The backend was developed using the [LangChain](https://python.langchain.com/docs/get_started/introduction/) framework, which enables creating sequences of complex interactions using Large Language Models. The web server was implemented using the [FastAPI](https://fastapi.tiangolo.com/) framework.
-
-More information on how the service works can be found in the [Overview and Usage](./docs/10_Overview_And_Usage.md) page.
 
 ## Main Features
 
@@ -64,93 +63,13 @@ curl 'http://localhost:3000/chat/completions' \
 
 </details>
 
-### Generate Embedding Endpoint (`/embeddings/generate`)
-
-The `/embeddings/generate` endpoint is a HTTP POST method that takes as input:
-
-- `url` (string, *required*), a web URL used as a starting point
-- `filterPath` (string, not required), a more specific web URL that the one specified above
-
-- crawl the webpage
-- check for links on the same domain (and, if included, that begins with the `filterPath`) of the webpage and store them in a list
-- scrape the page for text
-- generate the embeddings using the [configured embedding model](#configuration)
-- start again from every link still in the list
-
-> **NOTE**:
-> This method can be run only one at a time, as it uses a lock to prevent multiple requests from starting the process at the same time.
->
-> No information are returned when the process ends, either as completed or stopped because of an error.
-
-***Eg***:
-
-<details>
-<summary>Request</summary>
-
-```curl
-curl 'http://localhost:3000/embedding/generate' \
-  -H 'content-type: application/json' \
-  --data-raw '{"url":"https://docs.mia-platform.eu/", "domain": "https://docs.mia-platform.eu/docs/runtime_suite_templates" }'
-```
-
-</details>
-
-<details>
-<summary>Response in case the runner is idle</summary>
-
-```json
-200 OK
-{
-    "statusOk": "true"
-}
-```
-</details>
-
-<details>
-<summary>Response in case the runner is runnning</summary>
-
-```json
-409 Conflict
-{
-    "detail": "A process to generate embeddings is already in progress." 
-}
-```
-</details>
-
-### Generation Embedding Status Endpoint (`/embeddings/generate`)
-
-This request returns to the user information regarding the [embeddings generation runner](#generate-embedding-endpoint-embeddingsgenerate). Could be either `idle` (no process currently running) or `running` (a process of generating embeddings is actually happenning).
-
-***Eg***:
-
-<details>
-<summary>Request</summary>
-
-```curl
-curl 'http://localhost:3000/embedding/status' \
-  -H 'content-type: application/json' \
-```
-
-</details>
-
-<details>
-<summary>Response</summary>
-
-```json
-200 OK
-{
-    "status": "idle"
-}
-```
-</details>
-
 ### Metrics Endpoint (`/-/metrics`)
 
 The `/-/metrics` endpoint exposes the metrics collected by Prometheus.
 
 ## High Level Architecture
 
-The following is the high-level architecture of ai-rag-template.
+The following is the high-level architecture of mia_template_service_name_placeholder.
 
 ```mermaid
 flowchart LR
@@ -169,31 +88,6 @@ flowchart LR
   llm --7. bot answer--> be
   be --8. bot answer--> fe
 ```
-
-## Vector Index
-
-The application will check if the collection includes at Vector Search Index at startup. If it does not find it, it will create a new one. If there's already one, it will try to update if notices that there any difference between the existing one and the one based on the values included in the [configuration](#configuration) file.
-
-The Vector Search Index will have the following structure:
-
-```json
-{
-  "fields": [
-    {
-      "numDimensions": <numDimensions>,
-      "path": "<embeddingKey>",
-      "similarity": "<relevanceScoreFn>",
-      "type": "vector"
-    }
-  ]
-}
-```
-
-The values `numDimensions`, `embeddingKey` and `relevanceScoreFn` comes from the [configuration file](#configuration). While `embeddingKey` and `relevanceScoreFn` comes exactly from the values included in the file, the `numDimensions` depends on the Embedding Model used (supported: `text-embedding-3-small` and `text-embedding-3-large`).
-
-> **NOTE**
->
-> In the event that an error occurs during the creation or update of the Vector Index, the exception will be logged, but the application will still start. However, the functioning of the service is not guaranteed.
 
 ## Configuration
 
@@ -253,9 +147,9 @@ Description of configuration parameters:
 | Embeddings Name | Name of the encoder to use. [Must be supported by LangChain.](https://python.langchain.com/docs/integrations/text_embedding/) |
 | Vector Store DB Name | Name of the MongoDB database to use as a knowledge base. |
 | Vector Store Collection Name | Name of the MongoDB collection to use for storing documents and document embeddings. |
-| Vector Store Index Name | Name of the vector index to use for retrieving documents related to the user's query. The application will check at startup if a vector index with this name exists, it needs to be updated or needs to be created. |
-| Vector Store Relevance Score Function | Name of the similarity function used for extracting similar documents using the created vector index. In case the existing vector index uses a different similarity function, the index will be updated using this as a similarity function. |
-| Vector Store Embeddings Key | Name of the field used to save the semantic encoding of documents. In case the existing vector index uses a different key to store the embedding in the collection, the index will be updated using this as key. Please mind that any change of this value might require to recreate the embeddings. |
+| Vector Store Index Name | Name of the vector index to use for retrieving documents related to the user's query. **Note:** [Currently, it's necessary to manually create this index on MongoDB Atlas.](https://www.mongodb.com/docs/atlas/atlas-vector-search/create-index/) |
+| Vector Store Relevance Score Function | Name of the similarity function used for extracting similar documents using the created vector index. **Note:** Must be the same used to create the vector index. |
+| Vector Store Embeddings Key | Name of the field used to save the semantic encoding of documents. |
 | Vector Store Text Key | Name of the field used to save the raw document (or chunk of document). |
 | Vector Store Max. Documents To Retrieve | Maximum number of documents to retrieve from the Vector Store. |
 | Vector Store Min. Score Distance | Minimum distance beyond which retrieved documents from the Vector Store are discarded. |
@@ -266,7 +160,7 @@ Description of configuration parameters:
 | Documentation Repository Request Timeout In Seconds | Time limit to download a single documentation file. |
 | Documentation Repository Supported Extensions | Name of supported file extensions (currently only Markdown files). |
 | Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. |
-| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. |
+| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model.
 
 ## Local Development
 
@@ -280,14 +174,14 @@ Description of configuration parameters:
 cp default.env local.env
 ```
 
-- Modify the values of the environment variables in the newly created file (for more info, refer to the [Overview and Usage](./docs/10_Overview_And_Usage.md#environment-variables) page)
+- Modify the values of the environment variables in the newly created file
 - Create a configuration file located in the path defined as the `CONFIGURATION_PATH` value in the environment variables file. As example, you can copy the `default.configuration.json` file into a new file called `local.configuration.json` with the following command:
 
 ```sh
 cp default.configuration.json local.configuration.json
 ```
 
-- Modify the values of the configuration in the newly created file, accordingly to the definitions included in the [Overview and Usage](./docs/10_Overview_And_Usage.md#configuration) page.
+- Modify the values of the configuration in the newly created file, accordingly to the definitions included in the [Configuration paragraph](#configuration)
 
 ### Startup
 
@@ -322,7 +216,7 @@ You can reivew the API using the Swagger UI exposed at `http://localhost:3000/do
 
 ### Contributing
 
-To contribute to the project, please always create a branch for your updates and submit a Merge Request requesting approvals for one of the maintainers of the repository.
+To contribute to the project, please always create a branch for your updates and submit a [Merge Request](https://git.tools.mia-platform.eu/platform/console/ai/mia_template_service_name_placeholder/-/merge_requests/new) requesting approvals for one of the maintainers of the repository.
 
 In order to push your commit, pre-commit operations are automatically executed to run unit tests and lint your code.
 
@@ -385,15 +279,15 @@ If you prefer Docker...
 - Build your image
 
 ```sh
-docker build . -t ai-rag-template
+docker build . -t mia_template_service_name_placeholder
 ```
 
 - Run the web server
 
 ```sh
-docker run --env-file ./local.env -p 3000:3000 -d ai-rag-template
+docker run --env-file ./local.env -p 3000:3000 -d mia_template_service_name_placeholder
 ```
 
-### Try the ai-rag-template
+### Try the mia_template_service_name_placeholder
 
-You can also use the ai-rag-template with a CLI. Please follow the instruction in the [related README file](./scripts/chatbotcli/README.md).
+You can also use the mia_template_service_name_placeholder with a CLI. Please follow the instruction in the [related README file](./scripts/chatbotcli/README.md).

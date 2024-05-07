@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"taskName": null, "level": 40, "msg": "Test log message", "time": 1628000000000, "pid": 1234, "hostname": "mocked_hostname"}
+=======
+{"level": 40, "msg": "Test log message", "time": 1628000000000, "pid": 1234, "hostname": "mocked_hostname"}
+>>>>>>> e8b806b (feat: first commit)

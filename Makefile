@@ -67,13 +67,13 @@ lint-fix:
 	autopep8 --in-place --aggressive --aggressive */**/*.py
 
 test:
-	python -m pytest -v tests
+	python -m pytest -v tests --ignore="tests/integration"
 
 snapshot:
-	python -m pytest -v --snapshot-update
+	python -m pytest -v --snapshot-update --ignore="tests/integration" tests
 
 coverage:
-	coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest tests
+	coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest --ignore="tests/integration" tests
 	coverage html --data-file ${COVERAGE_DATA_FILE} -d ${COVERAGE_HTML_DIR}
 	coverage xml --data-file ${COVERAGE_DATA_FILE} -o ${COVERAGE_XML_FILE}
 	genbadge coverage -i ${COVERAGE_XML_FILE} -o ${COVERAGE_BADGE_FILE}
@@ -94,12 +94,10 @@ update-version:
 	@sed -i.bck "s|## Unreleased|## Unreleased\n\n## ${NEW_SERVICE_VERSION} - ${CURRENT_DATE}|g" "CHANGELOG.md"
 	# update dockerfile
 	@sed -i.bck "s|eu\.mia-platform\.version=\"[0-9]*.[0-9]*.[0-9]*.*\"|eu\.mia-platform\.version=\"${NEW_SERVICE_VERSION}\"|" "Dockerfile"
-	# update src/app.py
-	@sed -i.bck "s|version=\"[0-9]*.[0-9]*.[0-9]*.*\"|version=\"${NEW_SERVICE_VERSION}\"|" "src/app.py"
 	# house cleaning
-	@rm -fr "CHANGELOG.md.bck" "Dockerfile.bck" "src/app.py.bck"
+	@rm -fr "CHANGELOG.md.bck" "Dockerfile.bck"
 
-	@git add "CHANGELOG.md" "Dockerfile" "src/app.py"
+	@git add "CHANGELOG.md" "Dockerfile"
 	@git commit -m "upgrade: service v${NEW_SERVICE_VERSION}"
 	@git tag v${NEW_SERVICE_VERSION}
 
