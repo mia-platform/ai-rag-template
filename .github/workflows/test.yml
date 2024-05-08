@@ -2,7 +2,7 @@ name: Run tests
 
 on:
   push:
-    branches: [ main, "feat/github-actions" ]
+    branches: [ main ]
   pull_request:
 
 jobs:
