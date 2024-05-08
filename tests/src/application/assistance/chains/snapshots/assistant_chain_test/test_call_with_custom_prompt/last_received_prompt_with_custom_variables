@@ -1,0 +1,27 @@
+System: 
+You are an AI assistant.
+
+---
+
+Based on the information provided in this documentation:
+
+doc1
+
+doc2
+
+doc3
+
+---
+ 
+Referring to the previous conversation messages:
+
+Human: chat message 1
+AI: chat message 2
+Human: chat message 3
+AI: chat message 4
+
+---
+
+You MUST reply to Human question using the same language of the question.
+This is a custom prompt with a variable: a_custom_value
+Human: test query
