@@ -1,4 +1,4 @@
-# ai-rag-template
+# mia_template_service_name_placeholder
 
 [![Python
 version](https://img.shields.io/badge/python-v3.11.9-blue)](.coverage/html/index.html)
@@ -7,7 +7,7 @@ version](https://img.shields.io/badge/fastapi-v0.110.1-blue)](.coverage/html/ind
 
 ---
 
-`ai-rag-template` is a template meant to be a based for the implementation of a RAG(retrieval augmented generation) system.  
+mia_template_service_name_placeholder is a template meant to be a based for the implementation of a RAG(retrieval augmented generation) system.  
 This repository contains the backend code, which consists of a web server that provides REST APIs to primarily support one type of operation:
 
 - **Chat**: Provides a conversation feature, allowing users to ask questions and get responses from the chatbot.
