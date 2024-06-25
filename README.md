@@ -158,8 +158,8 @@ Description of configuration parameters:
 | Documentation Repository Base Dir. | Name of the folder containing the documentation source. |
 | Documentation Repository Request Timeout In Seconds | Time limit to download a single documentation file. |
 | Documentation Repository Supported Extensions | Name of supported file extensions (currently only Markdown files). |
-| Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. |
-| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model.
+| Chain RAG System Prompts File Path | Path to the file containing system prompts for the RAG model. |
+| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. |
 
 ## Local Development
 
