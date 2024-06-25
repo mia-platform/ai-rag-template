@@ -28,6 +28,10 @@ flowchart LR
   be --8. bot answer--> fe
 ```
 
+### Embeddings
+
+Please mind that the _ai-rag-template_ does not include embeddings or any logic to create them. It is intended that the Vector Store will include the embeddings (or these are generated separately). In any case, please ensure that the embedding model used the populate the Vector Store is the same embedding model used when running the service, otherwise the service will generate answers only based on its own knowledge, without being able to use the Vector Store, with the risk of hallucinations when chatting with the user.
+
 ### API
 
 When running the service, the application exposes a Swagger UI at the `/docs` endpoint.
