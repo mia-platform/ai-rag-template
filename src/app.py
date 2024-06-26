@@ -18,8 +18,9 @@ from src.infrastracture.metrics.manager import MetricsManager
 def create_app(context: AppContext) -> FastAPI:
     app = FastAPI(
         openapi_url="/documentation/json",
-        # docs_url=None,
-        redoc_url=None
+        redoc_url=None,
+        title="ai-rag-template",
+        version="0.1.1"
     )
 
     app.add_middleware(AppContextMiddleware, app_context=context)
