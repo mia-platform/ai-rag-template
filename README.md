@@ -1,4 +1,4 @@
-# mia_template_service_name_placeholder
+# ai-rag-template
 
 [![Python
 version](https://img.shields.io/badge/python-v3.11.9-blue)](.coverage/html/index.html)
@@ -7,12 +7,14 @@ version](https://img.shields.io/badge/fastapi-v0.110.1-blue)](.coverage/html/ind
 
 ---
 
-mia_template_service_name_placeholder is a template meant to be a based for the implementation of a RAG(retrieval augmented generation) system.  
+`ai-rag-template` is a template meant to be a based for the implementation of a RAG (retrieval augmented generation) system.  
 This repository contains the backend code, which consists of a web server that provides REST APIs to primarily support one type of operation:
 
 - **Chat**: Provides a conversation feature, allowing users to ask questions and get responses from the chatbot.
 
 The backend was developed using the [LangChain](https://python.langchain.com/docs/get_started/introduction/) framework, which enables creating sequences of complex interactions using Large Language Models. The web server was implemented using the [FastAPI](https://fastapi.tiangolo.com/) framework.
+
+More information on how the service works can be found in the [Overview and Usage](./docs/10_Overview_And_Usage.md) page.
 
 ## Main Features
 
@@ -173,14 +175,14 @@ Description of configuration parameters:
 cp default.env local.env
 ```
 
-- Modify the values of the environment variables in the newly created file
+- Modify the values of the environment variables in the newly created file (for more info, refer to the [Overview and Usage](./docs/10_Overview_And_Usage.md#environment-variables) page)
 - Create a configuration file located in the path defined as the `CONFIGURATION_PATH` value in the environment variables file. As example, you can copy the `default.configuration.json` file into a new file called `local.configuration.json` with the following command:
 
 ```sh
 cp default.configuration.json local.configuration.json
 ```
 
-- Modify the values of the configuration in the newly created file, accordingly to the definitions included in the [Configuration paragraph](#configuration)
+- Modify the values of the configuration in the newly created file, accordingly to the definitions included in the [Overview and Usage](./docs/10_Overview_And_Usage.md#configuration) page.
 
 ### Startup
 
