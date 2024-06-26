@@ -93,7 +93,7 @@ The following environment variables are required for the service to work:
 - **PORT**: the port used to expose the API (default: _3000_)
 - **LOG_LEVEL**: the level of the logger (default: _INFO_)
 - **CONFIGURATION_PATH**: the path that contains the [JSON configuration file](#configuration)
-- **MONGODB_CLUSTER_URI**: the MongoDB connectio string
+- **MONGODB_CLUSTER_URI**: the MongoDB connection string
 - **LLM_API_KEY**: the API Key of the LLM (_NOTE_: currently, we support only the OpenAI models, thus the API Key is the same as the OpenAI API Key)
 - **EMBEDDINGS_API_KEY**: the API Key of the embeddings model (_NOTE_: currently, we support only the OpenAI models, thus the API Key is the same as the OpenAI API Key)
 
