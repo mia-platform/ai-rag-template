@@ -1,14 +1,14 @@
-# ai-rag-template
+# AI RAG Template
 
-The `ai-rag-template` is a template to build and run your own RAG application to have a Chatbot that is capable to perform a conversation with an user.
+The _AI RAG Template_ is a template to build and run your own RAG application and build a Chatbot that is capable to perform a conversation with a user.
 
-The service is developed using the [LangChain](https://python.langchain.com/docs/get_started/introduction/) framework, which enables creating sequences of complex interactions using Large Language Models. The web server was implemented using the [FastAPI](https://fastapi.tiangolo.com/) framework.
+The service is developed using the [LangChain](https://python.langchain.com/docs/get_started/introduction/) framework, which enables creating sequences of complex interactions using Large Language Models. The web server is implemented using the [FastAPI](https://fastapi.tiangolo.com/) framework.
 
 In order to work, it is required to have a MongoDB instance to be used as Vector Store and that supports [MongoDB Vector Search indexes](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/vector-search-quick-start/), which means an Atlas instance with version 6 or above.
 
 ## Overview
 
-The following is the high-level architecture of _ai-rag-template_.
+The following is the high-level architecture of the template.
 
 ```mermaid
 flowchart LR
@@ -30,7 +30,7 @@ flowchart LR
 
 ### Embeddings
 
-Please mind that the _ai-rag-template_ does not include embeddings or any logic to create them. It is intended that the Vector Store will include the embeddings (or these are generated separately). In any case, please ensure that the embedding model used the populate the Vector Store is the same embedding model used when running the service, otherwise the service will generate answers only based on its own knowledge, without being able to use the Vector Store, with the risk of hallucinations when chatting with the user.
+Please mind that the template does not include embeddings or any logic to create them. It is intended that the Vector Store will include the embeddings (or these are generated separately). In any case, please ensure that the embedding model used the populate the Vector Store is the same embedding model used when running the service, otherwise the service will generate answers only based on its own knowledge, without being able to use the Vector Store, with the risk of hallucinations when chatting with the user.
 
 ### API
 
@@ -84,7 +84,7 @@ curl 'http://localhost:3000/chat/completions' \
 
 ### Metrics Endpoint (`/-/metrics`)
 
-The `/-/metrics` endpoint exposes the metrics collected by Prometheus.
+The `/-/metrics` endpoint exposes useful metrics to be collected by Prometheus.
 
 ## Environment Variables
 
