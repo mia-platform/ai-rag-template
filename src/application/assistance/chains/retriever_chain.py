@@ -5,7 +5,7 @@ from langchain.chains.base import Chain
 from langchain_core.callbacks import CallbackManagerForChainRun
 from langchain_core.embeddings import Embeddings
 from langchain_core.runnables import RunnableConfig
-from langchain_mongodb import MongoDBAtlasVectorSearch
+from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSearch
 from pydantic import BaseModel, create_model
 
 from src.context import AppContext

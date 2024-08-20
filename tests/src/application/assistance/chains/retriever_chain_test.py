@@ -68,7 +68,7 @@ def setup_test(
     return mock_similar_documents, inputs, chain
 
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_call(
     similarity_search_with_score,
@@ -89,7 +89,7 @@ def test_call(
         assert doc.metadata['score'] == 0.5
         
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_call_with_max_distance(
     similarity_search_with_score,
@@ -108,7 +108,7 @@ def test_call_with_max_distance(
     assert post_filter_call_arg[0]["$match"]["score"]["$lte"] == 0.5
 
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_call_with_min_distance(
     similarity_search_with_score,
