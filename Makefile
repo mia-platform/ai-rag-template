@@ -94,10 +94,12 @@ update-version:
 	@sed -i.bck "s|## Unreleased|## Unreleased\n\n## ${NEW_SERVICE_VERSION} - ${CURRENT_DATE}|g" "CHANGELOG.md"
 	# update dockerfile
 	@sed -i.bck "s|eu\.mia-platform\.version=\"[0-9]*.[0-9]*.[0-9]*.*\"|eu\.mia-platform\.version=\"${NEW_SERVICE_VERSION}\"|" "Dockerfile"
+	# update src/app.py
+	@sed -i.bck "s|version=\"[0-9]*.[0-9]*.[0-9]*.*\"|version=\"${NEW_SERVICE_VERSION}\"|" "src/app.py"
 	# house cleaning
-	@rm -fr "CHANGELOG.md.bck" "Dockerfile.bck"
+	@rm -fr "CHANGELOG.md.bck" "Dockerfile.bck" "src/app.py.bck"
 
-	@git add "CHANGELOG.md" "Dockerfile"
+	@git add "CHANGELOG.md" "Dockerfile" "src/app.py"
 	@git commit -m "upgrade: service v${NEW_SERVICE_VERSION}"
 	@git tag v${NEW_SERVICE_VERSION}
 
