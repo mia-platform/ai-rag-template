@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- dependencies (FastAPI, Langchain, OpenAI)
+- updated dependencies (FastAPI, Langchain, OpenAI)
 - the application is now using Python version 3.12.3
 - improved documentation
 
