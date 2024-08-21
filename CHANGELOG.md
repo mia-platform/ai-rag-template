@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.2.0 - 2024-08-21
+
+### Updated
+
+- dependencies (FastAPI, Langchain, OpenAI)
+- the application is now using Python version 3.12.3
+- improved documentation
+
 ## 0.1.1 - 2024-05-09
 
 ### Added

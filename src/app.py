@@ -20,7 +20,7 @@ def create_app(context: AppContext) -> FastAPI:
         openapi_url="/documentation/json",
         redoc_url=None,
         title="ai-rag-template",
-        version="0.1.1"
+        version="0.2.0"
     )
 
     app.add_middleware(AppContextMiddleware, app_context=context)
