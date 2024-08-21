@@ -1,9 +1,9 @@
 # ai-rag-template
 
 [![Python
-version](https://img.shields.io/badge/python-v3.11.9-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/python-v3.12.3-blue)](.coverage/html/index.html)
 [![FastAPI
-version](https://img.shields.io/badge/fastapi-v0.110.1-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/fastapi-v0.112.1-blue)](.coverage/html/index.html)
 
 ---
 
