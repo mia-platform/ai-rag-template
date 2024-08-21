@@ -143,4 +143,3 @@ Referring to the previous conversation messages:
 """
 
         return ""
-    
