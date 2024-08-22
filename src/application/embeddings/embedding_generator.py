@@ -19,17 +19,7 @@ from src.application.embeddings.hyperlink_parser import HyperlinkParser
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
 
-class SingletonMeta(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            instance = super().__call__(*args, **kwargs)
-            cls._instances[cls] = instance
-        return cls._instances[cls]
-
-
-class EmbeddingGenerator(metaclass=SingletonMeta):
+class EmbeddingGenerator():
     """
     Class to generate embeddings for text data.
     """
@@ -117,12 +107,13 @@ class EmbeddingGenerator(metaclass=SingletonMeta):
 
         return list(set(clean_links))
     
-    def crawl(self, url: str):
+    def generate(self, url: str):
         """
         Crawls the given URL and saves the text content of each page to a text file.
 
         Args:
-            url (str): The URL to crawl.
+            url (str): The URL to crawl. From this URL, the crawler will extract the text content 
+                of said page and any other page connected via hyperlinks (anchor tags).
 
         Returns:
             None
@@ -137,7 +128,7 @@ class EmbeddingGenerator(metaclass=SingletonMeta):
         while queue:
             # Get the next URL from the queue
             url = queue.pop()
-            self.logger.debug(f"Crawling page: {url}")  # for debugging and to see the progress
+            self.logger.debug(f"Scraping page: {url}")  # for debugging and to see the progress
 
             # Get the text from the URL using BeautifulSoup
             soup = BeautifulSoup(requests.get(url, timeout=5).text, "html.parser")
@@ -148,7 +139,7 @@ class EmbeddingGenerator(metaclass=SingletonMeta):
             # If the crawler gets to a page that requires JavaScript, it will stop the crawl
             if "You need to enable JavaScript to run this app." in text:
                 self.logger.debug(
-                    "Unable to parse page " + url + " due to JavaScript being required"
+                    f"Unable to parse page {url} due to JavaScript being required"
                 )
                 continue
 
@@ -168,4 +159,4 @@ class EmbeddingGenerator(metaclass=SingletonMeta):
                     queue.append(link)
                     seen.add(link)
 
-        self.logger.debug("Crawling completed.")
+        self.logger.debug("Scraping completed.")
