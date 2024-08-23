@@ -64,6 +64,83 @@ curl 'http://localhost:3000/chat/completions' \
 
 </details>
 
+### Generate Embedding Endpoint (`/embeddings/generate`)
+
+The `/embeddings/generate` endpoint takes as input a web URL and execute the following operation:
+
+- crawl the webpage
+- check for links on the same domain of the webpage and store them in a list
+- scrape the page for text
+- generate the embeddings using the [configured embedding model](#configuration)
+- start again from every link still in the list
+
+> **NOTE**:
+> This method can be run only one at a time, as it uses a lock to prevent multiple requests from starting the process at the same time.
+>
+> No information are returned when the process ends, either as completed or stopped because of an error.
+
+***Eg***:
+
+<details>
+<summary>Request</summary>
+
+```curl
+curl 'http://localhost:3000/embedding/generation' \
+  -H 'content-type: application/json' \
+  --data-raw '{"url":"https://docs.mia-platform.eu/"}'
+```
+
+</details>
+
+<details>
+<summary>Response in case the runner is idle</summary>
+
+```json
+200 OK
+{
+    "statusOk": "true"
+}
+```
+</details>
+
+<details>
+<summary>Response in case the runner is runnning</summary>
+
+```json
+409 Conflict
+{
+    "detail": "A process to generate embeddings is already in progress." 
+}
+```
+</details>
+
+### Generation Embedding Status Endpoint (`/embeddings/generate`)
+
+This request returns to the user information regarding the [embeddings generation runner](#generate-embedding-endpoint-embeddingsgenerate). Could be either `idle` (no process currently running) or `running` (a process of generating embeddings is actually happenning).
+
+***Eg***:
+
+<details>
+<summary>Request</summary>
+
+```curl
+curl 'http://localhost:3000/embedding/status' \
+  -H 'content-type: application/json' \
+```
+
+</details>
+
+<details>
+<summary>Response</summary>
+
+```json
+200 OK
+{
+    "status": "idle"
+}
+```
+</details>
+
 ### Metrics Endpoint (`/-/metrics`)
 
 The `/-/metrics` endpoint exposes the metrics collected by Prometheus.
