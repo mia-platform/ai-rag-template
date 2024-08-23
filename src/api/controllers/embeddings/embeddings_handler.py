@@ -71,12 +71,6 @@ def embeddings_status():
     Get the status of the embeddings generation process.
 
     Returns:
-        dict: A StatusOkResponseSchema responding _True_.
-        
-    Raises:
-        HTTPException: If a process to generate embeddings is already in progress (thus: the lock is on _True_).
+        dict: A StatusOkResponseSchema responding _True_ if there are no process in progress. Otherwise, it will return _False_.        
     """
-    if router.lock:
-        raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
-
-    return {"statusOk": True}
+    return {"statusOk": not router.lock}
