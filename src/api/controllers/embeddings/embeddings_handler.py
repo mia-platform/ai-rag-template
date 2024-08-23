@@ -2,7 +2,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
 
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
-from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema
+from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.context import AppContext
 
 router = APIRouter()
@@ -17,7 +17,14 @@ router.lock = False
 
 def generate_embeddings_from_url(url: str, app_context: AppContext):
     """
-    Generate embeddings for a given URL.
+    Generate embeddings for a given URL. 
+    
+    This method is intended to be called as a background task. Includes managmeent of the lock mechanism
+    of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
+
+    Args:
+        url (str): The URL to generate embeddings from.
+        app_context (AppContext): The application context.
     """
     logger = app_context.logger
 
@@ -62,7 +69,7 @@ def generate_embeddings(request: Request, data: GenerateEmbeddingsInputSchema, b
 
 @router.get(
     "/embeddings/status",
-    response_model=StatusOkResponseSchema,
+    response_model=GenerateStatusOutputSchema,
     status_code=status.HTTP_200_OK,
     tags=["Embeddings"]
 )
@@ -73,4 +80,4 @@ def embeddings_status():
     Returns:
         dict: A StatusOkResponseSchema responding _True_ if there are no process in progress. Otherwise, it will return _False_.        
     """
-    return {"statusOk": not router.lock}
+    return {"status": "running" if router.lock else "idle"}

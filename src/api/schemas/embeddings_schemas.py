@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Literal
 from pydantic import BaseModel
 
 
@@ -8,3 +8,6 @@ class GenerateEmbeddingsInputSchema(BaseModel):
 class GenerateEmbeddingsOutputSchema(BaseModel):
     state: str
     metadata: Dict[str, Any]
+
+class GenerateStatusOutputSchema(BaseModel):
+    status: Literal["running", "idle"]
