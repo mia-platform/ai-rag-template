@@ -32,6 +32,7 @@ def generate_embeddings_from_url(url: str, app_context: AppContext):
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
         embedding_generator.generate(url)
+    # pylint: disable=W0718
     except Exception as e:
         logger.error(f"Error in background task: {str(e)}")
     finally:

@@ -44,4 +44,6 @@ class DocumentChunker():
 
         document = Document(page_content=content, metadata={"sha": sha, "url": url})
         chunks = [Document(page_content=chunk) for chunk in self._chunker.split_text(document.page_content)]
+        # NOTE: "copy" method actually exists.
+        # pylint: disable=E1101
         return [Document(page_content=chunk.page_content, metadata=document.metadata.copy()) for chunk in chunks]
