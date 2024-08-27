@@ -28,6 +28,7 @@ class VectorSearchIndexUpdater:
             client = MongoClient(mongo_cluster_uri)
             db = client.get_database()
             self.collection = db[collection_name]
+        # pylint: disable=broad-except
         except Exception:
             self.collection = client[db_name][collection_name]
 
@@ -93,8 +94,8 @@ class VectorSearchIndexUpdater:
                 self._create_vector_index(new_vector_index_definition)
             else:
                 self._update_vector_index(current_vector_index_definition, new_vector_index_definition)
+        # pylint: disable=broad-except
         except Exception as ex:
             self.logger.warn(f'Unable to update Vector Search index "{self.index_name}".')
             self.logger.warn(ex)
             self.logger.warn("Service will continue to run, but you might experience unwanted behaviors.")
-
