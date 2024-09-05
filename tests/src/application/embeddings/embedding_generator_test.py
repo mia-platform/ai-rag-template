@@ -10,7 +10,7 @@ def test_generate(app_context):
     with open(file_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
 
-    with patch('requests.api.get') as mock_requests_get, \
+    with patch('requests.get') as mock_requests_get, \
         patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text, \
         patch('langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents') as mock_add_documents:
 
