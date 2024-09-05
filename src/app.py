@@ -14,6 +14,7 @@ from src.configurations.variables import get_variables
 from src.context import AppContext, AppContextParams
 from src.infrastracture.logger import get_logger
 from src.infrastracture.metrics.manager import MetricsManager
+from src.lib.vector_search_index_updater import VectorSearchIndexUpdater
 
 
 def create_app(context: AppContext) -> FastAPI:
@@ -55,6 +56,9 @@ if __name__ == '__main__':
     )
 
     application = create_app(app_context)
+
+    vector_search_index_updater = VectorSearchIndexUpdater(app_context)
+    vector_search_index_updater.update_vector_search_index()
 
     uvicorn.run(
         application,

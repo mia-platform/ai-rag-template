@@ -131,7 +131,10 @@ class EmbeddingGenerator():
             self.logger.debug(f"Scraping page: {url}")  # for debugging and to see the progress
 
             # Get the text from the URL using BeautifulSoup
-            soup = BeautifulSoup(requests.get(url, timeout=5).text, "html.parser")
+            response = requests.get(url, timeout=5)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, "html.parser")
 
             # Get the text but remove the tags
             text = soup.get_text()

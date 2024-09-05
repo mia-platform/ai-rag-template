@@ -167,6 +167,31 @@ flowchart LR
   be --8. bot answer--> fe
 ```
 
+## Vector Index
+
+The application will check if the collection includes at Vector Search Index at startup. If it does not find it, it will create a new one. If there's already one, it will try to update if notices that there any difference between the existing one and the one based on the values included in the [configuration](#configuration) file.
+
+The Vector Search Index will have the following structure:
+
+```json
+{
+  "fields": [
+    {
+      "numDimensions": <numDimensions>,
+      "path": "<embeddingKey>",
+      "similarity": "<relevanceScoreFn>",
+      "type": "vector"
+    }
+  ]
+}
+```
+
+The values `numDimensions`, `embeddingKey` and `relevanceScoreFn` comes from the [configuration file](#configuration). While `embeddingKey` and `relevanceScoreFn` comes exactly from the values included in the file, the `numDimensions` depends on the Embedding Model used (supported: `text-embedding-3-small` and `text-embedding-3-large`).
+
+> **NOTE**
+>
+> In the event that an error occurs during the creation or update of the Vector Index, the exception will be logged, but the application will still start. However, the functioning of the service is not guaranteed.
+
 ## Configuration
 
 The service requires several configuration parameters for execution. Below is an example configuration:
@@ -225,9 +250,9 @@ Description of configuration parameters:
 | Embeddings Name | Name of the encoder to use. [Must be supported by LangChain.](https://python.langchain.com/docs/integrations/text_embedding/) |
 | Vector Store DB Name | Name of the MongoDB database to use as a knowledge base. |
 | Vector Store Collection Name | Name of the MongoDB collection to use for storing documents and document embeddings. |
-| Vector Store Index Name | Name of the vector index to use for retrieving documents related to the user's query. **Note:** [Currently, it's necessary to manually create this index on MongoDB Atlas.](https://www.mongodb.com/docs/atlas/atlas-vector-search/create-index/) |
-| Vector Store Relevance Score Function | Name of the similarity function used for extracting similar documents using the created vector index. **Note:** Must be the same used to create the vector index. |
-| Vector Store Embeddings Key | Name of the field used to save the semantic encoding of documents. |
+| Vector Store Index Name | Name of the vector index to use for retrieving documents related to the user's query. The application will check at startup if a vector index with this name exists, it needs to be updated or needs to be created. |
+| Vector Store Relevance Score Function | Name of the similarity function used for extracting similar documents using the created vector index. In case the existing vector index uses a different similarity function, the index will be updated using this as a similarity function. |
+| Vector Store Embeddings Key | Name of the field used to save the semantic encoding of documents. In case the existing vector index uses a different key to store the embedding in the collection, the index will be updated using this as key. Please mind that any change of this value might require to recreate the embeddings. |
 | Vector Store Text Key | Name of the field used to save the raw document (or chunk of document). |
 | Vector Store Max. Documents To Retrieve | Maximum number of documents to retrieve from the Vector Store. |
 | Vector Store Min. Score Distance | Minimum distance beyond which retrieved documents from the Vector Store are discarded. |
@@ -238,7 +263,7 @@ Description of configuration parameters:
 | Documentation Repository Request Timeout In Seconds | Time limit to download a single documentation file. |
 | Documentation Repository Supported Extensions | Name of supported file extensions (currently only Markdown files). |
 | Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. |
-| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model.
+| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. |
 
 ## Local Development
 
