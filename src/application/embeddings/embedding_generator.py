@@ -133,7 +133,11 @@ class EmbeddingGenerator():
             # Get the text from the URL using BeautifulSoup
             response = requests.get(url, timeout=5)
             response.raise_for_status()
-
+            # check the response headers to see if the content is HTML
+            if not response.headers.get("Content-Type", "").startswith("text/html"):
+                self.logger.debug(f"Skipping page {url} as it is not HTML content.")
+                continue
+            
             soup = BeautifulSoup(response.text, "html.parser")
 
             # Get the text but remove the tags
