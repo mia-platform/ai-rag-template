@@ -113,9 +113,7 @@ The values `numDimensions`, `embeddingKey` and `relevanceScoreFn` comes from the
 
 > **NOTE**
 >
-> In order to create a Vector Index, you need a MongoDB Atlas instance, otherwise the RAG retrieval mechanism will not work.
->
-> In case your Atlas instance is a cluster M5 or below, the automatic generation will fail: a warning will appear in the logs just after the startup and the service will run normally, but you will be required to create/update the Vector Index manually.
+> In the event that an error occurs during the creation or update of the Vector Index, the exception will be logged, but the application will still start. However, the functioning of the service is not guaranteed.
 
 ## Configuration
 
