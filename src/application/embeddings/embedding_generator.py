@@ -2,9 +2,7 @@
 This script crawls a website and saves the embeddings extracted from the text of each page to a text file.
 """
 import re
-import urllib.request
 from collections import deque
-from urllib.error import URLError
 from urllib.parse import urlparse
 
 from langchain_openai import OpenAIEmbeddings
@@ -56,13 +54,13 @@ class EmbeddingGenerator():
         return parser.hyperlinks
 
 
-    def _get_domain_hyperlinks(self, raw_text: str, local_domain: str, path: str):
+    def _get_domain_hyperlinks(self, raw_text: str, local_domain: str, path: str | None = None):
         """
         Function to get the hyperlinks from a URL that are within the same domain
         
         Args:
+            raw_text (str): The raw HTML text to extract hyperlinks from.
             local_domain (str): The domain to compare the hyperlinks against.
-            url (str): The URL to extract hyperlinks from.
         
         Returns:
             list: A list of hyperlinks that are within the same domain.
@@ -76,8 +74,8 @@ class EmbeddingGenerator():
                 # Parse the URL and check if the domain is the same
                 url_obj = urlparse(link)
                 # Link should be within the same domain and should start with one of the paths
-                if (url_obj.path.startswith(path or '')):
-                    continue
+                if url_obj.netloc == local_domain and url_obj.path.startswith(path or ''):
+                    clean_link = link
 
             # If the link is not a URL, check if it is a relative link
             else:
@@ -100,20 +98,22 @@ class EmbeddingGenerator():
 
         return list(set(clean_links))
     
-    def generate(self, url: str, domain: str):
+    def generate(self, url: str, filter_path: str | None = None):
         """
         Crawls the given URL and saves the text content of each page to a text file.
 
         Args:
             url (str): The URL to crawl. From this URL, the crawler will extract the text content 
                 of said page and any other page connected via hyperlinks (anchor tags).
+            domain (str | None, optional): The domain to compare the hyperlinks against. If None,
+                the hyperlinks will not be filtered by domain. Defaults to None.
 
         Returns:
             None
         """
 
         local_domain = urlparse(url).netloc
-        path = urlparse(domain).path if domain else None
+        path = urlparse(filter_path).path if filter_path else None
 
         queue = deque([url])
         seen = set([url])
