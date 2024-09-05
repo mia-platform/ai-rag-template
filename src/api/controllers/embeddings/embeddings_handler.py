@@ -47,10 +47,19 @@ def generate_embeddings_from_url(app_context: AppContext, url: str, filter_path:
 )
 def generate_embeddings(request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks):
     """
-    Generate embeddings for a given URL.
+    Generate embeddings for a given URL. It starts from a single web page and generates embeddings for the text data of that page and
+    for every page connected via hyperlinks (anchor tags).
 
     This method can be run only one at a time, as it uses a lock to prevent multiple requests from starting the process at the same time.
     If a process is already in progress, it will return a 409 status code (Conflict).
+
+    The embeddings are generated only from the text of each web page: images, rss and any other webpage with a ContextType different from text/html
+    are not included.
+
+    The POST requests require a body that includes:
+
+    - url: The URL to generate embeddings from.
+    - filterPath: The full domain to compare the hyperlinks against.
 
     Args:
         request (Request): The request object.
@@ -81,6 +90,6 @@ def embeddings_status():
     Get the status of the embeddings generation process.
 
     Returns:
-        dict: A StatusOkResponseSchema responding _True_ if there are no process in progress. Otherwise, it will return _False_.        
+        dict: A `status` object that can be either "running" (if a process is ongoing) or "idle" (if the service is ready).
     """
     return {"status": "running" if router.lock else "idle"}
