@@ -12,7 +12,7 @@ def test_generate_embeddings_success(test_client):
         
         assert response.status_code == 200
         assert response.json() == {"statusOk": True}
-        mock_generate.assert_called_once_with(url)
+        mock_generate.assert_called_once_with(url, None)
 
 def test_generate_embeddings_conflict(test_client):
     url = "http://example.com"

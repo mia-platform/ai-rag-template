@@ -66,10 +66,13 @@ curl 'http://localhost:3000/chat/completions' \
 
 ### Generate Embedding Endpoint (`/embeddings/generate`)
 
-The `/embeddings/generate` endpoint takes as input a web URL and execute the following operation:
+The `/embeddings/generate` endpoint is a HTTP POST method that takes as input:
+
+- `url` (string, *required*), a web URL used as a starting point
+- `filterPath` (string, not required), a more specific web URL that the one specified above
 
 - crawl the webpage
-- check for links on the same domain of the webpage and store them in a list
+- check for links on the same domain (and, if included, that begins with the `filterPath`) of the webpage and store them in a list
 - scrape the page for text
 - generate the embeddings using the [configured embedding model](#configuration)
 - start again from every link still in the list
@@ -85,9 +88,9 @@ The `/embeddings/generate` endpoint takes as input a web URL and execute the fol
 <summary>Request</summary>
 
 ```curl
-curl 'http://localhost:3000/embedding/generation' \
+curl 'http://localhost:3000/embedding/generate' \
   -H 'content-type: application/json' \
-  --data-raw '{"url":"https://docs.mia-platform.eu/"}'
+  --data-raw '{"url":"https://docs.mia-platform.eu/", "domain": "https://docs.mia-platform.eu/docs/runtime_suite_templates" }'
 ```
 
 </details>

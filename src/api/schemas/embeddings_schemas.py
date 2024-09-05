@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class GenerateEmbeddingsInputSchema(BaseModel):
     url: str
+    filterPath: str | None = None
 
 class GenerateEmbeddingsOutputSchema(BaseModel):
     state: str
