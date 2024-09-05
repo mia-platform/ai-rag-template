@@ -6,6 +6,7 @@ from src.api.controllers.core.checkup import checkup_handler
 from src.api.controllers.core.liveness import liveness_handler
 from src.api.controllers.core.readiness import readiness_handler
 from src.api.controllers.core.metrics import metrics_handler
+from src.api.controllers.embeddings import embeddings_handler
 from src.api.middlewares.app_context_middleware import AppContextMiddleware
 from src.api.middlewares.logger_middleware import LoggerMiddleware
 from src.configurations.configuration import get_configuration
@@ -33,6 +34,7 @@ def create_app(context: AppContext) -> FastAPI:
     app.include_router(metrics_handler.router)
 
     app.include_router(chat_completions_handler.router)
+    app.include_router(embeddings_handler.router)
 
     return app
 

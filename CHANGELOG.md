@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Automatic creation/update of the Vector Index
+- add endpoints `POST /embeddings/generate` and `GET /embeddings/status` for embedding generation
 
 ## 0.2.0 - 2024-08-21
 
