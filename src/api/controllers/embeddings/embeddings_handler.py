@@ -15,7 +15,7 @@ router = APIRouter()
 # you might want to use a more sophisticated mechanism to handle this.
 router.lock = False
 
-def generate_embeddings_from_url(url: str, app_context: AppContext):
+def generate_embeddings_from_url(app_context: AppContext, url: str, domain: str | None):
     """
     Generate embeddings for a given URL. 
     
@@ -23,15 +23,16 @@ def generate_embeddings_from_url(url: str, app_context: AppContext):
     of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
 
     Args:
-        url (str): The URL to generate embeddings from.
         app_context (AppContext): The application context.
+        url (str): The URL to generate embeddings from.
+        domain (str | None): The domain to compare the hyperlinks against.
     """
     logger = app_context.logger
 
     try:
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
-        embedding_generator.generate(url)
+        embedding_generator.generate(url, domain)
     # pylint: disable=W0718
     except Exception as e:
         logger.error(f"Error in background task: {str(e)}")
@@ -59,10 +60,11 @@ def generate_embeddings(request: Request, data: GenerateEmbeddingsInputSchema, b
 
     request_context: AppContext = request.state.app_context
     url = data.url
+    domain = data.domain
     request_context.logger.info(f"Generate embeddings request received for url: {url}")
 
     if not router.lock:
-        background_tasks.add_task(generate_embeddings_from_url, url, request_context)
+        background_tasks.add_task(generate_embeddings_from_url, request_context, url, domain)
         request_context.logger.info("Generation embeddings process started.")
         return {"statusOk": True}
     

@@ -45,31 +45,18 @@ class EmbeddingGenerator():
         )
 
 
-    def _get_hyperlinks(self, url):
+    def _get_hyperlinks(self, raw_text: str):
         """
-        Function to get the hyperlinks from a URL
+        Function to get the hyperlinks from a raw HTML text
         """
-
-        try:
-            # Open the URL and read the HTML
-            with urllib.request.urlopen(url) as response:
-                # If the response is not HTML, return an empty list
-                if not response.info().get("Content-Type").startswith("text/html"):
-                    return []
-
-                html = response.read().decode("utf-8")
-        except URLError as e:
-            self.logger.error(e)
-            return []
-
         # Create the HTML Parser and then Parse the HTML to get hyperlinks
         parser = HyperlinkParser()
-        parser.feed(html)
+        parser.feed(raw_text)
 
         return parser.hyperlinks
 
 
-    def _get_domain_hyperlinks(self, local_domain: str, url: str):
+    def _get_domain_hyperlinks(self, raw_text: str, local_domain: str, path: str):
         """
         Function to get the hyperlinks from a URL that are within the same domain
         
@@ -81,7 +68,7 @@ class EmbeddingGenerator():
             list: A list of hyperlinks that are within the same domain.
         """
         clean_links = []
-        for link in set(self._get_hyperlinks(url)):
+        for link in set(self._get_hyperlinks(raw_text)):
             clean_link = None
 
             # If the link is a URL, check if it is within the same domain
@@ -89,8 +76,8 @@ class EmbeddingGenerator():
                 # Parse the URL and check if the domain is the same
                 url_obj = urlparse(link)
                 # Link should be within the same domain and should start with one of the paths
-                if url_obj.netloc == local_domain:
-                    clean_link = link
+                if (url_obj.path.startswith(path or '')):
+                    continue
 
             # If the link is not a URL, check if it is a relative link
             else:
@@ -103,11 +90,17 @@ class EmbeddingGenerator():
             if clean_link is not None:
                 if clean_link.endswith("/"):
                     clean_link = clean_link[:-1]
+                if path:
+                    # Check if the link starts with the path (if included)
+                    url_obj = urlparse(clean_link)
+                    if not url_obj.path.startswith(path or ''):
+                        continue
                 clean_links.append(clean_link)
+        
 
         return list(set(clean_links))
     
-    def generate(self, url: str):
+    def generate(self, url: str, domain: str):
         """
         Crawls the given URL and saves the text content of each page to a text file.
 
@@ -120,6 +113,7 @@ class EmbeddingGenerator():
         """
 
         local_domain = urlparse(url).netloc
+        path = urlparse(domain).path if domain else None
 
         queue = deque([url])
         seen = set([url])
@@ -137,10 +131,11 @@ class EmbeddingGenerator():
             if not response.headers.get("Content-Type", "").startswith("text/html"):
                 self.logger.debug(f"Skipping page {url} as it is not HTML content.")
                 continue
-            
-            soup = BeautifulSoup(response.text, "html.parser")
+
+            raw_text = response.text
 
             # Get the text but remove the tags
+            soup = BeautifulSoup(raw_text, "html.parser")
             text = soup.get_text()
 
             # If the crawler gets to a page that requires JavaScript, it will stop the crawl
@@ -155,7 +150,7 @@ class EmbeddingGenerator():
             self._embedding_vector_store.add_documents(chunks)
             self.logger.debug("Embeddings generation completed. Extracting links...")  # for debugging and to see the progress
 
-            hyperlinks = self._get_domain_hyperlinks(local_domain, url)
+            hyperlinks = self._get_domain_hyperlinks(raw_text, local_domain, path)
             if len(hyperlinks) == 0:
                 self.logger.debug("No links found, move on.")
 
