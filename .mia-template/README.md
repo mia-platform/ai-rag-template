@@ -139,7 +139,3 @@ docker build . -t ai-rag-template
 ```sh
 docker run --env-file ./local.env -p 3000:3000 -d ai-rag-template
 ```
-
-### Try the ai-rag-template
-
-You can also use the ai-rag-template with a CLI. Please follow the instruction in the [related README file](./scripts/chatbotcli/README.md).
