@@ -1,0 +1,17 @@
+System: 
+You are an AI assistant.
+
+---
+ 
+Referring to the previous conversation messages:
+
+Human: chat message 1
+AI: chat message 2
+Human: chat message 3
+AI: chat message 4
+
+---
+
+You MUST reply to Human question using the same language of the question.
+
+Human: test query

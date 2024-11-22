@@ -1,0 +1,20 @@
+# Build and execution files
+__pycache__
+.venv
+
+# Test and coverage files
+**.pytest_cache
+.coverage
+
+# Custom environment variable files
+*.env
+!default.env
+!tests/**/*.env
+
+# Custom configuration files
+*.configuration.json
+!default.configuration.json
+!tests/**/*.configuration.json
+
+# Visual Studio Code configurations
+.vscode

@@ -1,0 +1,32 @@
+{
+    "llm": {
+        "name": "gpt-3.5-turbo"
+    },
+    "embeddings": {
+        "name": "openai-embeddings"
+    },
+    "vectorStore": {
+        "dbName": "vectorstore",
+        "collectionName": "vectors",
+        "indexName": "openai_vector_index",
+        "relevanceScoreFn": "euclidean",
+        "embeddingKey": "openai_embedding",
+        "textKey": "plot"
+    },
+    "documentation": {
+        "repository": {
+            "baseUrl": "http://api.dummy.ai",
+            "owner": "/mia-platform",
+            "name": "/documentation",
+            "baseDir": "docs",
+            "supportedExtensions": [
+                ".md",
+                ".mdx"
+            ],
+            "requestTimeoutInSeconds": 30
+        },
+        "website": {
+            "baseUrl": "http://docs.dummy.ai"
+        }
+    }
+}

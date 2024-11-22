@@ -1,0 +1,57 @@
+#DEP Springboot ASAP pipeline - B4J
+name: $(Date:yyyyMMdd).$(Rev:r)
+resources:
+  repositories:
+    - repository: asapTemplates
+      type: git
+      name: Azure-Simple-Automated-Pipelines/ASAP-Framework
+      endpoint: ASAPServiceConnection # ASAP Framework repo service connection
+      ref: release/1.5.0 # ref to pin to
+
+parameters:
+- { name: runBuild,                     displayName: 'Run Build?',                  type: boolean, default: true }
+- { name: runUnitTests,                 displayName: 'Run Unit Tests?',             type: boolean, default: false }
+- { name: runSonarCloud,                displayName: 'Run SonarCloud?',             type: boolean, default: false }
+- { name: prmVmImage,                   displayName: 'VM Image',                    type: string,  default: 'ubuntu-latest' }
+
+# Trigger at every commit
+trigger:
+  branches:
+    include: 
+    - '*'
+
+variables:
+  - template: asapVariables.yml@asapTemplates
+  - { name: vmImage,                 value: "${{ parameters.prmVmImage }}" }
+  - { name: artifactoryProjectKey,   value: "$(System.TeamProject)" }
+  - { name: versionTag,              value: "1.0.0" }                         # if you want to change the version update this line
+  # Final tag version calculation
+  - name: dockerTag
+    ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/main') }}:  # from branch main
+      value: $(versionTag)-beta.$(Build.BuildNumber)                          # x.x.x-beta.YYYYMMDD.[revisionNumber]
+  - name: dockerTag    
+    ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release') }}: # from branch release
+      value:  $(versionTag)-$(Build.BuildNumber)                              # x.x.x-YYYYMMDD.[revisionNumber]
+  - name: dockerTag
+    ${{ if and(not(startsWith(variables['Build.SourceBranch'], 'refs/heads/main')), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/release'))) }}:                                                                  # all other cases
+      value:  $(versionTag)-alpha.$(Build.BuildNumber)                        # x.x.x-alpha.YYYYMMDD.[revisionNumber]
+
+pool:
+  vmImage: $(vmImage)
+
+steps:
+  - checkout: self
+    fetchDepth: 1
+  - script: |
+      pip install falcon
+      pip install uwsgi
+    displayName: 'Pip setup - install falcon and uwsgi'
+
+  - template: runPipeline.yml@asapTemplates
+    parameters:
+      ${{ insert }}: ${{ parameters }}
+      asapBuildType: dockerImage
+      dockerContainerRegistry: 'Docker-Artifactory'
+      dockerRepository: "$(artifactoryDockerRepository)" 
+      dockerTags: "${{ variables.dockerTag }}"
+      dockerFile: '**/Dockerfile'
