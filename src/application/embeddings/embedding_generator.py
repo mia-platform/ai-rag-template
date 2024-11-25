@@ -13,6 +13,8 @@ from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSea
 from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
+import openai
+openai.base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
