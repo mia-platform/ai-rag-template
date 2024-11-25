@@ -66,6 +66,9 @@ class AssistantService:
             temperature=llm_config.temperature
         )
 
+        print(llm_url)
+        print(llm)
+
         return llm
 
     def _init_retriever_chain(self, embeddings: Embeddings):
