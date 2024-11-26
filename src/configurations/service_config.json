@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RAG-template config schema",
+  "description": "Schema for configuring RAG-template, an intelligent virtual assistant.",
+  "type": "object",
+  "properties": {
+    "llm": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the language model (llm) to be used by RAG-template for natural language processing and understanding."
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL of the language model."
+        },
+        "temperature": {
+          "type": "number",
+          "description": "The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
+          "default": 0.7
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "tokenizer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the tokenizer",
+          "default": "gpt-3.5-turbo"
+        }
+      },
+      "default": {
+        "name": "gpt-3.5-turbo"
+      }
+    },
+    "embeddings": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "vectorStore": {
+      "type": "object",
+      "properties": {
+        "dbName": {
+          "type": "string",
+          "description": "The name of the database where the vector store is hosted."
+        },
+        "collectionName": {
+          "type": "string",
+          "description": "The name of the collection of vectors to be used by RAG-template for various tasks such as text representation and similarity."
+        },
+        "indexName": {
+          "type": "string",
+          "description": "The name of the index to be used by RAG-template for various tasks such as text representation and similarity."
+        },
+        "relevanceScoreFn": {
+          "type": "string",
+          "enum": [
+            "euclidean",
+            "cosine",
+            "dotProduct"
+          ],
+          "description": "The function used to calculate relevance scores for vectors. Options: 'euclidean', 'cosine', 'dotProduct'.",
+          "default": "euclidean"
+        },
+        "embeddingKey": {
+          "type": "string",
+          "description": "The key used to identify embeddings in the vector store."
+        },
+        "textKey": {
+          "type": "string",
+          "description": "The key used to store text data in the vector store."
+        },
+        "maxDocumentsToRetrieve": {
+          "type": "integer",
+          "description": "The maximum number of documents to be retrieved from the vector store.",
+          "default": 4
+        },
+        "maxScoreDistance": {
+          "type": "number",
+          "description": "The maximum score distance for the vectors.",
+          "default": null
+        },
+        "minScoreDistance": {
+          "type": "number",
+          "description": "The maximum score distance for the vectors.",
+          "default": null
+        }
+      },
+      "required": [
+        "collectionName",
+        "indexName",
+        "embeddingKey",
+        "textKey"
+      ]
+    },
+    "chain": {
+      "type": "object",
+      "properties": {
+        "aggregateMaxTokenNumber": {
+          "type": "integer",
+          "description": "The maximum number of tokens to be used for aggregation of multiple responses from different services.",
+          "default": 2000
+        },
+        "rag": {
+          "type": "object",
+          "properties": {
+            "promptsFilePath": {
+              "type": "object",
+              "properties": {
+                "system": {
+                  "type": "string",
+                  "description": "The system prompt to be used for the RAG chain."
+                },
+                "user": {
+                  "type": "string",
+                  "description": "The user prompt to be used for the RAG chain."
+                }
+              }
+            }
+          },
+          "description": "RAG chain configuration"
+        }
+      },
+      "default": {
+        "aggregateMaxTokenNumber": 2000
+      }
+    }
+  },
+  "required": [
+    "llm",
+    "embeddings",
+    "vectorStore"
+  ]
+}

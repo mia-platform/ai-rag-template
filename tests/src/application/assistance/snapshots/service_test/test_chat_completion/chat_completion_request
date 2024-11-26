@@ -1,0 +1,1 @@
+{"messages": [{"role": "user", "content": "\nYou are an AI assistant expert in Mia-Platform product.\nTaking into account this documentation: \ndoc1\ndoc2\ndoc3.\nTaking into account previouse messages: A long chat history....\nYou MUST reply to the user query: query.\n"}], "model": "gpt-3.5-turbo", "n": 1, "stream": false, "temperature": 0.7}
