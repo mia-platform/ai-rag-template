@@ -99,7 +99,7 @@ class AssistantChain(Chain):
         print(chain)
         return chain.invoke(
             input={
-                "chat_history": self._process_chat_history(chat_history),
+                "chat_history": "",
                 "query": query,
                 **custom_prompt_variables
             },
