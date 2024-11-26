@@ -73,9 +73,8 @@ class AssistantService:
             api_version="2024-05-01-preview",
             api_key=llm_api_key,
             temperature=0.7,
-            max_tokens=None,
             timeout=None,
-            max_retries=2,
+            max_retries=5,
             azure_endpoint="https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
             model_version="0301",
         )
