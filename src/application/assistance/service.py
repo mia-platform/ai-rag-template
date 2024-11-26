@@ -59,13 +59,25 @@ class AssistantService:
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
         llm_url = self.app_context.configurations.llm.url
         print(llm_url)
-        llm = AzureOpenAI(
-            model=llm_config.name,
+        llm = AzureChatOpenAI(
+            azure_deployment="dep-gpt-35-turbo",
+            api_version="2024-05-01-preview",
             api_key=llm_api_key,
+            temperature=0.7,
+            max_tokens=None,
+            timeout=None,
+            max_retries=2,
             azure_endpoint=llm_url if llm_url else None,
-            temperature=llm_config.temperature,
-            api_version='2024-05-01-preview'
+            model=llm_config.name,
+            model_version="0301",
         )
+        # llm = AzureOpenAI(
+        #     model=llm_config.name,
+        #     api_key=llm_api_key,
+        #     azure_endpoint=llm_url if llm_url else None,
+        #     temperature=llm_config.temperature,
+        #     api_version='2024-05-01-preview'
+        # )
         print(llm)
 
         return llm
