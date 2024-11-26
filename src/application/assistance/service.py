@@ -5,7 +5,7 @@ from pymongo.uri_parser import parse_uri
 
 from langchain_community.callbacks.manager import get_openai_callback
 from langchain_core.embeddings import Embeddings
-from langchain_openai import AzureChatOpenAI, OpenAIEmbeddings
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
 
 from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
 from src.application.assistance.chains.assistant_chain import AssistantChain
@@ -45,10 +45,18 @@ class AssistantService:
 
         embeddings_config = self.app_context.configurations.embeddings
         embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
+        embeddings_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
-        embeddings_model = OpenAIEmbeddings(
-            openai_api_key=embeddings_api_key,
-            model=embeddings_config.name
+        self.app_context.logger.info(f"pre-embedding")
+        self.app_context.logger.info(f"Key: {embedding_api_key}")
+        self.app_context.logger.info(f"Url: {embedding_base_url}")
+
+
+        embeddings_model = AzureOpenAIEmbeddings(
+            model="text-embedding-ada-002",
+            azure_endpoint=embedding_base_url,
+            api_key=embedding_api_key,
+            openai_api_version="2024-05-01-preview" 
         )
 
         return embeddings_model
@@ -68,7 +76,6 @@ class AssistantService:
             timeout=None,
             max_retries=2,
             azure_endpoint="https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
-            base_url="https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
             model_version="0301",
         )
         # llm = AzureOpenAI(

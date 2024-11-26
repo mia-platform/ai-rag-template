@@ -5,7 +5,7 @@ import re
 from collections import deque
 from urllib.parse import urlparse
 
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import AzureOpenAIEmbeddings
 import requests
 from bs4 import BeautifulSoup
 
