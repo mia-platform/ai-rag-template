@@ -48,14 +48,14 @@ class AssistantService:
         embeddings_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
         self.app_context.logger.info(f"pre-embedding")
-        self.app_context.logger.info(f"Key: {embedding_api_key}")
-        self.app_context.logger.info(f"Url: {embedding_base_url}")
+        self.app_context.logger.info(f"Key: {embeddings_api_key}")
+        self.app_context.logger.info(f"Url: {embeddings_base_url}")
 
 
         embeddings_model = AzureOpenAIEmbeddings(
             model="text-embedding-ada-002",
-            azure_endpoint=embedding_base_url,
-            api_key=embedding_api_key,
+            azure_endpoint=embeddings_base_url,
+            api_key=embeddings_api_key,
             openai_api_version="2024-05-01-preview" 
         )
 
