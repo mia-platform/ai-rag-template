@@ -1,0 +1,138 @@
+{"taskName": null, "level": 20, "msg": "Vector Search index \"vector_index\" missing, it will be created now", "time": 1732631484837, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": null, "level": 30, "msg": "Unable to update Vector Search index \"vector_index\".", "time": 1732631484901, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": null, "level": 30, "msg": "Collection 'miademo.rag-collection-cnh-internal' does not exist., full error: {'ok': 0.0, 'errmsg': \"Collection 'miademo.rag-collection-cnh-internal' does not exist.\", 'code': 26, 'codeName': 'NamespaceNotFound', '$clusterTime': {'clusterTime': Timestamp(1732631483, 1), 'signature': {'hash': b'\\xbf{\\xd55e\\xa4\\xf8\\x9e\\x89W,\\xb7\\xb6\\x94\\xb8\\xfa\\xec\\xa6\\xb0\\xdc', 'keyId': 7413654529796734981}}, 'operationTime': Timestamp(1732631483, 1)}", "time": 1732631484902, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": null, "level": 30, "msg": "Service will continue to run, but you might experience unwanted behaviors.", "time": 1732631484902, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": "Task-185", "http": {"method": "POST", "path": "/chat/completions"}, "reqId": "38052a41-c560-407e-9c20-8208965aa5b7", "level": 20, "msg": "POST /chat/completions", "time": 1732631579023, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": "starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro", "level": 20, "msg": "Chat completions request received", "time": 1732631579032, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": "starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro", "level": 20, "msg": "LLM url: https://cnh-we-pr-miarun-openai-01.openai.azure.com/", "time": 1732631579601, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+{"taskName": "starlette.middleware.base.BaseHTTPMiddleware.__call__.<locals>.call_next.<locals>.coro", "level": 20, "msg": "client=<openai.resources.chat.completions.Completions object at 0x7f337020a000> async_client=<openai.resources.chat.completions.AsyncCompletions object at 0x7f337025d970> root_client=<openai.lib.azure.AzureOpenAI object at 0x7f33702292e0> root_async_client=<openai.lib.azure.AsyncAzureOpenAI object at 0x7f337020be30> openai_api_key=SecretStr('**********') openai_proxy='' azure_endpoint='https://cnh-we-pr-miarun-openai-01.openai.azure.com/' openai_api_version='2024-05-01-preview' openai_api_type='azure'", "time": 1732631580200, "pid": 1, "hostname": "ai-rag-template-internal-cnh-7dcfcfbf59-5jbc8"}
+/usr/local/lib/python3.12/site-packages/langchain_core/_api/deprecation.py:141: LangChainDeprecationWarning: The class `LLMChain` was deprecated in LangChain 0.1.17 and will be removed in 1.0. Use RunnableSequence, e.g., `prompt | llm` instead.
+  warn_deprecated(
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 407, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
+    with collapse_excgroups():
+  File "/usr/local/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/middlewares/logger_middleware.py", line 50, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 189, in __call__
+    with collapse_excgroups():
+  File "/usr/local/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/middlewares/app_context_middleware.py", line 28, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/usr/local/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/usr/local/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/usr/local/lib/python3.12/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/chat_completions/chat_completions_handler.py", line 30, in chat_completions
+    completion_response = assistant_service.chat_completion(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/assistance/service.py", line 202, in chat_completion
+    chain_response = self._chain.invoke(inputs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain/chains/base.py", line 164, in invoke
+    raise e
+  File "/usr/local/lib/python3.12/site-packages/langchain/chains/base.py", line 154, in invoke
+    self._call(inputs, run_manager=run_manager)
+  File "/app/src/application/assistance/chains/assistant_chain.py", line 115, in _call
+    chain_response = self._invoke_chain(chain, chat_history, query, custom_prompt_variables)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/application/assistance/chains/assistant_chain.py", line 100, in _invoke_chain
+    return chain.invoke(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 2876, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain/chains/base.py", line 164, in invoke
+    raise e
+  File "/usr/local/lib/python3.12/site-packages/langchain/chains/base.py", line 154, in invoke
+    self._call(inputs, run_manager=run_manager)
+  File "/app/src/application/assistance/chains/retriever_chain.py", line 107, in _call
+    result = vector_search.similarity_search(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_community/vectorstores/mongodb_atlas.py", line 278, in similarity_search
+    docs_and_scores = self.similarity_search_with_score(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_community/vectorstores/mongodb_atlas.py", line 244, in similarity_search_with_score
+    embedding = self._embedding.embed_query(query)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_openai/embeddings/base.py", line 656, in embed_query
+    return self.embed_documents([text])[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_openai/embeddings/base.py", line 616, in embed_documents
+    return self._get_len_safe_embeddings(texts, engine=engine)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/langchain_openai/embeddings/base.py", line 514, in _get_len_safe_embeddings
+    response = self.client.create(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/openai/resources/embeddings.py", line 114, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/openai/_base_client.py", line 1260, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/openai/_base_client.py", line 937, in request
+    return self._request(
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/openai/_base_client.py", line 1041, in _request
+    raise self._make_status_error_from_response(err.response) from None
+openai.AuthenticationError: Error code: 401 - {'error': {'message': 'Incorrect API key provided: a69d6d3b********************aa6a. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
