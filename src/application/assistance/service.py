@@ -67,7 +67,7 @@ class AssistantService:
             max_tokens=50,
             timeout=None,
             max_retries=2,
-            azure_endpoint=" https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
+            azure_endpoint=" https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
             model_version="0301",
         )
         # llm = AzureOpenAI(
