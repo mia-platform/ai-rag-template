@@ -1,0 +1,13 @@
+include:
+  - file: "/build/python/template-app-python.yml"
+    project: "platform/pipelines-templates"
+    ref: "master"
+  - file: "/build/python/template-app-python-test-latest.yml"
+    project: "platform/pipelines-templates"
+    ref: "master"
+
+default:
+  image: python:3.9.6
+
+variables:
+  IMAGE_NAME:  showcase-rag/ai-rag-template-internal-cnh

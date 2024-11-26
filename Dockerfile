@@ -13,7 +13,7 @@ RUN pip install -r requirements.txt
 ARG COMMIT_SHA=<not-specified>
 RUN echo "ai-rag-template: $COMMIT_SHA" >> ./commit.sha
 
-LABEL maintainer="alessio.bernardi@cnh.com" \
+LABEL maintainer="stefano.fontana@mia-platform.eu" \
       name="ai-rag-template" \
       description="" \
       eu.mia-platform.url="https://www.mia-platform.eu" \
