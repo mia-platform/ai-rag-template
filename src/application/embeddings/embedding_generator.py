@@ -30,8 +30,12 @@ class EmbeddingGenerator():
         embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
         embedding_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
-
-        embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name, openai_api_base=embedding_base_url)
+        embedding = AzureOpenAIEmbeddings(
+            model="text-embedding-ada-002",
+            azure_endpoint=embedding_base_url,
+            api_key=embedding_api_key,
+            openai_api_version="2024-05-01-preview" 
+        )
         print(embedding)
         self._document_chunker = DocumentChunker(embedding=embedding)
 
