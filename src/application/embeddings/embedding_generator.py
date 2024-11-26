@@ -30,13 +30,17 @@ class EmbeddingGenerator():
         embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
         embedding_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
+        self.app_context.logger.info(f"pre-embedding")
+        self.app_context.logger.info(f"Key: {embedding_api_key}")
+
         embedding = AzureOpenAIEmbeddings(
             model="text-embedding-ada-002",
             azure_endpoint=embedding_base_url,
             api_key=embedding_api_key,
             openai_api_version="2024-05-01-preview" 
         )
-        print(embedding)
+        self.app_context.logger.info(f"Embedding")
+        self.app_context.logger.info(embedding)
         self._document_chunker = DocumentChunker(embedding=embedding)
 
         self._embedding_vector_store = MongoDBAtlasVectorSearch.from_connection_string(
