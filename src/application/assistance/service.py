@@ -58,15 +58,13 @@ class AssistantService:
         llm_config = self.app_context.configurations.llm
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
         llm_url = self.app_context.configurations.llm.url
-
+        print(llm_url)
         llm = ChatOpenAI(
             model=llm_config.name,
             openai_api_key=llm_api_key,
             base_url=llm_url if llm_url else None,
             temperature=llm_config.temperature
         )
-
-        print(llm_url)
         print(llm)
 
         return llm
