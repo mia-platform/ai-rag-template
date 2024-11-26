@@ -5,7 +5,7 @@ from pymongo.uri_parser import parse_uri
 
 from langchain_community.callbacks.manager import get_openai_callback
 from langchain_core.embeddings import Embeddings
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import AzureOpenAI, OpenAIEmbeddings
 
 from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
 from src.application.assistance.chains.assistant_chain import AssistantChain
@@ -59,7 +59,7 @@ class AssistantService:
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
         llm_url = self.app_context.configurations.llm.url
         print(llm_url)
-        llm = ChatOpenAI(
+        llm = AzureOpenAI(
             model=llm_config.name,
             openai_api_key=llm_api_key,
             base_url=llm_url if llm_url else None,
