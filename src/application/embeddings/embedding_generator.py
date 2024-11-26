@@ -31,7 +31,7 @@ class EmbeddingGenerator():
         configuration = app_context.configurations
 
         embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name)
-
+        print(embedding)
         self._document_chunker = DocumentChunker(embedding=embedding)
 
         self._embedding_vector_store = MongoDBAtlasVectorSearch.from_connection_string(

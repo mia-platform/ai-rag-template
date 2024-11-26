@@ -97,7 +97,6 @@ class AssistantChain(Chain):
 
     def _invoke_chain(self, chain, chat_history, query, custom_prompt_variables):
         print(chain)
-        print(chain.base_url)
         return chain.invoke(
             input={
                 "chat_history": self._process_chat_history(chat_history),
