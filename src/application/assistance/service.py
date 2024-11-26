@@ -57,7 +57,7 @@ class AssistantService:
             azure_endpoint=embeddings_base_url,
             api_key=embeddings_api_key,
             openai_api_version="2024-05-01-preview",
-            deployment="dep-text-embedding-ada-002" 
+            deployment="dep-text-embedding-ada-002"
         )
 
         return embeddings_model

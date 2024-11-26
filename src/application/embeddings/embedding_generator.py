@@ -37,7 +37,8 @@ class EmbeddingGenerator():
             model="text-embedding-ada-002",
             azure_endpoint=embedding_base_url,
             api_key=embedding_api_key,
-            openai_api_version="2024-05-01-preview" 
+            openai_api_version="2024-05-01-preview" ,
+            deployment="dep-text-embedding-ada-002" 
         )
         self.app_context.logger.info(f"Embedding")
         self.app_context.logger.info(embedding)
