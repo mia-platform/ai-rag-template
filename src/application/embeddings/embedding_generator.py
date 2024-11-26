@@ -13,8 +13,8 @@ from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSea
 from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
-import openai
-openai.base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
+# import openai
+# openai.base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
@@ -29,8 +29,9 @@ class EmbeddingGenerator():
         mongodb_cluster_uri = app_context.env_vars.MONGODB_CLUSTER_URI
         embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
+        embedding_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
-        embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name)
+        embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name, openai_api_base=embedding_base_url)
         print(embedding)
         self._document_chunker = DocumentChunker(embedding=embedding)
 
