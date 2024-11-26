@@ -61,7 +61,7 @@ class AssistantService:
         print(llm_url)
         llm = AzureOpenAI(
             model=llm_config.name,
-            openai_api_key=llm_api_key,
+            api_key=llm_api_key,
             azure_endpoint=llm_url if llm_url else None,
             temperature=llm_config.temperature,
             api_version='2024-05-01-preview'
