@@ -58,7 +58,7 @@ class AssistantService:
         llm_config = self.app_context.configurations.llm
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
         llm_url = self.app_context.configurations.llm.url
-        print(llm_url)
+        self.app_context.logger.info(f"LLM url: {llm_url}")
         llm = AzureChatOpenAI(
             azure_deployment="dep-gpt-35-turbo",
             api_version="2024-05-01-preview",
@@ -67,7 +67,7 @@ class AssistantService:
             max_tokens=None,
             timeout=None,
             max_retries=2,
-            azure_endpoint=llm_url if llm_url else None,
+            azure_endpoint="https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
             model=llm_config.name,
             model_version="0301",
         )
@@ -78,7 +78,7 @@ class AssistantService:
         #     temperature=llm_config.temperature,
         #     api_version='2024-05-01-preview'
         # )
-        print(llm)
+        self.app_context.logger.info(llm)
 
         return llm
 
