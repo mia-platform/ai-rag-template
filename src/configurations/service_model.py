@@ -11,14 +11,22 @@ from pydantic import BaseModel, Field
 
 
 class Llm(BaseModel):
-    name: str = Field(
+    model: str = Field(
         ...,
         description='The name of the language model (llm) to be used by RAG-template for natural language processing and understanding.',
     )
-    url: Optional[str] = Field(None, description='The URL of the language model.')
+    url: str = Field(None, description='The URL of the language model.')
     temperature: Optional[float] = Field(
         0.7,
         description='The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.',
+    )
+    deployment: str = Field(
+        ...,
+        description="Deployment name"
+    )
+    openai_api_version: str = Field(
+        ...,
+        description="Api version for openAPI on Azure"
     )
 
 
@@ -29,9 +37,18 @@ class Tokenizer(BaseModel):
 
 
 class Embeddings(BaseModel):
-    name: str = Field(
+    model: str = Field(
         ...,
-        description='The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity.',
+        description='The name of the language model (llm) to be used by RAG-template for natural language processing and understanding.',
+    )
+    url: str = Field(None, description='The URL of the language model.')
+    deployment: str = Field(
+        ...,
+        description="Deployment name"
+    )
+    openai_api_version: str = Field(
+        ...,
+        description="Api version for openAPI on Azure"
     )
 
 
