@@ -96,10 +96,9 @@ class AssistantChain(Chain):
         return self.retriever_chain | self.aggregate_docs_chain | llm_chain
 
     def _invoke_chain(self, chain, chat_history, query, custom_prompt_variables):
-        print(chain)
         return chain.invoke(
             input={
-                "chat_history": "",
+                "chat_history": self._process_chat_history(chat_history),
                 "query": query,
                 **custom_prompt_variables
             },

@@ -5,7 +5,7 @@ from pymongo.uri_parser import parse_uri
 
 from langchain_community.callbacks.manager import get_openai_callback
 from langchain_core.embeddings import Embeddings
-from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, OpenAIEmbeddings
 
 from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
 from src.application.assistance.chains.assistant_chain import AssistantChain
@@ -44,48 +44,39 @@ class AssistantService:
         # Load the embeddings model
 
         embeddings_config = self.app_context.configurations.embeddings
+        embeddings_url = self.app_context.configurations.llm.url
         embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
-        embeddings_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
-
-        self.app_context.logger.info(f"pre-embedding")
-        self.app_context.logger.info(f"Key: {embeddings_api_key}")
-        self.app_context.logger.info(f"Url: {embeddings_base_url}")
-
+        # TODO: Should be possible to extract this from the configuration
+        openai_api_version = "2024-05-01-preview"
 
         embeddings_model = AzureOpenAIEmbeddings(
-            model="text-embedding-ada-002",
-            azure_endpoint=embeddings_base_url,
             api_key=embeddings_api_key,
-            openai_api_version="2024-05-01-preview",
-            deployment="dep-text-embedding-ada-002"
+            api_version=openai_api_version,
+            azure_deployment="dep-text-embedding-ada-002",
+            azure_endpoint=embeddings_url,
+            model=embeddings_config.name
         )
+
 
         return embeddings_model
 
     def _init_llm(self):
         # Load the LLM model
-        llm_config = self.app_context.configurations.llm
+        temperature = self.app_context.configurations.llm.temperature or 0.7
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
+        llm_model = self.app_context.configurations.llm.name
         llm_url = self.app_context.configurations.llm.url
-        self.app_context.logger.info(f"LLM url: {llm_url}")
+        # TODO: Should be possible to extract this from the configuration
+        openai_api_version = "2024-05-01-preview"
+
         llm = AzureChatOpenAI(
-            azure_deployment="dep-gpt-35-turbo",
-            api_version="2024-05-01-preview",
             api_key=llm_api_key,
-            temperature=0.7,
-            timeout=None,
-            max_retries=5,
-            azure_endpoint="https://cnh-we-pr-miarun-openai-01.openai.azure.com/",
-            model_version="0301",
+            api_version=openai_api_version,
+            azure_deployment="dep-gpt-35-turbo",
+            azure_endpoint=llm_url,
+            model=llm_model,
+            temperature=temperature
         )
-        # llm = AzureOpenAI(
-        #     model=llm_config.name,
-        #     api_key=llm_api_key,
-        #     azure_endpoint=llm_url if llm_url else None,
-        #     temperature=llm_config.temperature,
-        #     api_version='2024-05-01-preview'
-        # )
-        self.app_context.logger.info(llm)
 
         return llm
 

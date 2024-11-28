@@ -5,7 +5,7 @@ import re
 from collections import deque
 from urllib.parse import urlparse
 
-from langchain_openai import AzureOpenAIEmbeddings
+from langchain_openai import AzureOpenAIEmbeddings, OpenAIEmbeddings
 import requests
 from bs4 import BeautifulSoup
 
@@ -13,8 +13,6 @@ from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSea
 from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
-# import openai
-# openai.base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
@@ -27,21 +25,19 @@ class EmbeddingGenerator():
     def __init__(self, app_context: AppContext):
         self.logger = app_context.logger
         mongodb_cluster_uri = app_context.env_vars.MONGODB_CLUSTER_URI
-        embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
+        embeddings_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
-        embedding_base_url = "https://cnh-we-pr-miarun-openai-01.openai.azure.com/"
-        self.app_context.logger.info(f"pre-embedding")
-        self.app_context.logger.info(f"Key: {embedding_api_key}")
+        # TODO: Should be possible to extract this from the configuration
+        openai_api_version = "2024-05-01-preview"
 
         embedding = AzureOpenAIEmbeddings(
-            model="text-embedding-ada-002",
-            azure_endpoint=embedding_base_url,
-            api_key=embedding_api_key,
-            openai_api_version="2024-05-01-preview" ,
-            deployment="dep-text-embedding-ada-002" 
+            api_key=embeddings_api_key,
+            api_version=openai_api_version,
+            azure_deployment="dep-text-embedding-ada-002",
+            azure_endpoint=configuration.llm.url,
+            model=app_context.configurations.embeddings.name
         )
-        self.app_context.logger.info(f"Embedding")
-        self.app_context.logger.info(embedding)
+
         self._document_chunker = DocumentChunker(embedding=embedding)
 
         self._embedding_vector_store = MongoDBAtlasVectorSearch.from_connection_string(
