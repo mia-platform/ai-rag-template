@@ -7,7 +7,7 @@
     "llm": {
       "type": "object",
       "properties": {
-        "name": {
+        "model": {
           "type": "string",
           "description": "The name of the language model (llm) to be used by RAG-template for natural language processing and understanding."
         },
@@ -19,10 +19,21 @@
           "type": "number",
           "description": "The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
           "default": 0.7
+        },
+        "deployment": {
+          "type": "string",
+          "description": "Name of the deployment to use in the selected Azure OpenAI."
+        },
+        "openai_api_version": {
+          "type": "string",
+          "description": "Openapi api version to use for the api calls to the Azure OpenAI."
         }
       },
       "required": [
-        "name"
+        "model",
+        "url",
+        "deployment",
+        "openai_api_version"
       ]
     },
     "tokenizer": {
@@ -41,13 +52,28 @@
     "embeddings": {
       "type": "object",
       "properties": {
-        "name": {
+        "model": {
           "type": "string",
           "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL of the language model."
+        },
+        "deployment": {
+          "type": "string",
+          "description": "Name of the deployment to use in the selected Azure OpenAI."
+        },
+        "openai_api_version": {
+          "type": "string",
+          "description": "Openapi api version to use for the api calls to the Azure OpenAI."
         }
       },
       "required": [
-        "name"
+        "model",
+        "url",
+        "deployment",
+        "openai_api_version"
       ]
     },
     "vectorStore": {

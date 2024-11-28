@@ -1,9 +1,9 @@
 {
   "llm": {
-    "name": "gpt-3.5-turbo"
+    "model": "gpt-3.5-turbo"
   },
   "embeddings": {
-    "name": "text-embedding-3-small"
+    "model": "text-embedding-3-small"
   },
   "vectorStore": {
     "dbName": "a-db-name",

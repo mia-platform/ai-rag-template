@@ -20,10 +20,10 @@ def app_context():
 
     mock_configurations = RagTemplateConfigSchema(
         llm={
-            "name": "gpt-3.5-turbo"
+            "model": "gpt-3.5-turbo"
         },
         embeddings={
-            "name": "embeddings_name"
+            "model": "embeddings_name"
         },
         vectorStore={
             "dbName": "sample_mflix",

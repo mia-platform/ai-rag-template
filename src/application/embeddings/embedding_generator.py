@@ -27,15 +27,20 @@ class EmbeddingGenerator():
         mongodb_cluster_uri = app_context.env_vars.MONGODB_CLUSTER_URI
         embeddings_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
-        # TODO: Should be possible to extract this from the configuration
-        openai_api_version = "2024-05-01-preview"
+
+        embeddings_config = self.app_context.configurations.embeddings
+        embeddings_url = embeddings_config.url
+        embeddings_openai_api_version = embeddings_config.openai_api_version
+        embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
+        embeddings_deployment = embeddings_config.deployment
+        embeddings_model_name = embeddings_config.model
 
         embedding = AzureOpenAIEmbeddings(
             api_key=embeddings_api_key,
-            api_version=openai_api_version,
-            azure_deployment="dep-text-embedding-ada-002",
-            azure_endpoint=configuration.llm.url,
-            model=app_context.configurations.embeddings.name
+            api_version=embeddings_openai_api_version,
+            azure_deployment=embeddings_deployment,
+            azure_endpoint=embeddings_url,
+            model=embeddings_model_name
         )
 
         self._document_chunker = DocumentChunker(embedding=embedding)

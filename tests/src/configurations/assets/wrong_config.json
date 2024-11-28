@@ -1,9 +1,9 @@
 {
   "apiKey": 12345,
   "llm": {
-    "description": "This is missing the 'name' key, which is required."
+    "description": "This is missing the 'model' key, which is required."
   },
   "embeddings": {
-    "name": 123
+    "model": 123
   }
 }

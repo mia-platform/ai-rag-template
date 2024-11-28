@@ -44,35 +44,36 @@ class AssistantService:
         # Load the embeddings model
 
         embeddings_config = self.app_context.configurations.embeddings
-        embeddings_url = self.app_context.configurations.llm.url
+        embeddings_url = embeddings_config.url
+        embeddings_openai_api_version = embeddings_config.openai_api_version
         embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
-        # TODO: Should be possible to extract this from the configuration
-        openai_api_version = "2024-05-01-preview"
+        embeddings_deployment = embeddings_config.deployment
+        embeddings_model_name = embeddings_config.model
 
-        embeddings_model = AzureOpenAIEmbeddings(
+        embeddings = AzureOpenAIEmbeddings(
             api_key=embeddings_api_key,
-            api_version=openai_api_version,
-            azure_deployment="dep-text-embedding-ada-002",
+            api_version=embeddings_openai_api_version,
+            azure_deployment=embeddings_deployment,
             azure_endpoint=embeddings_url,
-            model=embeddings_config.name
+            model=embeddings_model_name
         )
 
-
-        return embeddings_model
+        return embeddings
 
     def _init_llm(self):
         # Load the LLM model
-        temperature = self.app_context.configurations.llm.temperature or 0.7
+        llm_config = self.app_context.configurations.llm
+        temperature = llm_config.temperature or 0.7
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
-        llm_model = self.app_context.configurations.llm.name
-        llm_url = self.app_context.configurations.llm.url
-        # TODO: Should be possible to extract this from the configuration
-        openai_api_version = "2024-05-01-preview"
+        llm_model = llm_config.model
+        llm_url = llm_config.url
+        llm_api_version = llm_config.openai_api_version
+        llm_deployment = llm.deployment
 
         llm = AzureChatOpenAI(
             api_key=llm_api_key,
-            api_version=openai_api_version,
-            azure_deployment="dep-gpt-35-turbo",
+            api_version=llm_api_version,
+            azure_deployment=llm_deployment,
             azure_endpoint=llm_url,
             model=llm_model,
             temperature=temperature
