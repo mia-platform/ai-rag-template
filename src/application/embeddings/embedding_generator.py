@@ -28,10 +28,10 @@ class EmbeddingGenerator():
         embeddings_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
 
-        embeddings_config = self.app_context.configurations.embeddings
+        embeddings_config = app_context.configurations.embeddings
         embeddings_url = embeddings_config.url
         embeddings_openai_api_version = embeddings_config.openai_api_version
-        embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
+        embeddings_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         embeddings_deployment = embeddings_config.deployment
         embeddings_model_name = embeddings_config.model
 

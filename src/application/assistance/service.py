@@ -68,7 +68,7 @@ class AssistantService:
         llm_model = llm_config.model
         llm_url = llm_config.url
         llm_api_version = llm_config.openai_api_version
-        llm_deployment = llm.deployment
+        llm_deployment = llm_config.deployment
 
         llm = AzureChatOpenAI(
             api_key=llm_api_key,
