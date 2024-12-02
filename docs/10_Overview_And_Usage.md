@@ -137,8 +137,8 @@ Description of configuration parameters:
 
 | Name | Key | Description |
 |------|-----|-------------|
-| LLM Name | `llm.name` | Name of the chat model to use. We currently support only [OpenAI models](https://platform.openai.com/docs/models). |
-| Embeddings Name | `embeddings.name` | Name of the encoder to use. We currently support only [OpenAI embeddings models](https://platform.openai.com/docs/guides/embeddings/what-are-embeddings). |
+| LLM Name | `llm.model` | Name of the chat model to use. We currently support only [OpenAI models](https://platform.openai.com/docs/models). |
+| Embeddings Name | `embeddings.model` | Name of the encoder to use. We currently support only [OpenAI embeddings models](https://platform.openai.com/docs/guides/embeddings/what-are-embeddings). |
 | Vector Store DB Name | `vectorStore.dbName` | Name of the MongoDB database to use as a knowledge base and that contains the collection with the embeddings. |
 | Vector Store Collection Name | `vectorStore.collectionName` | Name of the MongoDB collection to use for storing documents and document embeddings. |
 | Vector Store Index Name | `vectorStore.indexName` | Name of the vector index to use for retrieving documents related to the user's query. For more info, refer to the [Create a Vector index](#create-a-vector-index) paragraph. |

@@ -67,7 +67,7 @@ class VectorSearchIndexUpdater:
 
     def _get_updated_vector_index_definition(self) -> SearchIndexModel:
         configured_similarity_fn = self.app_context.configurations.vectorStore.relevanceScoreFn or RelevanceScoreFn.cosine
-        num_dimensions = DIMENSIONS_DICT.get(self.app_context.configurations.embeddings.name, DEFAULT_NUM_DIMENSIONS_VALUE)
+        num_dimensions = DIMENSIONS_DICT.get(self.app_context.configurations.embeddings.model, DEFAULT_NUM_DIMENSIONS_VALUE)
 
         return SearchIndexModel(
             definition={

@@ -8,7 +8,7 @@ def test_update_vector_index_requires_no_changes(app_context):
     app_context (from `/tests/fixtures/app_context.py`) includes:
     - vectorStore.indexName = "openai_vector_index"
     - vectorStore.relevanceScoreFn = "euclidean" (which means that the index must have "similarity" equal to "euclidean")
-    - embeddings.name = "text-emebedding-3-small" (which means that the index must have "numDimensions" equal to 1536)
+    - embeddings.model = "text-emebedding-3-small" (which means that the index must have "numDimensions" equal to 1536)
 
     The mock should not receive instruction to update the index "openai_vector_index" since there won't be any changes on its definition.
     '''
@@ -73,7 +73,7 @@ def test_update_vector_index_requires_update(app_context):
     app_context (from `/tests/fixtures/app_context.py`) includes:
     - vectorStore.indexName = "openai_vector_index"
     - vectorStore.relevanceScoreFn = "euclidean" (which means that the index must have "similarity" equal to "euclidean")
-    - embeddings.name = "text-emebedding-3-small" (which means that the index must have "numDimensions" equal to 1536)
+    - embeddings.model = "text-emebedding-3-small" (which means that the index must have "numDimensions" equal to 1536)
 
     The mock should receive instruction to update the index named "openai_vector_index" since both "similarity" and "numDimensions" must be updated.
     '''
