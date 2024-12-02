@@ -7,7 +7,7 @@ def test_generate_embeddings_success(test_client):
     url = "http://example.com"
     data = {"url": url}
     
-    with patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate") as mock_generate:
+    with patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_url") as mock_generate:
         response = test_client.post("/embeddings/generate", json=data)
         
         assert response.status_code == 200

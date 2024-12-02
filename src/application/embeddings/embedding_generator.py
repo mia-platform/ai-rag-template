@@ -42,7 +42,6 @@ class EmbeddingGenerator():
             text_key=configuration.vectorStore.textKey
         )
 
-
     def _get_hyperlinks(self, raw_text: str):
         """
         Function to get the hyperlinks from a raw HTML text
@@ -52,7 +51,6 @@ class EmbeddingGenerator():
         parser.feed(raw_text)
 
         return parser.hyperlinks
-
 
     def _get_domain_hyperlinks(self, raw_text: str, local_domain: str, path: str | None = None):
         """
@@ -98,7 +96,7 @@ class EmbeddingGenerator():
 
         return list(set(clean_links))
     
-    def generate(self, url: str, filter_path: str | None = None):
+    def generate_from_url(self, url: str, filter_path: str | None = None):
         """
         Crawls the given URL and saves the text content of each page to a text file.
 
@@ -148,8 +146,8 @@ class EmbeddingGenerator():
             chunks = self._document_chunker.split_text_into_chunks(text=text, url=url)
             self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")  # for debugging and to see the progress
             self._embedding_vector_store.add_documents(chunks)
-            self.logger.debug("Embeddings generation completed. Extracting links...")  # for debugging and to see the progress
 
+            self.logger.debug("Embeddings generation completed. Extracting links...")  # for debugging and to see the progress
             hyperlinks = self._get_domain_hyperlinks(raw_text, local_domain, path)
             if len(hyperlinks) == 0:
                 self.logger.debug("No links found, move on.")

@@ -15,11 +15,11 @@ router = APIRouter()
 # you might want to use a more sophisticated mechanism to handle this.
 router.lock = False
 
-def generate_embeddings_from_url(app_context: AppContext, url: str, filter_path: str | None):
+def generate_embeddings_from_url_background_task(app_context: AppContext, url: str, filter_path: str | None):
     """
     Generate embeddings for a given URL. 
     
-    This method is intended to be called as a background task. Includes managmeent of the lock mechanism
+    This method is intended to be called as a background task. Includes managmement of the lock mechanism
     of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
 
     Args:
@@ -32,7 +32,7 @@ def generate_embeddings_from_url(app_context: AppContext, url: str, filter_path:
     try:
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
-        embedding_generator.generate(url, filter_path)
+        embedding_generator.generate_from_url(url, filter_path)
     # pylint: disable=W0718
     except Exception as e:
         logger.error(f"Error in background task: {str(e)}")
@@ -45,7 +45,7 @@ def generate_embeddings_from_url(app_context: AppContext, url: str, filter_path:
     status_code=status.HTTP_200_OK,
     tags=["Embeddings"]
 )
-def generate_embeddings(request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks):
+def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks):
     """
     Generate embeddings for a given URL. It starts from a single web page and generates embeddings for the text data of that page and
     for every page connected via hyperlinks (anchor tags).
@@ -73,7 +73,7 @@ def generate_embeddings(request: Request, data: GenerateEmbeddingsInputSchema, b
     request_context.logger.info(f"Generate embeddings request received for url: {url}")
 
     if not router.lock:
-        background_tasks.add_task(generate_embeddings_from_url, request_context, url, filter_path)
+        background_tasks.add_task(generate_embeddings_from_url_background_task, request_context, url, filter_path)
         request_context.logger.info("Generation embeddings process started.")
         return {"statusOk": True}
     
