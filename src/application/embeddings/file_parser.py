@@ -76,6 +76,7 @@ class FileParser:
         
     
     def extract_documents_from_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
+        # TODO: Should this stay also here or only on the API layer?
         if not file.filename.endswith(SUPPORTED_FILES_TUPLE):
             raise InvalidFileExtensionError(filename=file.filename)
         

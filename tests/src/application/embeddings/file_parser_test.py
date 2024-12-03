@@ -1,5 +1,6 @@
 import io
 from pathlib import Path
+from zipfile import BadZipFile
 
 from fastapi import UploadFile
 import pytest
@@ -112,3 +113,18 @@ def test_fail_open_file_with_wrong_extension(logger):
             # We are not supposed to get here
             pass
             
+
+def test_fail_if_non_valid_zip_file(logger):
+    upload_file = UploadFile(
+        filename="not_a_zip_file.zip",
+        headers={"Content-Type": "application/zip"},
+        file=io.BytesIO(b"this is a text file")
+    )
+
+    file_parser = FileParser(logger)
+
+    with pytest.raises(BadZipFile):
+        document_generator = file_parser.extract_documents_from_file(upload_file)
+        for _ in document_generator:
+            # We are not supposed to get here
+            pass
