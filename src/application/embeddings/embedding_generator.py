@@ -5,6 +5,7 @@ import re
 from collections import deque
 from urllib.parse import urlparse
 
+from fastapi import UploadFile
 from langchain_openai import OpenAIEmbeddings
 import requests
 from bs4 import BeautifulSoup
@@ -12,6 +13,7 @@ from bs4 import BeautifulSoup
 from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSearch
 from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
+from src.application.embeddings.file_parser import FileParser
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
 
 # Regex pattern to match a URL
@@ -144,10 +146,10 @@ class EmbeddingGenerator():
                 continue
 
             chunks = self._document_chunker.split_text_into_chunks(text=text, url=url)
-            self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")  # for debugging and to see the progress
+            self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")
             self._embedding_vector_store.add_documents(chunks)
 
-            self.logger.debug("Embeddings generation completed. Extracting links...")  # for debugging and to see the progress
+            self.logger.debug("Embeddings generation completed. Extracting links...")
             hyperlinks = self._get_domain_hyperlinks(raw_text, local_domain, path)
             if len(hyperlinks) == 0:
                 self.logger.debug("No links found, move on.")
@@ -160,3 +162,12 @@ class EmbeddingGenerator():
                     seen.add(link)
 
         self.logger.debug("Scraping completed.")
+
+    def generate_from_file(self, zip_file: UploadFile):
+        file_parser = FileParser(self.logger)
+
+        docs = file_parser.extract_documents_from_file(zip_file)
+        for text in docs:
+            chunks = self._document_chunker.split_text_into_chunks(text=text, url="TODO: Manage this")
+            self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")
+            self._embedding_vector_store.add_documents(chunks)
