@@ -1,3 +1,4 @@
+from typing import Generator
 from zipfile import BadZipFile
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile, status
 
@@ -33,14 +34,18 @@ def generate_embeddings_from_url_background_task(app_context: AppContext, url: s
     logger = app_context.logger
 
     try:
+        logger.debug("Locking router for embedding generation.")
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
+        logger.info("Starting embedding generation process.")
         embedding_generator.generate_from_url(url, filter_path)
+        logger.info("Embedding generation process finished.")
     # pylint: disable=W0718
     except Exception as e:
         logger.error(f"Error in background task: {str(e)}")
     finally:
         router.lock = False
+        logger.debug("Router unlocked after embedding generation.")
 
 @router.post(
     "/embeddings/generate",
@@ -82,7 +87,7 @@ def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInput
     
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
-def generate_embeddings_from_file_background_task(app_context: AppContext, docs: list[str]):
+def generate_embeddings_from_file_background_task(app_context: AppContext, document_generator: Generator[str, None, None]):
     """
     Generate embeddings for an uploaded file. 
     
@@ -96,16 +101,20 @@ def generate_embeddings_from_file_background_task(app_context: AppContext, docs:
     logger = app_context.logger
 
     try:
+        logger.debug("Locking router for embedding generation.")
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
-        for doc in docs:
+        logger.info("Starting embedding generation process.")
+        for doc in document_generator:
             embedding_generator.generate_from_text(doc)
+        logger.info("Embedding generation process finished.")
     # pylint: disable=W0718
     except Exception as ex:
         logger.error(ex)
         logger.error(f"Error in background task: {str(ex)}")
     finally:
         router.lock = False
+        logger.debug("Router unlocked after embedding generation.")
 
 @router.post(
     "/embeddings/generateFromFile",

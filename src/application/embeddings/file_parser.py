@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 
 from typing import Generator
 from zipfile import BadZipFile, ZipFile
-import fitz
+from pymupdf import Document
 from fastapi import File, UploadFile
 
 from src.constants import MD_EXTENSION, PDF_EXTENSION, SUPPORTED_FILES_IN_ZIP_TUPLE, SUPPORTED_FILES_TUPLE, TEXT_EXTENSION, ZIP_EXTENSION
@@ -42,19 +42,14 @@ class FileParser:
         content = file.file.read()
         return self._convert_bytes_to_str(content)
 
-    def _convert_from_doc_to_str(self, doc: open) -> Generator[str, None, None]:
-        # TODO: Test this with more complicated PDFs, because to_markdown seems not working
-        # We could've used:
-        # return pymupdf4llm.to_markdown(doc)
-        # return pymupdf.get_text(doc)
-
+    def _convert_from_doc_to_str(self, doc: Document) -> Generator[str, None, None]:
         for page in doc:
             yield page.get_text()
 
     def _convert_pdf_to_str(self, file: UploadFile) -> Generator[str, None, None]:
         self.logger.debug(f'Extracting text from PDF file {file.filename}')
         file_content = file.file.read()
-        doc = fitz.open(stream=file_content)
+        doc = Document(stream=file_content)
         yield from self._convert_from_doc_to_str(doc)
     
     def _extract_documents_from_zip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
@@ -78,7 +73,7 @@ class FileParser:
                             file_content = f.read()
 
                             if file_name.endswith(PDF_EXTENSION):
-                                doc = fitz.open(stream=file_content)
+                                doc = Document(stream=file_content)
                                 yield from self._convert_from_doc_to_str(doc)
                             if file_name.endswith(TEXT_EXTENSION):
                                 yield self._convert_bytes_to_str(file_content)
