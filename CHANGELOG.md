@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### aDDED
+
+- add endpoint `POST /embeddings/generateFromFile` for embedding generation
+
 ## 0.3.1 - 2024-09-05
 
 ## 0.3.0 - 2024-09-05
