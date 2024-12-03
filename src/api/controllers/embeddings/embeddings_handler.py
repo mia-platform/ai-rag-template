@@ -1,8 +1,10 @@
+from zipfile import BadZipFile
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile, status
 
 from src.constants import MD_CONTENT_TYPE, PDF_CONTENT_TYPE, ZIP_CONTENT_TYPE, TEXT_CONTENT_TYPE
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
+from src.application.embeddings.file_parser import FileParser
 from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.context import AppContext
 
@@ -80,7 +82,7 @@ def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInput
     
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
-def generate_embeddings_from_file_background_task(app_context: AppContext, file: UploadFile):
+def generate_embeddings_from_file_background_task(app_context: AppContext, docs: list[str]):
     """
     Generate embeddings for an uploaded file. 
     
@@ -96,7 +98,8 @@ def generate_embeddings_from_file_background_task(app_context: AppContext, file:
     try:
         router.lock = True
         embedding_generator = EmbeddingGenerator(app_context=app_context)
-        embedding_generator.generate_from_file(file)
+        for doc in docs:
+            embedding_generator.generate_from_text(doc)
     # pylint: disable=W0718
     except Exception as ex:
         logger.error(ex)
@@ -114,11 +117,11 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     """
     Generate embeddings for a given file. 
     
-    The file must be uploaded as a multipart/form-data request. And must have one of the following extension:
-        - .txt
-        - .pdf
-        - .md
-        - .zip (which must contain only the previous file types)
+    The file must be uploaded as a multipart/form-data request and must have one of the following content type:
+        - text/plain (such as .txt files)
+        - text/markdown (such as .md files)
+        - application/pdf
+        - application/zip (which must contain only file of the previous types)
 
     Args:
         request (Request): The request object.
@@ -126,14 +129,22 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         background_tasks (BackgroundTasks): The background tasks object.
     """
 
-    if not file.filename.endswith((".txt", ".pdf", ".md", ".zip")) or file.content_type not in [MD_CONTENT_TYPE, TEXT_CONTENT_TYPE, PDF_CONTENT_TYPE, ZIP_CONTENT_TYPE]:
-        raise HTTPException(status_code=400, detail="File must be a .txt, .pdf, .md or .zip file.")
-
+    if file.content_type not in [MD_CONTENT_TYPE, TEXT_CONTENT_TYPE, PDF_CONTENT_TYPE, ZIP_CONTENT_TYPE]:
+        raise HTTPException(status_code=400, detail=f"Application does not support this file type (content type: {file.content_type}).")
+    
     request_context: AppContext = request.state.app_context
-    request_context.logger.info(f"Generate embeddings request received for file: {file.filename}")
+    request_context.logger.info(f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})")
+    
+    try:
+        file_parser = FileParser(request_context.logger)
+        docs = list(file_parser.extract_documents_from_file(file))
+    except BadZipFile as ex:
+        raise HTTPException(status_code=400, detail="File uploaded is not a valid application/zip file.") from ex
+    except Exception as ex:
+        raise HTTPException(status_code=400, detail=f"Error parsing file: {str(ex)}") from ex
 
     if not router.lock:
-        background_tasks.add_task(generate_embeddings_from_file_background_task, request_context, file)
+        background_tasks.add_task(generate_embeddings_from_file_background_task, request_context, docs)
         request_context.logger.info("Generation embeddings process started.")
         return {"statusOk": True}
     
