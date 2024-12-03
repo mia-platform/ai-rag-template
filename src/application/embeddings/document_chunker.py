@@ -29,7 +29,7 @@ class DocumentChunker():
         """
         return hashlib.sha256(content.encode()).hexdigest()
 
-    def split_text_into_chunks(self, text: str, url: str | None) -> List[Document]:
+    def split_text_into_chunks(self, text: str, url: str | None = None) -> List[Document]:
         """
         Generate chunks via semantic separation from a given text
 
