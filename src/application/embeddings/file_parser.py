@@ -53,7 +53,8 @@ class FileParser:
 
     def _convert_pdf_to_str(self, file: UploadFile) -> Generator[str, None, None]:
         self.logger.debug(f'Extracting text from PDF file {file.filename}')
-        doc = fitz.open(file.file)
+        file_content = file.file.read()
+        doc = fitz.open(stream=file_content)
         yield from self._convert_from_doc_to_str(doc)
     
     def _extract_documents_from_zip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
@@ -70,7 +71,7 @@ class FileParser:
 
                 # Check for the list of file: we extract the files then we check if the extension match the available ones (supported: pdf, txt, md)
                 for file_name in zipf.namelist():
-                    # NOTE: For now we do not support folders inside zip files. Should we?
+                    # For now we do not support folders inside zip files.
                     if file_name.endswith(SUPPORTED_FILES_IN_ZIP_TUPLE):
                         with zipf.open(file_name) as f:
                             self.logger.info(f'Reading file {file_name}')
@@ -87,8 +88,8 @@ class FileParser:
             self.logger.error(bad_zip_file_ex)
             raise BadZipFile(bad_zip_file_ex)
         except Exception as ex:
-            self.logger.error(ex)
-            raise Exception(f"An error occurred while extracting the file {file.filename}")
+            #pylint: disable=W0719
+            raise Exception(f"An error occurred while extracting the file {file.filename}") from ex
 
         
     
@@ -128,5 +129,5 @@ class FileParser:
         if file.filename.endswith(ZIP_EXTENSION):
             result = self._extract_documents_from_zip_file(file)
     
-        self.logger.info(f"Extracted documents from file {file.filename}")
+        self.logger.info(f"Completed documents extraction from file {file.filename}")
         yield from result
