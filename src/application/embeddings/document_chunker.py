@@ -8,8 +8,6 @@ from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_experimental.text_splitter import SemanticChunker
 
-DEFAULT_EMBEDDING_MODEL = "text-embedding-3-small"
-
 
 class DocumentChunker():
     """
@@ -31,18 +29,22 @@ class DocumentChunker():
         """
         return hashlib.sha256(content.encode()).hexdigest()
 
-    def split_text_into_chunks(self, text: str, url: str) -> List[Document]:
+    def split_text_into_chunks(self, text: str, url: str | None) -> List[Document]:
         """
         Generate chunks via semantic separation from a given text
 
         Args:
             text (str): The input text.
-            url (str): The URL of the text.
+            url (str | None): The URL of the text. Could be None if the text is not from a URL (e.g. from an uploaded file).
         """
         content = self._remove_consecutive_newlines(text)
         sha = self._generate_sha(content)
 
-        document = Document(page_content=content, metadata={"sha": sha, "url": url})
+        metadata = {"sha": sha}
+        if url:
+            metadata["url"] = url
+
+        document = Document(page_content=content, metadata=metadata)
         chunks = [Document(page_content=chunk) for chunk in self._chunker.split_text(document.page_content)]
         # NOTE: "copy" method actually exists.
         # pylint: disable=E1101
