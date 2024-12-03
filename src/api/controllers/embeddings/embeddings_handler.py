@@ -117,7 +117,7 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     """
     Generate embeddings for a given file. 
     
-    The file must be uploaded as a multipart/form-data request and must have one of the following content type:
+    The file must be uploaded with content type "multipart/form-data" request and must have one of the following content type:
         - text/plain (such as .txt files)
         - text/markdown (such as .md files)
         - application/pdf
@@ -141,7 +141,7 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     except BadZipFile as ex:
         raise HTTPException(status_code=400, detail="File uploaded is not a valid application/zip file.") from ex
     except Exception as ex:
-        raise HTTPException(status_code=400, detail=f"Error parsing file: {str(ex)}") from ex
+        raise HTTPException(status_code=500, detail=f"Error parsing file: {str(ex)}") from ex
 
     if not router.lock:
         background_tasks.add_task(generate_embeddings_from_file_background_task, request_context, docs)
