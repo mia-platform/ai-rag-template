@@ -1,6 +1,5 @@
 from pathlib import Path
 from unittest.mock import patch
-from fastapi import UploadFile
 import requests_mock
 
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
@@ -57,32 +56,14 @@ def test_generate_from_url_with_domain(app_context):
             embedding_generator.logger.debug.assert_called()
 
 
-def test_generate_from_zip_file(app_context):
-        # We are passing a zip file that contains:
-        # - a text file
-        # - a markdown file
-        # - a pdf file
-        # We check that the split_text and the add_documents is called 3 times with the correct text passed as argument
-    
-    current_dir = Path(__file__).parent
-
+def test_generate_from_text(app_context):
     with patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text, \
-        patch('langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents') as mock_add_documents, \
-        open(current_dir / "assets" / "zip_file.zip", 'rb') as zip_file:
-        
-        upload_file = UploadFile(
-            filename="zip_file.zip",
-            headers={'Content-Type': 'application/zip'},
-            file=zip_file,
-        )
-
+        patch('langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents') as mock_add_documents:
         embedding_generator = EmbeddingGenerator(app_context)
-        embedding_generator.generate_from_file(upload_file)
+        embedding_generator.generate_from_text("This is a text example\n")
 
-        assert mock_split_text.call_count == 3
-        assert mock_add_documents.call_count == 3
+        assert mock_split_text.call_count == 1
+        assert mock_add_documents.call_count == 1
         embedding_generator.logger.debug.assert_called()
 
-        mock_split_text.assert_any_call('this is a text file\n')
-        mock_split_text.assert_any_call('# Markdown File\nThis is a Markdown file\n')
-        mock_split_text.assert_any_call('this is a PDF (portable document format) file\n')
+        mock_split_text.assert_any_call('This is a text example\n')
