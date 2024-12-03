@@ -1,5 +1,6 @@
 import base64
 import io
+from logging import Logger
 from tempfile import TemporaryDirectory
 
 from typing import Generator
@@ -9,12 +10,14 @@ from fastapi import File, UploadFile
 
 from src.constants import MD_EXTENSION, PDF_EXTENSION, SUPPORTED_FILES_IN_ZIP_TUPLE, SUPPORTED_FILES_TUPLE, TEXT_EXTENSION, ZIP_EXTENSION
 from src.application.embeddings.errors import InvalidFileExtensionError
-from src.context import AppContext
 
 
 class FileParser:
-    def __init__(self, app_context: AppContext):
-        self.logger = app_context.logger
+    # TODO: Add documentation
+    # TODO: Add logs
+    
+    def __init__(self, logger: Logger):
+        self.logger = logger
 
     def _convert_bytes_to_str(self, content: bytes) -> str:
         return content.decode("utf-8")
