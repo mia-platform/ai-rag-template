@@ -163,11 +163,30 @@ class EmbeddingGenerator():
 
         self.logger.debug("Scraping completed.")
 
-    def generate_from_file(self, zip_file: UploadFile):
-        file_parser = FileParser(self.logger)
+    def generate_from_file(self, file: UploadFile):
+        """
+        Given an uploaded file, in form of a FastAPI `UploadFile` instance, this function will
+        extract all the text from the file and generate embeddings for it.
 
-        docs = file_parser.extract_documents_from_file(zip_file)
+        Files supported have the following extensions:
+        - .txt
+        - .pdf
+        - .md
+        - .zip (which must contain only the previous file types)
+
+        Args:
+            file (UploadFile): The file to read and extract the text from to be crawled.
+
+        Returns:
+            None
+        """
+        file_parser = FileParser(self.logger)
+        docs = file_parser.extract_documents_from_file(file)
+
         for text in docs:
+            # TODO: Manage file name
             chunks = self._document_chunker.split_text_into_chunks(text=text, url="TODO: Manage this")
             self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")
             self._embedding_vector_store.add_documents(chunks)
+
+        self.logger.debug("Embeddings generation completed.")
