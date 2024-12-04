@@ -23,7 +23,7 @@ def generate_embeddings_from_url_background_task(app_context: AppContext, url: s
     """
     Generate embeddings for a given URL. 
     
-    This method is intended to be called as a background task. Includes managmement of the lock mechanism
+    This method is intended to be called as a background task. Includes management of the lock mechanism
     of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
 
     Args:
@@ -96,7 +96,7 @@ def generate_embeddings_from_file_background_task(app_context: AppContext, docum
 
     Args:
         app_context (AppContext): The application context.
-        file (UploadFile): The file to extract the embeddings from.
+        document_generator (Generator[str, None, None]): The generator, as iterable, of the texts to be evaluated
     """
     logger = app_context.logger
 
