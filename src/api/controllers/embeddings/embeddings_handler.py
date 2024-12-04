@@ -1,12 +1,14 @@
+from gzip import BadGzipFile
+from tarfile import TarError
 from typing import Generator
 from zipfile import BadZipFile
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile, status
 
-from src.constants import MD_CONTENT_TYPE, PDF_CONTENT_TYPE, ZIP_CONTENT_TYPE, TEXT_CONTENT_TYPE
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
 from src.application.embeddings.file_parser import FileParser
 from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
+from src.constants import SUPPORTED_CONTENT_TYPES_TUPLE
 from src.context import AppContext
 
 router = APIRouter()
@@ -129,8 +131,14 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     The file must be uploaded with content type "multipart/form-data" request and must have one of the following content type:
         - text/plain (such as .txt files)
         - text/markdown (such as .md files)
-        - application/pdf
-        - application/zip (which must contain only file of the previous types)
+        - application/pdf (such as .pdf files)
+
+    Also, it could be one of the following archive types:
+        - application/zip
+        - application/x-tar
+        - application/gzip
+    Please mind that archive files must contain only files with the aforementioned content types.
+
 
     Args:
         request (Request): The request object.
@@ -138,7 +146,7 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         background_tasks (BackgroundTasks): The background tasks object.
     """
 
-    if file.content_type not in [MD_CONTENT_TYPE, TEXT_CONTENT_TYPE, PDF_CONTENT_TYPE, ZIP_CONTENT_TYPE]:
+    if file.content_type not in SUPPORTED_CONTENT_TYPES_TUPLE:
         raise HTTPException(status_code=400, detail=f"Application does not support this file type (content type: {file.content_type}).")
     
     request_context: AppContext = request.state.app_context
@@ -147,8 +155,8 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     try:
         file_parser = FileParser(request_context.logger)
         docs = list(file_parser.extract_documents_from_file(file))
-    except BadZipFile as ex:
-        raise HTTPException(status_code=400, detail="File uploaded is not a valid application/zip file.") from ex
+    except (BadZipFile, BadGzipFile, TarError) as ex:
+        raise HTTPException(status_code=400, detail="The file uploaded is not a valid archive file.") from ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error parsing file: {str(ex)}") from ex
 

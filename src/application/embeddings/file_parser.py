@@ -1,13 +1,21 @@
+import gzip
 import io
 from logging import Logger
 from tempfile import TemporaryDirectory
 
 from typing import Generator
 from zipfile import BadZipFile, ZipFile
+import tarfile
 from pymupdf import Document
 from fastapi import File, UploadFile
 
-from src.constants import MD_EXTENSION, PDF_EXTENSION, SUPPORTED_FILES_IN_ZIP_TUPLE, SUPPORTED_FILES_TUPLE, TEXT_EXTENSION, ZIP_EXTENSION
+from src.constants import (
+    MD_EXTENSION,
+    PDF_EXTENSION,
+    SUPPORTED_CONTENT_TYPES_TUPLE,
+    SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE,
+    TEXT_EXTENSION,
+)
 from src.application.embeddings.errors import InvalidFileExtensionError
 
 
@@ -67,7 +75,7 @@ class FileParser:
                 # Check for the list of file: we extract the files then we check if the extension match the available ones (supported: pdf, txt, md)
                 for file_name in zipf.namelist():
                     # For now we do not support folders inside zip files.
-                    if file_name.endswith(SUPPORTED_FILES_IN_ZIP_TUPLE):
+                    if file_name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
                         with zipf.open(file_name) as f:
                             self.logger.info(f'Reading file {file_name}')
                             file_content = f.read()
@@ -86,14 +94,90 @@ class FileParser:
             #pylint: disable=W0719
             raise Exception(f"An error occurred while extracting the file {file.filename}") from ex
 
-        
+    def _extract_documents_from_tar_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
+        self.logger.debug(f'Extracting files from tar file {file.filename}')
+        try:
+            content = file.file.read()
+            with (
+                TemporaryDirectory() as temp_dir,
+                tarfile.open(fileobj=io.BytesIO(content)) as tarf
+            ):
+                tarf.extractall(temp_dir)
+
+                self.logger.info(f'Extracted {len(tarf.getmembers())} files. Processing them...')
+
+                # Process each file in the tar archive
+                for member in tarf.getmembers():
+                    # Skip if it's a directory
+                    if member.isfile() and member.name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
+                        with tarf.extractfile(member) as f:
+                            self.logger.info(f'Reading file {member.name}')
+                            file_content = f.read()
+
+                            if member.name.endswith(PDF_EXTENSION):
+                                doc = Document(stream=file_content)
+                                yield from self._convert_from_doc_to_str(doc)
+                            if member.name.endswith(TEXT_EXTENSION):
+                                yield self._convert_bytes_to_str(file_content)
+                            if member.name.endswith(MD_EXTENSION):
+                                yield self._convert_bytes_to_str(file_content)
+        except tarfile.TarError as tar_error:
+            self.logger.error(tar_error)
+            raise tarfile.TarError(f"Invalid tar file: {tar_error}")
+        except Exception as ex:
+            #pylint: disable=W0719
+            raise Exception(f"An error occurred while extracting the file {file.filename}") from ex
     
+    def _extract_documents_from_gzip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
+        self.logger.debug(f'Extracting files from gzip file {file.filename}')
+        try:
+            content = file.file.read()
+            with (
+                TemporaryDirectory() as temp_dir,
+                gzip.open(io.BytesIO(content)) as gzf
+            ):
+                # For .tar.gz files
+                if file.filename.endswith('.tar.gz'):
+                    with tarfile.open(fileobj=gzf) as tarf:
+                        tarf.extractall(temp_dir)
+                        self.logger.info(f'Extracted {len(tarf.getmembers())} files. Processing them...')
+                        
+                        for member in tarf.getmembers():
+                            if member.isfile() and member.name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
+                                with tarf.extractfile(member) as f:
+                                    self.logger.info(f'Reading file {member.name}')
+                                    file_content = f.read()
+
+                                    if member.name.endswith(PDF_EXTENSION):
+                                        doc = Document(stream=file_content)
+                                        yield from self._convert_from_doc_to_str(doc)
+                                    if member.name.endswith(TEXT_EXTENSION):
+                                        yield self._convert_bytes_to_str(file_content)
+                                    if member.name.endswith(MD_EXTENSION):
+                                        yield self._convert_bytes_to_str(file_content)
+                # For single .gz files
+                else:
+                    decompressed_content = gzf.read()
+                    if file.filename.endswith('.pdf.gz'):
+                        doc = Document(stream=decompressed_content)
+                        yield from self._convert_from_doc_to_str(doc)
+                    elif file.filename.endswith(('.txt.gz', '.md.gz')):
+                        yield self._convert_bytes_to_str(decompressed_content)
+                        
+        except gzip.BadGzipFile as gzip_error:
+            self.logger.error(gzip_error)
+            raise gzip.BadGzipFile(f"Invalid gzip file: {gzip_error}")
+        except Exception as ex:
+            #pylint: disable=W0719
+            raise Exception(f"An error occurred while extracting the file {file.filename}") from ex
+
     def extract_documents_from_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
         """
         Extract text content from various file types and return it as a Generator.
                 
-        This method supports extracting text from PDF, TXT, MD, and ZIP files. For ZIP files,
-        it will process all supported file types contained within. 
+        This method supports extracting text from `pdf`s, `txt`s, `md`s, and archive files (`zip`, `tar` and `gz` supported).
+        For archives, it will process all supported file types contained within.
+        This is performed with a check on the file content-type
         
         The use of a Generator allows for memory-efficient processing of large files by yielding content
         incrementally rather than loading everything into memory at once. It can be transformed into a list
@@ -107,22 +191,31 @@ class FileParser:
             
         Raises:
             InvalidFileExtensionError: If the file extension is not supported
-            BadZipFile: If the ZIP file is corrupted or invalid
+            BadZipFile: If the zip file is corrupted or invalid
+            TarError: If the tar file is corrupted or invalid
+            BadGzipFile: If the gzip file is corrupted or invalid
             Exception: For general processing errors
         
         """
         self.logger.info(f"Extracting documents from file {file.filename}")
-        if not file.filename.endswith(SUPPORTED_FILES_TUPLE):
+        if file.content_type not in SUPPORTED_CONTENT_TYPES_TUPLE:
             raise InvalidFileExtensionError(filename=file.filename)
         
         result: list[str] | Generator[str, None, None] = []
-        if file.filename.endswith(PDF_EXTENSION):
-            result = self._convert_pdf_to_str(file)
-        if file.filename.endswith((TEXT_EXTENSION, MD_EXTENSION)):
-            # Since we are returning a Generator (an iterable), we need to convert it to a list
-            result = [self._convert_text_to_str(file)]
-        if file.filename.endswith(ZIP_EXTENSION):
-            result = self._extract_documents_from_zip_file(file)
-    
+
+        match file.content_type:
+            case "text/plain" | "text/markdown":
+                result = [self._convert_text_to_str(file)]
+            case "application/pdf":
+                result = self._convert_pdf_to_str(file)
+            case "application/zip":
+                result = self._extract_documents_from_zip_file(file)
+            case "application/x-tar":
+                result = self._extract_documents_from_tar_file(file)
+            case "application/gzip":
+                result = self._extract_documents_from_gzip_file(file)
+            case _:
+                raise InvalidFileExtensionError(filename=file.filename)
+            
         self.logger.info(f"Completed documents extraction from file {file.filename}")
         yield from result

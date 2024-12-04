@@ -87,13 +87,21 @@ def test_fail_generate_embeddings_from_unsupported_file(test_client):
         mock_extract_documents_from_file.assert_not_called()
         mock_generate_from_text.assert_not_called()
 
-def test_fail_for_bad_zip_file(test_client):
+@pytest.mark.parametrize(
+    "file_name, content_type",
+    [
+        ("zip_file.zip", "application/zip"),
+        ("tar_file.tar", "application/x-tar"),
+        ("gz_file.gz", "application/gzip"),
+    ]
+)
+def test_fail_for_bad_archive_file(test_client, file_name, content_type):
     with patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text") as mock_generate_from_text:
-        files = {"file": ("bad_zip_file.zip", b"This is not a valid ZIP file", "application/zip")}
+        files = {"file": (file_name, b"This is not a valid archive file", content_type)}
         response = test_client.post("/embeddings/generateFromFile", files=files)
         
         assert response.status_code == 400
-        assert response.json() == {"detail": "File uploaded is not a valid application/zip file."}
+        assert response.json() == {"detail": "The file uploaded is not a valid archive file."}
         mock_generate_from_text.assert_not_called()
 
 def test_fail_generate_embeddings_from_file_for_conflicts(test_client):
