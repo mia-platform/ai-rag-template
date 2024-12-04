@@ -3,7 +3,7 @@ import io
 from logging import Logger
 from tempfile import TemporaryDirectory
 
-from typing import Generator
+from typing import IO, Generator
 from zipfile import BadZipFile, ZipFile
 import tarfile
 from pymupdf import Document
@@ -59,6 +59,17 @@ class FileParser:
         file_content = file.file.read()
         doc = Document(stream=file_content)
         yield from self._convert_from_doc_to_str(doc)
+
+    def _convert_file_to_str(self, file: IO[bytes], file_name: str) -> Generator[str, None, None]:
+        file_content = file.read()
+
+        if file_name.endswith(PDF_EXTENSION):
+            doc = Document(stream=file_content)
+            yield from self._convert_from_doc_to_str(doc)
+        if file_name.endswith(TEXT_EXTENSION):
+            yield self._convert_bytes_to_str(file_content)
+        if file_name.endswith(MD_EXTENSION):
+            yield self._convert_bytes_to_str(file_content)
     
     def _extract_documents_from_zip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
         self.logger.debug(f'Extracting files from zip file {file.filename}')
@@ -78,15 +89,7 @@ class FileParser:
                     if file_name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
                         with zipf.open(file_name) as f:
                             self.logger.info(f'Reading file {file_name}')
-                            file_content = f.read()
-
-                            if file_name.endswith(PDF_EXTENSION):
-                                doc = Document(stream=file_content)
-                                yield from self._convert_from_doc_to_str(doc)
-                            if file_name.endswith(TEXT_EXTENSION):
-                                yield self._convert_bytes_to_str(file_content)
-                            if file_name.endswith(MD_EXTENSION):
-                                yield self._convert_bytes_to_str(file_content)
+                            yield from self._convert_file_to_str(f, file_name)
         except BadZipFile as bad_zip_file_ex:
             self.logger.error(bad_zip_file_ex)
             raise BadZipFile(bad_zip_file_ex)
@@ -112,15 +115,7 @@ class FileParser:
                     if member.isfile() and member.name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
                         with tarf.extractfile(member) as f:
                             self.logger.info(f'Reading file {member.name}')
-                            file_content = f.read()
-
-                            if member.name.endswith(PDF_EXTENSION):
-                                doc = Document(stream=file_content)
-                                yield from self._convert_from_doc_to_str(doc)
-                            if member.name.endswith(TEXT_EXTENSION):
-                                yield self._convert_bytes_to_str(file_content)
-                            if member.name.endswith(MD_EXTENSION):
-                                yield self._convert_bytes_to_str(file_content)
+                            yield from self._convert_file_to_str(f, member.name)
         except tarfile.TarError as tar_error:
             self.logger.error(tar_error)
             raise tarfile.TarError(f"Invalid tar file: {tar_error}")
@@ -146,15 +141,7 @@ class FileParser:
                             if member.isfile() and member.name.endswith(SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE):
                                 with tarf.extractfile(member) as f:
                                     self.logger.info(f'Reading file {member.name}')
-                                    file_content = f.read()
-
-                                    if member.name.endswith(PDF_EXTENSION):
-                                        doc = Document(stream=file_content)
-                                        yield from self._convert_from_doc_to_str(doc)
-                                    if member.name.endswith(TEXT_EXTENSION):
-                                        yield self._convert_bytes_to_str(file_content)
-                                    if member.name.endswith(MD_EXTENSION):
-                                        yield self._convert_bytes_to_str(file_content)
+                                    yield from self._convert_file_to_str(f, member.name)
                 # For single .gz files
                 else:
                     decompressed_content = gzf.read()
