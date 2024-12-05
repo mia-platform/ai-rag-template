@@ -1,5 +1,5 @@
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
-from langchain_openai.chat_models.base import BaseChatOpenAI
+from langchain_core.language_models.chat_models import BaseChatModel
 from src.infrastracture.llm_manager.errors import UnsupportedLlmProviderError
 from src.context import AppContext
 
@@ -8,7 +8,7 @@ class LlmManager:
     def __init__(self, app_context: AppContext):
         self.app_context = app_context
 
-    def get_llm_instance(self) -> BaseChatOpenAI:
+    def get_llm_instance(self) -> BaseChatModel:
         llm_api_key = self.app_context.env_vars.LLM_API_KEY
         llm_configuration = self.app_context.configurations.llm
 
