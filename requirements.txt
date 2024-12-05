@@ -16,7 +16,7 @@ contourpy==1.2.1
 coverage==7.5.0
 cycler==0.12.1
 dataclasses-json==0.6.4
-datamodel-code-generator==0.25.5
+datamodel-code-generator==0.26.3
 defusedxml==0.7.1
 dill==0.3.8
 distlib==0.3.8
