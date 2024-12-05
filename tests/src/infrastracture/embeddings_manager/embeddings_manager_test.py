@@ -50,4 +50,3 @@ def test_fail_to_get_embeddings_instance_from_unsupported_configuration(app_cont
     embeddings_manager = EmbeddingsManager(app_context)
     with pytest.raises(UnsupportedEmbeddingsProviderError):
         embeddings_manager.get_embeddings_instance()
-        

@@ -50,4 +50,3 @@ def test_fail_to_get_llm_instance_from_unsupported_configuration(app_context):
     llm_manager = LlmManager(app_context)
     with pytest.raises(UnsupportedLlmProviderError):
         llm_manager.get_llm_instance()
-        
