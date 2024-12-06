@@ -15,37 +15,35 @@ def get_test_configuration(path, logger):
     return get_configuration(file_path, logger)
 
 
-CORRECT_CONFIG_PATH = 'assets/correct_config.json'
-INCORRECT_CONFIG_PATH = 'assets/wrong_config.json'
-UNEXISTING_CONFIG_PATH = 'zombie_config/asd.json'
+@pytest.mark.parametrize(
+    "title, config_path",
+    [
+        ("with minimal configuration", "assets/correct_config.json"),
+        ("with OpenAI configuration", "assets/openai_config.json"),
+        ("with Azure OpenAI configuration", "assets/azure_config.json"),
+    ]
+)
+# pylint: disable=unused-argument
+def test_get_valid_configuration(title, config_path, logger):
+    config = get_test_configuration(config_path, logger)
+    assert config is not None
+
+
+def test_fail_non_existing_configuration_file(logger):
+    with pytest.raises(FileNotFoundError):
+        get_test_configuration("not_existing_file.json", logger)
 
 
 @pytest.mark.parametrize(
-    "test_id, config_path, expected_exception",
+    "title, config_path",
     [
-        (
-            "it should load correct configuration",
-            CORRECT_CONFIG_PATH,
-            None
-        ),
-        (
-            "it should raise FileNotFoundError for non-existing path",
-            UNEXISTING_CONFIG_PATH,
-            FileNotFoundError
-        ),
-        (
-            "it should raise ConfigValidationError if the configuration is not valid against the schema",
-            INCORRECT_CONFIG_PATH,
-            ConfigValidationError
-        ),
+        ("empty config", "assets/empty_config.json"),
+        ("missing llm", "assets/missing_llm_config.json"),
+        ("unknown llm type", "assets/unknown_llm_type_config.json"),
+        ("unknown_embedding_type", "assets/unknown_embedding_type_config.json"),
     ],
 )
-def test_get_configuration(test_id, config_path, expected_exception, logger):
-    # pylint: disable=unused-argument
-
-    if expected_exception is None:
-        config = get_test_configuration(config_path, logger)
-        assert config is not None
-    else:
-        with pytest.raises(expected_exception):
-            get_test_configuration(config_path, logger)
+# pylint: disable=unused-argument
+def test_fail_invalid_configuration(title, config_path, logger):
+    with pytest.raises(ConfigValidationError):
+        get_test_configuration(config_path, logger)

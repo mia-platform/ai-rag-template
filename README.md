@@ -197,14 +197,17 @@ The values `numDimensions`, `embeddingKey` and `relevanceScoreFn` comes from the
 
 ## Configuration
 
-The service requires several configuration parameters for execution. Below is an example configuration:
+The service requires several configuration parameters for execution. Below is an example of configuration:
 
 ```json
 {
   "llm": {
-    "name": "gpt-3.5-turbo"
+    "type": "openai",
+    "name": "gpt-3.5-turbo",
+    "temperature": 0.7,
   },
   "embeddings": {
+    "type": "openai",
     "name": "text-embedding-3-small"
   },
   "vectorStore": {
@@ -216,22 +219,6 @@ The service requires several configuration parameters for execution. Below is an
     "textKey": "text",
     "maxDocumentsToRetrieve": 4,
     "minScoreDistance": 0.5
-  },
-  "documentation": {
-    "repository": {
-      "baseUrl": "https://api.github.com/repos",
-      "owner": "/mia-platform",
-      "name": "/documentation",
-      "baseDir": "docs",
-      "supportedExtensions": [
-        ".md",
-        ".mdx"
-      ],
-      "requestTimeoutInSeconds": 30
-    },
-    "website": {
-      "baseUrl": "https://docs.mia-platform.eu"
-    }
   },
   "chain": {
     "aggregateMaxTokenNumber": 2000,
@@ -249,7 +236,10 @@ Description of configuration parameters:
 
 | Param Name | Description |
 |------------|-------------|
+| LLM Type | Identifier of the provider to use for the LLM. Default: `openai`. See more in [Supported LLM providers](#supported-llm-providers) |
 | LLM Name | Name of the chat model to use. [Must be supported by LangChain.](https://python.langchain.com/docs/integrations/chat/) |
+| LLM Temperature | Temperature parameter for the LLM, intended as the grade of variability and randomness of the generated response. Default: `0.7` (suggested value). |
+| Embeddings Type | Identifier of the provider to use for the Embeddings. Default: `openai`. See more in [Supported Embeddings providers](#supported-embeddings-providers) |
 | Embeddings Name | Name of the encoder to use. [Must be supported by LangChain.](https://python.langchain.com/docs/integrations/text_embedding/) |
 | Vector Store DB Name | Name of the MongoDB database to use as a knowledge base. |
 | Vector Store Collection Name | Name of the MongoDB collection to use for storing documents and document embeddings. |
@@ -259,14 +249,74 @@ Description of configuration parameters:
 | Vector Store Text Key | Name of the field used to save the raw document (or chunk of document). |
 | Vector Store Max. Documents To Retrieve | Maximum number of documents to retrieve from the Vector Store. |
 | Vector Store Min. Score Distance | Minimum distance beyond which retrieved documents from the Vector Store are discarded. |
-| Documentation Repository Base Url | Base path of the GitHub repository to download documentation from. |
-| Documentation Repository Owner | Owner name of the documentation repository. |
-| Documentation Repository Name | Name of the documentation repository. |
-| Documentation Repository Base Dir. | Name of the folder containing the documentation source. |
-| Documentation Repository Request Timeout In Seconds | Time limit to download a single documentation file. |
-| Documentation Repository Supported Extensions | Name of supported file extensions (currently only Markdown files). |
-| Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. |
-| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. |
+| Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. If omitted, the application will use a standard system prompt. |
+| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. If omitted, the application will use a standard system prompt. |
+
+### Supported LLM providers
+
+The property `type` inside the `llm` object of the configuration should be one of the supported providers for the LLM.
+Currently, the supported LLM providers are:
+
+- OpenAI (`openai`), in which case the `llm` configuration could be the following:
+  ```json
+  {
+    "type": "openai",
+    "name": "gpt-3.5-turbo",
+    "temperature": 0.7,
+  }
+  ```
+  with the properties explained above.
+
+- Azure OpenAI (`azure`), in which case the `llm` configuration could be the following:
+  ```json
+  {
+    "type": "azure",
+    "name": "gpt-3.5-turbo",
+    "deploymentName": "dep-gpt-3.5-turbo",
+    "url": "https://my-company.openai.azure.com/",
+    "apiVersion": "my-azure-api-version",
+    "temperature": 0.7
+  }
+  ```
+
+  While, `type` is always `azure`, and `name` and `temperature` have been already explained, the other properties are:
+  | Name |  Description |
+  |------|-------------|
+  | `deploymentName` | Name of the deployment to use. |
+  | `url` | URL of the Azure OpenAI service to call. |
+  | `apiVersion` | API version of the Azure OpenAI service. |
+
+### Supported Embeddings providers
+
+The property `type` inside the `embeddings` object of the configuration should be one of the supported providers for the Embeddings.
+Currently, the supported Embeddings providers are:
+
+- OpenAI (`openai`), in which case the `embeddings` configuration could be the following:
+  ```json
+  {
+  "type": "openai",
+  "name": "text-embedding-3-small",
+  }
+  ```
+  with the properties explained above.
+
+  - Azure OpenAI (`azure`), in which case the `embeddings` configuration could be the following:
+  ```json
+  {
+    "type": "azure",
+    "name": "text-embedding-3-small",
+    "deploymentName": "dep-text-embedding-3-small",
+    "url": "https://my-company.openai.azure.com/",
+    "apiVersion": "my-azure-api-version"
+  }
+  ```
+  While, `type` is always `azure`, and `name` have been already explained, the other properties are:
+  
+  | Name |  Description |
+  |------|-------------|
+  | `deploymentName` | Name of the deployment to use. |
+  | `url` | URL of the Azure OpenAI service to call. |
+  | `apiVersion` | API version of the Azure OpenAI service. |
 
 ## Local Development
 

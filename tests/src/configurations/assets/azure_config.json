@@ -1,0 +1,24 @@
+{
+    "llm": {
+        "type": "azure",
+        "name": "gpt-3.5-turbo",
+        "url": "https://my-own.azure-openai.com/llm",
+        "deploymentName": "dep-gpt-3.5-turbo",
+        "apiVersion": "2024-01-01-version"
+    },
+    "embeddings": {
+        "type": "azure",
+        "name": "text-embedding-3-small",
+        "url": "https://my-own.azure-openai.com/embedings",
+        "deploymentName": "dep-text-embedding-3-small",
+        "apiVersion": "2024-01-01-version"
+    },
+    "vectorStore": {
+        "dbName": "vectorstore",
+        "collectionName": "vectors",
+        "indexName": "openai_vector_index",
+        "relevanceScoreFn": "euclidean",
+        "embeddingKey": "openai_embedding",
+        "textKey": "text"
+    }
+}
