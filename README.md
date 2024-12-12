@@ -294,8 +294,8 @@ Currently, the supported Embeddings providers are:
 - OpenAI (`openai`), in which case the `embeddings` configuration could be the following:
   ```json
   {
-  "type": "openai",
-  "name": "text-embedding-3-small",
+    "type": "openai",
+    "name": "text-embedding-3-small",
   }
   ```
   with the properties explained above.
