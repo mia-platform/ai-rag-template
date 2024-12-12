@@ -2,14 +2,14 @@ import re
 from collections import deque
 from urllib.parse import urlparse
 
-from langchain_openai import OpenAIEmbeddings
 import requests
 from bs4 import BeautifulSoup
 
 from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSearch
-from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
+from src.context import AppContext
+from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
@@ -22,10 +22,9 @@ class EmbeddingGenerator():
     def __init__(self, app_context: AppContext):
         self.logger = app_context.logger
         mongodb_cluster_uri = app_context.env_vars.MONGODB_CLUSTER_URI
-        embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
 
-        embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name)
+        embedding = EmbeddingsManager(app_context).get_embeddings_instance()
 
         self._document_chunker = DocumentChunker(embedding=embedding)
 
