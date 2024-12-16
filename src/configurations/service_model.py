@@ -152,10 +152,10 @@ class Chain(BaseModel):
 class RagTemplateConfigSchema(BaseModel):
     llm: Union[AzureLlmConfiguration, OpenAILlmConfiguration]
     tokenizer: Optional[Tokenizer] = Field(
-        default_factory=lambda: Tokenizer.parse_obj({'name': 'gpt-3.5-turbo'})
+        default_factory=lambda: Tokenizer.model_validate({'name': 'gpt-3.5-turbo'})
     )
     embeddings: Union[AzureEmbeddingsConfiguration, OpenAIEmbeddingsConfiguration]
     vectorStore: VectorStore
     chain: Optional[Chain] = Field(
-        default_factory=lambda: Chain.parse_obj({'aggregateMaxTokenNumber': 2000})
+        default_factory=lambda: Chain.model_validate({'aggregateMaxTokenNumber': 2000})
     )
