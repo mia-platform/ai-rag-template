@@ -8,7 +8,7 @@ from fastapi import HTTPException
 
 class Reference(BaseModel):
     content: str
-    url: str
+    url: str | None = None
 
 
 class ChatCompletionInputSchema(BaseModel):
