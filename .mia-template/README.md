@@ -33,7 +33,7 @@ cp default.env local.env
 cp default.configuration.json local.configuration.json
 ```
 
-- Modify the values of the configuration in the newly created file, accordingly to the definitions included in the [Configuration paragraph](#configuration)
+- Modify the values of the configuration in the newly created file (you can use the [default.configuration.json](default.configuration.json) as a reference)
 
 ### Startup
 
