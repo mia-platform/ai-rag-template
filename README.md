@@ -18,11 +18,13 @@ More information on how the service works can be found in the [Overview and Usag
 
 ## Main Features
 
+When running the service, the application exposes a Swagger UI at the `/docs` endpoint.
+
 ### Chat Endpoint (`/chat/completions`)
 
 The `/chat/completions` endpoint generates responses to user queries based on provided context and chat history. It leverages information from the configured Vector Store to formulate relevant responses, enhancing the conversational experience.
 
-***Eg***:
+***Example***:
 
 <details>
 <summary>Request</summary>
@@ -40,22 +42,22 @@ curl 'http://localhost:3000/chat/completions' \
 
 ```json
 {
-    "message": "For an online store selling merchandise items, we can design a CRUD schema for a `Product` entity with the following properties:\n\n- `name`: A mandatory string.\n- `description`: An optional string.\n- `price`: A mandatory number.\n\nThe CRUD schema, excluding the default attributes, would look like this:\n\n```json\n[\n  {\n    \"name\": \"name\",\n    \"type\": \"string\",\n    \"required\": true,\n    \"nullable\": false,\n    \"encryptionEnabled\": false,\n    \"encryptionSearchable\": false,\n    \"sensitivityValue\": 0\n  },\n  {\n    \"name\": \"price\",\n    \"type\": \"number\",\n    \"required\": true,\n    \"nullable\": false,\n    \"encryptionEnabled\": false,\n    \"encryptionSearchable\": false,\n    \"sensitivityValue\": 0\n  },\n  {\n    \"name\": \"description\",\n    \"type\": \"string\",\n    \"required\": false,\n    \"nullable\": false,\n    \"encryptionEnabled\": false,\n    \"encryptionSearchable\": false,\n    \"sensitivityValue\": 0\n  }\n]\n```\n\nThis schema defines the structure of the `Product` entity with the necessary properties for managing merchandise items in the online store.",
+    "message": "For an online store selling merchandise items, we can design a CRUD schema for a `Product` entity with the following properties: ...",
     "references": [
         {
-            "content": "### Create CRUD to Read and Write Table Data  \nTo evaluate the new page, it's essential to create a CRUD microservice and expose the relevant data through an endpoint, facilitating reading and writing operations on our table.  \n:::warning\nIf you're unfamiliar with CRUD microservices, consider consulting the [CRUD Tutorial](/console/tutorials/configure-marketplace-components/rest-api-for-crud-on-data.mdx).\n:::  \nFor our example, let's employ a basic CRUD microservice featuring a `Product` entity endowed with the subsequent properties:\n* `name`: A mandatory string.\n* `description`: An optional string.\n* `price`: A mandatory number.  \nThe data CRUD will be exposed via an endpoint named `products`.  \nBelow is the CRUD schema, excluding the default CRUD attributes (_id, creatorId, createdAt, updaterId, updatedAt, and \\_\\_STATE\\_\\_):  \n```json\n[\n{\n\"name\":\"name\",\n\"type\":\"string\",\n\"required\":true,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n},\n{\n\"name\":\"price\",\n\"type\":\"number\",\n\"required\":true,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n},\n{\n\"name\":\"description\",\n\"type\":\"string\",\n\"required\":false,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n}\n]\n```\nNow, the CRUD data can be exposed using an endpoint named `products`.",
+            "content": "### Create CRUD to Read and Write Table Data  \n...",
             "url": "https://docs.mia-platform.eu/docs/microfrontend-composer/tutorials/basics"
         },
         {
-            "content": "### Create CRUD to Read and Write Table Data  \nTo evaluate the new page, it's essential to create a CRUD microservice and expose the relevant data through an endpoint, facilitating reading and writing operations on our table.  \n:::warning\nIf you're unfamiliar with CRUD microservices, consider consulting the [CRUD Tutorial](/console/tutorials/configure-marketplace-components/rest-api-for-crud-on-data.mdx).\n:::  \nFor our example, let's employ a basic CRUD microservice featuring a `Product` entity endowed with the subsequent properties:\n* `name`: A mandatory string.\n* `description`: An optional string.\n* `price`: A mandatory number.  \nThe data CRUD will be exposed via an endpoint named `products`.  \nBelow is the CRUD schema, excluding the default CRUD attributes (_id, creatorId, createdAt, updaterId, updatedAt, and \\_\\_STATE\\_\\_):  \n```json\n[\n{\n\"name\":\"name\",\n\"type\":\"string\",\n\"required\":true,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n},\n{\n\"name\":\"price\",\n\"type\":\"number\",\n\"required\":true,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n},\n{\n\"name\":\"description\",\n\"type\":\"string\",\n\"required\":false,\n\"nullable\":false,\n\"encryptionEnabled\":false,\n\"encryptionSearchable\":false,\n\"sensitivityValue\":0\n}\n]\n```\nNow, the CRUD data can be exposed using an endpoint named `products`.",
+            "content": "### Create CRUD to Read and Write Table Data  \n...",
             "url": "https://docs.mia-platform.eu/docs/microfrontend-composer/tutorials/basics"
         },
         {
-            "content": "### Create a CRUD for persistency  \nTo create a CRUD service you can follow [this](/console/tutorials/configure-marketplace-components/rest-api-for-crud-on-data.mdx) tutorial.\nAs data schema please import this <a download target=\"_blank\" href=\"/docs_files_to_download/flow-manager-service/saga-collection.json\">schema</a>.  \nRemember to create a **unique index** for the collection on the `sagaId` field and to set the **default state** for new documents to `PUBLIC`.  \nTo do this follow these steps:\n1. Open the _Design_ section of the Console.\n1. On the left panel, in the _Data Models_ group, click on _MongoDB CRUD_ section.\n1. Click on the CRUD you created.\n1. In the _Indexes_ section click _Add index_.\n1. Enter these values:\n- **Name**: `sagaIdIndex`\n- **Type**: `Normal`\n- **Field**: `sagaId`  \n<div style={{display: 'flex', justifyContent: 'center'}}>\n<div style={{display: 'flex', width: '600px'}}>  \n![Create CRUD index](img/create-crud-1.png)  \n</div>\n</div>  \n1. Click _Create_. The new index will be shown.\n1. Set the `unique` checkbox for the `sagaIdIndex` index.\n1. In the _Internal Endpoints_ section make sure that `Default state` is set to `PUBLIC`.  \n<div style={{display: 'flex', justifyContent: 'center'}}>\n<div style={{display: 'flex', width: '600px'}}>  \n![Create CRUD index](img/create-crud-2.png)  \n</div>\n</div>  \nYou can find more information on CRUD Persistency Manager in the [dedicated](/runtime_suite/flow-manager-service/30_configuration.md#crud-persistency-manager) page.",
+            "content": "### Create a CRUD for persistency  \n...",
             "url": "https://docs.mia-platform.eu/docs/console/tutorials/configure-marketplace-components/flow-manager"
         },
         {
-            "content": "### Create a CRUD for persistency  \nTo create a CRUD service you can follow [this](/console/tutorials/configure-marketplace-components/rest-api-for-crud-on-data.mdx) tutorial.\nAs data schema please import this <a download target=\"_blank\" href=\"/docs_files_to_download/flow-manager-service/saga-collection.json\">schema</a>.  \nRemember to create a **unique index** for the collection on the `sagaId` field and to set the **default state** for new documents to `PUBLIC`.  \nTo do this follow these steps:\n1. Open the _Design_ section of the Console.\n1. On the left panel, in the _Data Models_ group, click on _MongoDB CRUD_ section.\n1. Click on the CRUD you created.\n1. In the _Indexes_ section click _Add index_.\n1. Enter these values:\n- **Name**: `sagaIdIndex`\n- **Type**: `Normal`\n- **Field**: `sagaId`  \n<div style={{display: 'flex', justifyContent: 'center'}}>\n<div style={{display: 'flex', width: '600px'}}>  \n![Create CRUD index](img/create-crud-1.png)  \n</div>\n</div>  \n1. Click _Create_. The new index will be shown.\n1. Set the `unique` checkbox for the `sagaIdIndex` index.\n1. In the _Internal Endpoints_ section make sure that `Default state` is set to `PUBLIC`.  \n<div style={{display: 'flex', justifyContent: 'center'}}>\n<div style={{display: 'flex', width: '600px'}}>  \n![Create CRUD index](img/create-crud-2.png)  \n</div>\n</div>  \nYou can find more information on CRUD Persistency Manager in the [dedicated](/runtime_suite/flow-manager-service/30_configuration.md#crud-persistency-manager) page.",
+            "content": "### Create a CRUD for persistency  \n...",
             "url": "https://docs.mia-platform.eu/docs/console/tutorials/configure-marketplace-components/flow-manager"
         }
     ]
@@ -64,7 +66,9 @@ curl 'http://localhost:3000/chat/completions' \
 
 </details>
 
-### Generate Embedding Endpoint (`/embeddings/generate`)
+### Embedding Endpoints
+
+#### Generate from website (`/embeddings/generate`)
 
 The `/embeddings/generate` endpoint is a HTTP POST method that takes as input:
 
@@ -117,7 +121,64 @@ curl 'http://localhost:3000/embedding/generate' \
 ```
 </details>
 
-### Generation Embedding Status Endpoint (`/embeddings/generate`)
+#### Generate from file (`/embeddings/generateFromFile`)
+
+The `/embeddings/generateFromFile` endpoint is a HTTP POST method that takes as input:
+
+- `file` (binary, *required*), a file to be uploaded containing the text that will be transformed into embeddings.
+
+The file must be of format:
+
+- a text file (`.txt`)
+- a markdown file (`.md`)
+- a PDF file (`.pdf`)
+- a zip file (formats available: `.zip`, `.tar`, `.gz`) containing files of the same formats as above (folders and other files will be skipped).
+
+For this file, of each file inside the archive, the text will be retrieved, chunked and the embeddings generated.
+
+> **NOTE**:
+> This method can be run only one at a time, as it uses a lock to prevent multiple requests from starting the process at the same time.
+>
+> No information are returned when the process ends, either as completed or stopped because of an error.
+
+***Eg***:
+
+<details>
+<summary>Request</summary>
+
+```curl
+curl -X 'POST' \
+  'https://rag-app-test.console.gcp.mia-platform.eu/api/embeddings/generateFromFile' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@my-archive.zip;type=application/zip'
+```
+
+</details>
+
+<details>
+<summary>Response in case the runner is idle</summary>
+
+```json
+200 OK
+{
+    "statusOk": "true"
+}
+```
+</details>
+
+<details>
+<summary>Response in case the runner is runnning</summary>
+
+```json
+409 Conflict
+{
+    "detail": "A process to generate embeddings is already in progress." 
+}
+```
+</details>
+
+#### Generation status (`/embeddings/status`)
 
 This request returns to the user information regarding the [embeddings generation runner](#generate-embedding-endpoint-embeddingsgenerate). Could be either `idle` (no process currently running) or `running` (a process of generating embeddings is actually happenning).
 
@@ -443,7 +504,3 @@ docker build . -t ai-rag-template
 ```sh
 docker run --env-file ./local.env -p 3000:3000 -d ai-rag-template
 ```
-
-### Try the ai-rag-template
-
-You can also use the ai-rag-template with a CLI. Please follow the instruction in the [related README file](./scripts/chatbotcli/README.md).
