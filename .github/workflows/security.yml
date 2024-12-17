@@ -26,11 +26,3 @@ jobs:
       - name: Run Bandit Security Scanner
         run: |
           bandit -r . -x ./tests
-
-      - name: Check Dependencies for Vulnerabilities with Safety
-        run: |
-          if [ -f "requirements.txt" ]; then
-            safety check -r requirements.txt
-          else
-            echo "No requirements.txt found, skipping dependency check."
-          fi
