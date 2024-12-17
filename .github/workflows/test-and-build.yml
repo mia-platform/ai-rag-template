@@ -7,7 +7,7 @@ on:
 
 jobs:
   tests:
-    name: Test
+    name: Lint and Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,9 +27,13 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-cov coveralls
 
+      - name: Run linting
+        run: |
+          python -m pylint src
+          python -m pylint tests
       - name: Run tests with coverage
         run: |
-          pytest --cov=src --cov-report=term --cov-report=xml
+          python -m pytest -v tests --cov=src --cov-report=term --cov-report=xml
 
       - name: Send coverage to Coveralls
         uses: coverallsapp/github-action@v2
