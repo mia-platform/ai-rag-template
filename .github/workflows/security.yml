@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Bandit Security Scanner
         run: |
-          bandit -r . -x tests
+          bandit -r . -x ./tests
 
       - name: Check Dependencies for Vulnerabilities with Safety
         run: |
