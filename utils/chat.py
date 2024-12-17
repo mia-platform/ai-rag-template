@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import scrolledtext
+import os
+
 import requests
 from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
@@ -20,12 +21,12 @@ class ChatbotClient:
                 "chat_query": message,
                 "chat_history": chat_history
             },
-            headers={"Accept": "application/json"}
+            headers={"Accept": "application/json"},
+            timeout=10
         )
         if response.status_code == 200:
             return response.json()
-        else:
-            return f"Error: {response.text}"
+        return f"Error: {response.text}"
 
 class ChatApp:
     def __init__(self, root, chatbot_client):
