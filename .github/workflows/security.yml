@@ -28,3 +28,4 @@ jobs:
 
       - name: Run pip-audit Security Scanner
         run: pip-audit
+
