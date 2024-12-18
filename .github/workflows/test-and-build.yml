@@ -54,7 +54,7 @@ jobs:
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') || github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+    # if: ${{ startsWith(github.ref, 'refs/tags/') || github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
     permissions:
       actions: read
       contents: write
@@ -98,19 +98,19 @@ jobs:
       uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
       with:
         images: |
-          ghcr.io/mia-platform/ai-rag-template
-          docker.io/mia-platform/ai-rag-template
-          nexus.mia-platform.eu/ai-rag-template
+          ghcr.io/mia-platform/ai-rag-plugin
+          docker.io/mia-platform/ai-rag-plugin
+          nexus.mia-platform.eu/ai-rag-plugin
         tags: |
           type=ref,event=branch
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=semver,pattern={{major}}
         labels: |
-          org.opencontainers.image.documentation=https://github.com/mia-platform/ai-rag-template/blob/main/README.md
+          org.opencontainers.image.documentation=https://github.com/mia-platform/ai-rag-plugin/blob/main/README.md
           org.opencontainers.image.vendor=Mia Platform
         annotations: |
-          org.opencontainers.image.documentation=https://github.com/mia-platform/ai-rag-template/blob/main/README.md
+          org.opencontainers.image.documentation=https://github.com/mia-platform/ai-rag-plugin/blob/main/README.md
           org.opencontainers.image.vendor=Mia Platform
 
     - name: Setup Buildx Context
@@ -135,9 +135,9 @@ jobs:
       uses: anchore/sbom-action@55dc4ee22412511ee8c3142cbea40418e6cec693 # v0.17.8
       if: github.ref_type == 'tag'
       with:
-        artifact-name: ai-rag-template-sbom.spdx.json
-        output-file: ./ai-rag-template-sbom.spdx.json
-        image: nexus.mia-platform.eu/ai-rag-template:${{ steps.meta.output.version.main }}
+        artifact-name: ai-rag-plugin-sbom.spdx.json
+        output-file: ./ai-rag-plugin-sbom.spdx.json
+        image: nexus.mia-platform.eu/ai-rag-plugin:${{ steps.meta.output.version.main }}
         upload-release-assets: true
 
     - name: GCP Auth
@@ -154,12 +154,12 @@ jobs:
         for tag in ${TAGS}; do
           image="${tag}@${DIGEST}"
           cosign sign --recursive --yes --key "${COSIGN_PRIVATE_KEY}" "${image}"
-          cosign attest --recursive --yes --key "${COSIGN_PRIVATE_KEY}" --predicate "ai-rag-template-sbom.spdx.json" --type="spdxjson" "${image}"
+          cosign attest --recursive --yes --key "${COSIGN_PRIVATE_KEY}" --predicate "ai-rag-plugin-sbom.spdx.json" --type="spdxjson" "${image}"
         done
       env:
         TAGS: |
-          ghcr.io/mia-platform/ai-rag-template:${{ steps.meta.output.version.main }}
-          docker.io/mia-platform/ai-rag-template:${{ steps.meta.output.version.main }}
-          nexus.mia-platform.eu/ai-rag-template:${{ steps.meta.output.version.main }}
+          ghcr.io/mia-platform/ai-rag-plugin:${{ steps.meta.output.version.main }}
+          docker.io/mia-platform/ai-rag-plugin:${{ steps.meta.output.version.main }}
+          nexus.mia-platform.eu/ai-rag-plugin:${{ steps.meta.output.version.main }}
         DIGEST: ${{ steps.docker-build.outputs.digest }}
         COSIGN_PRIVATE_KEY: ${{ secrets.MIA_PLATFORM_COSIGN_KEY }}
