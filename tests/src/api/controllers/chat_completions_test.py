@@ -29,11 +29,11 @@ def test_chat_completions(chat_completion_mock, test_client):
             ),
             Document(
                 page_content="doc2",
-                metadata={"url": "www.mia-platform.eu"}
+                metadata={"url": None}
             ),
             Document(
                 page_content="doc3",
-                metadata={"url": "www.mia-platform.eu"}
+                metadata={}
             )
         ]
     )
@@ -55,10 +55,17 @@ def test_chat_completions(chat_completion_mock, test_client):
         "message": completion_mock_response.response,
         "references": [
             {
-                "content": doc.page_content,
-                "url": doc.metadata["url"]
+                "content": "doc1",
+                "url": "www.mia-platform.eu"
+            },
+            {
+                "content": "doc2",
+                "url": None
+            },
+            {
+                "content": "doc3",
+                "url": None
             }
-            for doc in completion_mock_response.references
         ]
     }
 
