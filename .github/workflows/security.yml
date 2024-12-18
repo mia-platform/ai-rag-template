@@ -24,11 +24,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Bandit Security Scanner
-        uses: PyCQA/bandit-action@v1
+        run: bandit -r -l /src
 
       - name: Run pip-audit Security Scanner
-        uses: pypa/gh-action-pip-audit@v1.1.0
-        with:
-          inputs: requirements.txt
-          no-deps: true
-
+        run: pip-audit
