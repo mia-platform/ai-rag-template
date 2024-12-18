@@ -6,38 +6,13 @@
     "name": "text-embedding-3-small"
   },
   "vectorStore": {
-    "dbName": "a-db-name",
-    "collectionName": "a-collection-name",
+    "dbName": "db-name",
+    "collectionName": "collection-name",
     "indexName": "vector-index-name",
     "relevanceScoreFn": "euclidean",
     "embeddingKey": "embedding",
     "textKey": "text",
     "maxDocumentsToRetrieve": 4,
     "minScoreDistance": 0.5
-  },
-  "documentation": {
-    "repository": {
-      "baseUrl": "https://api.github.com/repos",
-      "owner": "/mia-platform",
-      "name": "/documentation",
-      "baseDir": "docs",
-      "supportedExtensions": [
-        ".md",
-        ".mdx"
-      ],
-      "requestTimeoutInSeconds": 30
-    },
-    "website": {
-      "baseUrl": "https://docs.mia-platform.eu"
-    }
-  },
-  "chain": {
-    "aggregateMaxTokenNumber": 2000,
-    "rag": {
-      "promptsFilePath": {
-        "system": "/path/to/system-prompt.txt",
-        "user": "/path/to/user-prompt.txt"
-      }
-    }
   }
 }

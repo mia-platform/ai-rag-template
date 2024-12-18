@@ -1,28 +1,66 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "RAG-template config schema",
-  "description": "Schema for configuring RAG-template, an intelligent virtual assistant.",
+  "description": "Schema for configuring AI Rag Template, an intelligent virtual assistant.",
   "type": "object",
   "properties": {
     "llm": {
       "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The name of the language model (llm) to be used by RAG-template for natural language processing and understanding."
+      "oneOf": [
+        {
+          "title": "AzureLlm",
+          "type": "object",
+          "properties": {
+            "apiVersion": {
+              "description": "The API version of the Azure OpenAI service to be used.",
+              "type": "string"
+            },
+            "deploymentName": {
+              "description": "The name of the configured deployment model to be used by AI RAG Template.",
+              "type": "string"
+            },
+            "name": {
+              "description": "The name of the language model (LLM) to be used. Check the Azure OpenAI documentation for available models.",
+              "type": "string"
+            },
+            "type": {
+              "description": "The type of language model to be used by AI RAG Template for natural language processing and understanding.",
+              "const": "azure",
+              "type": "string"
+            },
+            "url": {
+              "description": "The URL of the Azure OpenAI service to connect with.",
+              "type": "string"
+            },
+            "temperature": {
+              "type": "number",
+              "description": "The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
+              "default": 0.7
+            }
+          },
+          "required": ["apiVersion", "deploymentName", "name", "type", "url"]
         },
-        "url": {
-          "type": "string",
-          "description": "The URL of the language model."
-        },
-        "temperature": {
-          "type": "number",
-          "description": "The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
-          "default": 0.7
+        {
+          "title": "OpenAILlm",
+          "type": "object",
+          "properties": {
+            "type": {
+              "description": "The type of language model to be used by AI RAG Template for natural language processing and understanding.",
+              "const": "openai",
+              "type": "string"
+            },
+            "name": {
+              "description": "The name of the language model (LLM) to be used. Check the OpenAI documentation for available models.",
+              "type": "string"
+            },
+            "temperature": {
+              "type": "number",
+              "description": "The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
+              "default": 0.7
+            }
+          },
+          "required": ["name"]
         }
-      },
-      "required": [
-        "name"
       ]
     },
     "tokenizer": {
@@ -40,14 +78,49 @@
     },
     "embeddings": {
       "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
+      "oneOf": [
+        {
+          "title": "AzureEmbeddings",
+          "properties": {
+            "apiVersion": {
+              "description": "The API version of the Azure OpenAI service to be used.",
+              "type": "string"
+            },
+            "deploymentName": {
+              "description": "The name of the configured deployment model to be used by AI RAG Template.",
+              "type": "string"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
+            },
+            "type": {
+              "description": "The type of language model to be used by AI RAG Template for the embeddings generation.",
+              "const": "azure",
+              "type": "string"
+            },
+            "url": {
+              "description": "The URL of the Azure OpenAI service to connect with.",
+              "type": "string"
+            }
+          },
+          "required": ["apiVersion", "deploymentName", "name", "type", "url"]
+        },
+        {
+          "title": "OpenAIEmbeddings",
+          "properties": {
+            "type": {
+              "description": "The type of language model to be used by AI RAG Template for the embeddings generation.",
+              "const": "openai",
+              "type": "string"
+            },
+            "name": {
+              "type": "string",
+              "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
+            }
+          },
+          "required": ["name"]
         }
-      },
-      "required": [
-        "name"
       ]
     },
     "vectorStore": {

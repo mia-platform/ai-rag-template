@@ -1,18 +1,15 @@
-"""
-This script crawls a website and saves the embeddings extracted from the text of each page to a text file.
-"""
 import re
 from collections import deque
 from urllib.parse import urlparse
 
-from langchain_openai import OpenAIEmbeddings
 import requests
 from bs4 import BeautifulSoup
 
 from langchain_community.vectorstores.mongodb_atlas import MongoDBAtlasVectorSearch
-from src.context import AppContext
 from src.application.embeddings.document_chunker import DocumentChunker
 from src.application.embeddings.hyperlink_parser import HyperlinkParser
+from src.context import AppContext
+from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r"^http[s]*://.+"
@@ -25,10 +22,9 @@ class EmbeddingGenerator():
     def __init__(self, app_context: AppContext):
         self.logger = app_context.logger
         mongodb_cluster_uri = app_context.env_vars.MONGODB_CLUSTER_URI
-        embedding_api_key = app_context.env_vars.EMBEDDINGS_API_KEY
         configuration = app_context.configurations
 
-        embedding = OpenAIEmbeddings(openai_api_key=embedding_api_key, model=configuration.embeddings.name)
+        embedding = EmbeddingsManager(app_context).get_embeddings_instance()
 
         self._document_chunker = DocumentChunker(embedding=embedding)
 
@@ -42,7 +38,6 @@ class EmbeddingGenerator():
             text_key=configuration.vectorStore.textKey
         )
 
-
     def _get_hyperlinks(self, raw_text: str):
         """
         Function to get the hyperlinks from a raw HTML text
@@ -52,7 +47,6 @@ class EmbeddingGenerator():
         parser.feed(raw_text)
 
         return parser.hyperlinks
-
 
     def _get_domain_hyperlinks(self, raw_text: str, local_domain: str, path: str | None = None):
         """
@@ -98,7 +92,7 @@ class EmbeddingGenerator():
 
         return list(set(clean_links))
     
-    def generate(self, url: str, filter_path: str | None = None):
+    def generate_from_url(self, url: str, filter_path: str | None = None):
         """
         Crawls the given URL and saves the text content of each page to a text file.
 
@@ -146,10 +140,10 @@ class EmbeddingGenerator():
                 continue
 
             chunks = self._document_chunker.split_text_into_chunks(text=text, url=url)
-            self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")  # for debugging and to see the progress
+            self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")
             self._embedding_vector_store.add_documents(chunks)
-            self.logger.debug("Embeddings generation completed. Extracting links...")  # for debugging and to see the progress
 
+            self.logger.debug("Embeddings generation completed. Extracting links...")
             hyperlinks = self._get_domain_hyperlinks(raw_text, local_domain, path)
             if len(hyperlinks) == 0:
                 self.logger.debug("No links found, move on.")
@@ -162,3 +156,18 @@ class EmbeddingGenerator():
                     seen.add(link)
 
         self.logger.debug("Scraping completed.")
+
+    def generate_from_text(self, text: str):
+        """
+        Take the string passed as argument, it separates the text into chunks and generates embeddings for each chunk.
+
+        Args:
+            text (str): The text to generate embeddings for.
+
+        Returns:
+            None
+        """
+        chunks = self._document_chunker.split_text_into_chunks(text=text)
+        self.logger.debug(f"Extracted {len(chunks)} chunks from the page. Generated embeddings for these...")
+        self._embedding_vector_store.add_documents(chunks)
+        self.logger.debug("Embeddings generation completed.")
