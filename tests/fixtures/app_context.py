@@ -32,19 +32,6 @@ def app_context():
             "relevanceScoreFn": "euclidean",
             "embeddingKey": "embedding",
             "textKey": "page_content"
-        },
-        documentation={
-            "repository": {
-                "baseUrl": "https://api.github.com/repos",
-                "owner": "mia-platform",
-                "name": "documentation",
-                "baseDir": "docs",
-                "supportedExtensions": [".md", ".mdx"],
-                "requestTimeoutInSeconds": 10
-            },
-            "website": {
-                "baseUrl": "https://docs.mia-platform.eu",
-            }
         }
     )
 

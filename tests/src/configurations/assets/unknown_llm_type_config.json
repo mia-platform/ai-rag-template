@@ -1,0 +1,17 @@
+{
+    "llm": {
+        "type": "unknown",
+        "name": "unknown-llm-model"
+    },
+    "embeddings": {
+        "name": "text-embedding-3-small"
+    },
+    "vectorStore": {
+        "dbName": "vectorstore",
+        "collectionName": "vectors",
+        "indexName": "openai_vector_index",
+        "relevanceScoreFn": "euclidean",
+        "embeddingKey": "openai_embedding",
+        "textKey": "plot"
+    }
+}

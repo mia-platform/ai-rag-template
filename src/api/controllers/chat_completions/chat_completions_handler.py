@@ -40,13 +40,14 @@ async def chat_completions(request: Request, chat: ChatCompletionInputSchema):
 
 def response_mapper(completion_response: AssistantServiceChatCompletionResponse):
     message = completion_response.response
-    references = [
-        {
-            "content": doc.page_content,
-            "url": doc.metadata["url"]
-        }
-        for doc in completion_response.references
-    ]
+    references = []
+
+    for doc in completion_response.references:
+        reference = { "content": doc.page_content }
+        if "url" in doc.metadata:
+            reference["url"] = doc.metadata["url"]
+
+        references.append(reference)
 
     return {
         "message": message,

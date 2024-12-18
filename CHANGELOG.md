@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- updated dependencies (FastAPI, Langchain, OpenAI)
+
+### Added
+
+- add endpoint `POST /embeddings/generateFromFile` for embedding generation
+- add support for _Azure OpenAI_ provider for embedding generation and LLM usage
+
+## 0.3.1 - 2024-09-05
+
+## 0.3.0 - 2024-09-05
+
+### Added
+
+- Automatic creation/update of the Vector Index
+- add endpoints `POST /embeddings/generate` and `GET /embeddings/status` for embedding generation
+
+## 0.2.0 - 2024-08-21
+
+### Updated
+
+- updated dependencies (FastAPI, Langchain, OpenAI)
+- the application is now using Python version 3.12.3
+- improved documentation
+
 ## 0.1.1 - 2024-05-09
 
 ### Added

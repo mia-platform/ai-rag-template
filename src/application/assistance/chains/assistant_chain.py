@@ -9,9 +9,9 @@ from langchain_core.documents import Document
 from langchain_core.language_models.base import LanguageModelInput
 from langchain_core.messages import BaseMessage
 from langchain_core.prompts import PromptTemplate
-from langchain_core.pydantic_v1 import BaseModel
 from langchain_core.runnables import Runnable, RunnableConfig
 from langchain_core.runnables.utils import create_model
+from pydantic import BaseModel
 
 from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
 from src.application.assistance.chains.retriever_chain import RetrieverChain
@@ -143,4 +143,3 @@ Referring to the previous conversation messages:
 """
 
         return ""
-    

@@ -5,7 +5,6 @@ from pymongo.uri_parser import parse_uri
 
 from langchain_community.callbacks.manager import get_openai_callback
 from langchain_core.embeddings import Embeddings
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
 from src.application.assistance.chains.assistant_chain import AssistantChain
@@ -14,6 +13,8 @@ from src.application.assistance.chains.combine_docs_chain import \
 from src.application.assistance.chains.retriever_chain import (
     RetrieverChainConfiguration, RetrieverChain)
 from src.context import AppContext
+from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
+from src.infrastracture.llm_manager.llm_manager import LlmManager
 
 @dataclass
 class AssistantServiceChatCompletionResponse:
@@ -41,32 +42,10 @@ class AssistantService:
         self._setup_assistant()
 
     def _init_embeddings(self):
-        # Load the embeddings model
-
-        embeddings_config = self.app_context.configurations.embeddings
-        embeddings_api_key = self.app_context.env_vars.EMBEDDINGS_API_KEY
-
-        embeddings_model = OpenAIEmbeddings(
-            openai_api_key=embeddings_api_key,
-            model=embeddings_config.name
-        )
-
-        return embeddings_model
+        return EmbeddingsManager(self.app_context).get_embeddings_instance()
 
     def _init_llm(self):
-        # Load the LLM model
-        llm_config = self.app_context.configurations.llm
-        llm_api_key = self.app_context.env_vars.LLM_API_KEY
-        llm_url = self.app_context.configurations.llm.url
-
-        llm = ChatOpenAI(
-            model=llm_config.name,
-            openai_api_key=llm_api_key,
-            base_url=llm_url if llm_url else None,
-            temperature=llm_config.temperature
-        )
-
-        return llm
+        return LlmManager(self.app_context).get_llm_instance()
 
     def _init_retriever_chain(self, embeddings: Embeddings):
         """

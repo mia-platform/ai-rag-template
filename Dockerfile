@@ -1,4 +1,4 @@
-FROM python:3.11.9-slim
+FROM python:3.12.3-slim
 
 RUN useradd -s /bin/bash python
 
@@ -17,7 +17,7 @@ LABEL maintainer="%CUSTOM_PLUGIN_CREATOR_USERNAME%" \
       name="ai-rag-template" \
       description="%CUSTOM_PLUGIN_SERVICE_DESCRIPTION%" \
       eu.mia-platform.url="https://www.mia-platform.eu" \
-      eu.mia-platform.version="0.1.1"
+      eu.mia-platform.version="0.3.1"
 
 USER python
 

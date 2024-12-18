@@ -43,7 +43,7 @@ def test_init_with_db_name_from_uri(app_context):
         pytest.fail("Creating instance of AssistantService failed")
 
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_chat_completion(
     similarity_search_with_score,
@@ -117,7 +117,7 @@ def test_chat_completion(
     assert result.response == chat_completion_reply_mock['choices'][0]['message']['content']
 
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_chat_completion_with_custom_template(
     similarity_search_with_score,
@@ -197,7 +197,7 @@ def test_chat_completion_with_custom_template(
     assert result.response == chat_completion_reply_mock['choices'][0]['message']['content']
 
 @patch(
-    'langchain_mongodb.MongoDBAtlasVectorSearch._similarity_search_with_score',
+    'langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score',
 )
 def test_chat_completion_with_prompts_from_file(
     similarity_search_with_score,

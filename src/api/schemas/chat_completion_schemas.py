@@ -2,13 +2,13 @@
 
 from typing import List
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from fastapi import HTTPException
 
 
 class Reference(BaseModel):
     content: str
-    url: str
+    url: str | None = None
 
 
 class ChatCompletionInputSchema(BaseModel):
@@ -22,7 +22,7 @@ class ChatCompletionInputSchema(BaseModel):
     chat_query: str
     chat_history: List[str]
 
-    @validator('chat_query')
+    @field_validator('chat_query')
     def validate_chat_query_length(cls, chat_query):
         max_length = 2000
         if len(chat_query) > max_length:
@@ -32,7 +32,7 @@ class ChatCompletionInputSchema(BaseModel):
             )
         return chat_query
 
-    @validator('chat_history')
+    @field_validator('chat_history')
     def validate_chat_history_length(cls, chat_history):
         if len(chat_history) % 2 != 0:
             raise ValueError('chat_history length must be even')

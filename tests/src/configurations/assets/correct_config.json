@@ -12,21 +12,5 @@
         "relevanceScoreFn": "euclidean",
         "embeddingKey": "openai_embedding",
         "textKey": "plot"
-    },
-    "documentation": {
-        "repository": {
-            "baseUrl": "http://api.dummy.ai",
-            "owner": "/mia-platform",
-            "name": "/documentation",
-            "baseDir": "docs",
-            "supportedExtensions": [
-                ".md",
-                ".mdx"
-            ],
-            "requestTimeoutInSeconds": 30
-        },
-        "website": {
-            "baseUrl": "http://docs.dummy.ai"
-        }
     }
 }
