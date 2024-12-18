@@ -12,10 +12,10 @@ class AggregateDocsChunksChain(BaseCombineDocumentsChain):
     context: AppContext
     aggreate_max_token_number: int = 2000
     """The maximum token length of the combined documents, if exceeded a warning will be logged."""
-    tokenizer_model_name = "gpt-3.5-turbo"
+    tokenizer_model_name: str = "gpt-3.5-turbo"
     """The language model to use for tokenization."""
 
-    tokenizer = tiktoken.encoding_for_model(tokenizer_model_name)
+    tokenizer: tiktoken.Encoding = tiktoken.encoding_for_model(tokenizer_model_name)
 
     # pylint: disable=W0236
     def acombine_docs(self, docs: List[Document], **kwargs: Any) -> Coroutine[Any, Any, Tuple[str | dict]]:
