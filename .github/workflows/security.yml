@@ -24,11 +24,8 @@ jobs:
           pip install bandit
 
       - name: Run Bandit Security Scanner
-        # run: bandit -r . -x ./tests
         uses: PyCQA/bandit-action@v1
 
       - name: Run pip-audit Security Scanner
         uses: pypa/gh-action-pip-audit@v1.1.0
-        with:
-          inputs: requirements.txt
 
