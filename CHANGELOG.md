@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- updated dependencies (FastAPI, Langchain, OpenAI)
+
 ### Added
 
 - add endpoint `POST /embeddings/generateFromFile` for embedding generation

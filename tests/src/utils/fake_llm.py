@@ -2,7 +2,7 @@
 from typing import Any, Dict, List, Mapping, Optional, cast
 
 from langchain_core.language_models.llms import LLM
-from langchain_core.pydantic_v1 import validator
+from pydantic import ValidationInfo, field_validator
 
 from langchain.callbacks.manager import CallbackManagerForLLMRun
 
@@ -15,12 +15,12 @@ class FakeLLM(LLM):
     response_index: int = 0
     prompts_received: List[str] = []  # received prompts for testing
 
-    @validator("queries", always=True)
+    @field_validator("queries", check_fields=True)
     # pylint: disable=no-self-argument
     def check_queries_required(
-        cls, queries: Optional[Mapping], values: Mapping[str, Any]
+        cls, queries: Optional[Mapping], values: ValidationInfo
     ) -> Optional[Mapping]:
-        if values.get("sequential_response") and not queries:
+        if values.data.get("sequential_response") and not queries:
             raise ValueError(
                 "queries is required when sequential_response is set to True"
             )
