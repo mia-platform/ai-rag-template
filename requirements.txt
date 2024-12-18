@@ -26,7 +26,7 @@ dnspython==2.6.1
 docker==7.0.0
 email_validator==2.1.1
 exceptiongroup==1.2.0
-fastapi==0.112.1
+fastapi==0.115.6
 filelock==3.13.4
 fonttools==4.51.0
 frozenlist==1.4.1
@@ -62,6 +62,7 @@ MarkupSafe==2.1.5
 marshmallow==3.21.1
 matplotlib==3.8.4
 mccabe==0.7.0
+mdurl==0.1.2
 multidict==6.0.5
 mypy-extensions==1.0.0
 nodeenv==1.8.0
