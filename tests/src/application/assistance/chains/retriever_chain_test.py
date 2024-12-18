@@ -86,6 +86,7 @@ def test_call(
     assert result[chain.output_key] == [
         doc for doc, _ in mock_similar_documents]
     for doc, _ in mock_similar_documents:
+        # pylint: disable=E1136
         assert doc.metadata['score'] == 0.5
         
 @patch(
