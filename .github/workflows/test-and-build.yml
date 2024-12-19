@@ -100,7 +100,7 @@ jobs:
       with:
         images: |
           ghcr.io/mia-platform/rag-chatbot-api
-          docker.io/mia-platform/rag-chatbot-api
+          docker.io/miaplatform/rag-chatbot-api
           nexus.mia-platform.eu/rag-chatbot-api
         tags: |
           type=ref,event=branch
@@ -160,7 +160,7 @@ jobs:
       env:
         TAGS: |
           ghcr.io/mia-platform/rag-chatbot-api:${{ steps.meta.output.version.main }}
-          docker.io/mia-platform/rag-chatbot-api:${{ steps.meta.output.version.main }}
+          docker.io/miaplatform/rag-chatbot-api:${{ steps.meta.output.version.main }}
           nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.output.version.main }}
         DIGEST: ${{ steps.docker-build.outputs.digest }}
         COSIGN_PRIVATE_KEY: ${{ secrets.MIA_PLATFORM_KEY_KMS }}
