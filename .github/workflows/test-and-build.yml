@@ -101,7 +101,7 @@ jobs:
         images: |
           ghcr.io/mia-platform/rag-chatbot-api
           docker.io/miaplatform/rag-chatbot-api
-          nexus.mia-platform.eu/rag-chatbot-api
+          nexus.mia-platform.eu/plugins/rag-chatbot-api
         tags: |
           type=ref,event=branch
           type=semver,pattern={{version}}
@@ -138,7 +138,7 @@ jobs:
       with:
         artifact-name: rag-chatbot-api-sbom.spdx.json
         output-file: ./rag-chatbot-api-sbom.spdx.json
-        image: nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.outputs.version }}
+        image: nexus.mia-platform.eu/plugins/rag-chatbot-api:${{ steps.meta.outputs.version }}
         upload-release-assets: true
 
     - name: GCP Auth
@@ -161,6 +161,6 @@ jobs:
         TAGS: |
           ghcr.io/mia-platform/rag-chatbot-api:${{ steps.meta.outputs.version }}
           docker.io/miaplatform/rag-chatbot-api:${{ steps.meta.outputs.version }}
-          nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.outputs.version }}
+          nexus.mia-platform.eu/plugins/rag-chatbot-api:${{ steps.meta.outputs.version }}
         DIGEST: ${{ steps.docker-build.outputs.digest }}
         COSIGN_PRIVATE_KEY: ${{ secrets.MIA_PLATFORM_KEY_KMS }}
