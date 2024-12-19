@@ -1,0 +1,165 @@
+name: Test and Build
+on:
+  pull_request:
+    types:
+      - opened
+  push:
+
+jobs:
+  tests:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.3'
+          check-latest: true
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov coveralls
+
+      - name: Run linting
+        run: |
+          python -m pylint src
+          python -m pylint tests
+      - name: Run tests with coverage
+        run: |
+          python -m pytest -v tests --cov=src --cov-report=term --cov-report=xml
+
+      - name: Send coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.xml
+          flag-name: python-3.12.3
+          parallel: true
+
+  post-tests:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
+
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/') || github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+    permissions:
+      actions: read
+      contents: write
+      packages: write
+      id-token: write
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        show-progress: false
+
+    - name: Docker Login to GitHub Repository
+      uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_cr_token }}
+
+    - name: Docker Login to DockerHub
+      uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+      with:
+        username: ${{ secrets.docker_username }}
+        password: ${{ secrets.docker_token }}
+
+    - name: Login to Mia registry
+      uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+      with:
+        registry: nexus.mia-platform.eu
+        username: ${{ secrets.nexus_username }}
+        password: ${{ secrets.nexus_token }}
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
+      with:
+        platforms: amd64,arm64
+
+    - name: Configure Docker metadata
+      id: meta
+      uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+      with:
+        images: |
+          ghcr.io/mia-platform/rag-chatbot-api
+          docker.io/mia-platform/rag-chatbot-api
+          nexus.mia-platform.eu/rag-chatbot-api
+        tags: |
+          type=ref,event=branch
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+        labels: |
+          org.opencontainers.image.documentation=https://github.com/mia-platform/rag-chatbot-api/blob/main/README.md
+          org.opencontainers.image.vendor=Mia Platform
+        annotations: |
+          org.opencontainers.image.documentation=https://github.com/mia-platform/rag-chatbot-api/blob/main/README.md
+          org.opencontainers.image.vendor=Mia Platform
+
+    - name: Setup Buildx Context
+      uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+      id: buildx
+      with:
+        platforms: linux/amd64,linux/arm64
+
+    - name: Build and Push Docker Image
+      id: docker-build
+      uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6.10.0
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        platforms: linux/amd64,linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Generate SBOM
+      uses: anchore/sbom-action@55dc4ee22412511ee8c3142cbea40418e6cec693 # v0.17.8
+      if: github.ref_type == 'tag'
+      with:
+        artifact-name: rag-chatbot-api-sbom.spdx.json
+        output-file: ./rag-chatbot-api-sbom.spdx.json
+        image: nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.output.version.main }}
+        upload-release-assets: true
+
+    - name: GCP Auth
+      uses: google-github-actions/auth@6fc4af4b145ae7821d527454aa9bd537d1f2dc5f # v2.1.7
+      if: github.ref_type == 'tag'
+      with:
+        project_id: ${{ secrets.kms_gcp_poject }}
+        workload_identity_provider: ${{ secrets.gcp_wif }}
+        create_credentials_file: true
+
+    - name: Sign public images with key
+      if: github.ref_type == 'tag'
+      run: |
+        for tag in ${TAGS}; do
+          image="${tag}@${DIGEST}"
+          cosign sign --recursive --yes --key "${COSIGN_PRIVATE_KEY}" "${image}"
+          cosign attest --recursive --yes --key "${COSIGN_PRIVATE_KEY}" --predicate "rag-chatbot-api-sbom.spdx.json" --type="spdxjson" "${image}"
+        done
+      env:
+        TAGS: |
+          ghcr.io/mia-platform/rag-chatbot-api:${{ steps.meta.output.version.main }}
+          docker.io/mia-platform/rag-chatbot-api:${{ steps.meta.output.version.main }}
+          nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.output.version.main }}
+        DIGEST: ${{ steps.docker-build.outputs.digest }}
+        COSIGN_PRIVATE_KEY: ${{ secrets.cosign_key }}

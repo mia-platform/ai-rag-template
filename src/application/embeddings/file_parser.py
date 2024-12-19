@@ -79,7 +79,7 @@ class FileParser:
                 TemporaryDirectory() as temp_dir,
                 ZipFile(io.BytesIO(content)) as zipf
             ):
-                zipf.extractall(temp_dir)
+                zipf.extractall(path=temp_dir, members=zipf.namelist())
 
                 self.logger.info(f'Extracted {len(zipf.namelist())} files. Processing them...')
 
@@ -105,8 +105,7 @@ class FileParser:
                 TemporaryDirectory() as temp_dir,
                 tarfile.open(fileobj=io.BytesIO(content)) as tarf
             ):
-                tarf.extractall(temp_dir)
-
+                tarf.extractall(path=temp_dir, filter="data")
                 self.logger.info(f'Extracted {len(tarf.getmembers())} files. Processing them...')
 
                 # Process each file in the tar archive
@@ -134,7 +133,7 @@ class FileParser:
                 # For .tar.gz files
                 if file.filename.endswith('.tar.gz'):
                     with tarfile.open(fileobj=gzf) as tarf:
-                        tarf.extractall(temp_dir)
+                        tarf.extractall(path=temp_dir, filter="data")
                         self.logger.info(f'Extracted {len(tarf.getmembers())} files. Processing them...')
                         
                         for member in tarf.getmembers():

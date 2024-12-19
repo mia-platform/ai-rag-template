@@ -1,0 +1,38 @@
+version: 2
+
+updates:
+# keep up to date the github actions
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: monthly
+    timezone: Europe/Rome
+  groups:
+    minor-actions-dependencies:
+      update-types:
+      - minor
+      - patch
+  commit-message:
+    include: scope
+    prefix: ci
+
+# keep up to date the base docker image
+- package-ecosystem: docker
+  directory: /
+  schedule:
+    interval: daily
+    time: "07:00"
+    timezone: Europe/Rome
+  commit-message:
+    include: scope
+    prefix: build
+
+# keep up with pip packages
+- package-ecosystem: pip
+  directory: /
+  schedule:
+    interval: weekly
+    timezone: Europe/Rome
+  commit-message:
+    include: scope
+    prefix: deps

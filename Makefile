@@ -69,6 +69,9 @@ lint-fix:
 test:
 	python -m pytest -v tests
 
+security-check:
+	bandit 
+
 snapshot:
 	python -m pytest -v --snapshot-update
 

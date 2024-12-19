@@ -1,0 +1,31 @@
+name: Security
+on:
+  pull_request:
+    types: [opened]
+  push:
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          show-progress: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.3"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Bandit Security Scanner
+        run: bandit -r -l /src
+
+      - name: Run pip-audit Security Scanner
+        run: pip-audit
+
