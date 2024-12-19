@@ -111,7 +111,7 @@ curl 'http://localhost:3000/embedding/generate' \
 </details>
 
 <details>
-<summary>Response in case the runner is runnning</summary>
+<summary>Response in case the runner is running</summary>
 
 ```json
 409 Conflict
@@ -168,7 +168,7 @@ curl -X 'POST' \
 </details>
 
 <details>
-<summary>Response in case the runner is runnning</summary>
+<summary>Response in case the runner is running</summary>
 
 ```json
 409 Conflict
