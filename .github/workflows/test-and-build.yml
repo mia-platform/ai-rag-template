@@ -71,20 +71,20 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.github_cr_token }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker Login to DockerHub
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
       with:
-        username: ${{ secrets.docker_username }}
-        password: ${{ secrets.docker_token }}
+        username: ${{ secrets.BOT_DOCKER_USERNAME }}
+        password: ${{ secrets.BOT_DOCKER_TOKEN }}
 
     - name: Login to Mia registry
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
       with:
         registry: nexus.mia-platform.eu
-        username: ${{ secrets.nexus_username }}
-        password: ${{ secrets.nexus_token }}
+        username: ${{ secrets.NEXUS_USER }}
+        password: ${{ secrets.NEXUS_TOKEN }}
     - name: Install Cosign
       uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
 
@@ -144,8 +144,8 @@ jobs:
       uses: google-github-actions/auth@6fc4af4b145ae7821d527454aa9bd537d1f2dc5f # v2.1.7
       if: github.ref_type == 'tag'
       with:
-        project_id: ${{ secrets.kms_gcp_poject }}
-        workload_identity_provider: ${{ secrets.gcp_wif }}
+        project_id: ${{ secrets.MIA_PLATFORM_KMS_GCP_PROJECT }}
+        workload_identity_provider: ${{ secrets.MIA_PLATFORM_WIF }}
         create_credentials_file: true
 
     - name: Sign public images with key
@@ -162,4 +162,4 @@ jobs:
           docker.io/mia-platform/rag-chatbot-api:${{ steps.meta.output.version.main }}
           nexus.mia-platform.eu/rag-chatbot-api:${{ steps.meta.output.version.main }}
         DIGEST: ${{ steps.docker-build.outputs.digest }}
-        COSIGN_PRIVATE_KEY: ${{ secrets.cosign_key }}
+        COSIGN_PRIVATE_KEY: ${{ secrets.MIA_PLATFORM_KEY_KMS }}
