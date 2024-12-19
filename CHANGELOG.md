@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.5.0 - 2024-12-19
+
 ### Added
 
 - Created new pipeline flow for testing, linting, security (with `bandit` and `pip-audit`) and docker image publishing on tags.
