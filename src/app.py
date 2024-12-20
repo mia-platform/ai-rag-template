@@ -62,6 +62,7 @@ if __name__ == '__main__':
 
     uvicorn.run(
         application,
+        host='0.0.0.0', # nosec B104 # binding to all interfaces is required to expose the service in containers
         port=int(app_context.env_vars.PORT),
         log_level='error'
     )
