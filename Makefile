@@ -45,13 +45,13 @@ CONFIGURATION_PATH = src/configurations
 CONFIGURATION_SCHEMA = service_config.json
 CONFIGURATION_MODEL = service_model.py
 
-
-setup:
-	pip install -r requirements.txt
-	pre-commit install
-
 install:
 	pip install -r requirements.txt
+
+clear-deps:
+	pip freeze > to-uninstall.txt
+	pip uninstall -y -r to-uninstall.txt
+	rm to-uninstall.txt
 
 freeze:
 	pip freeze > requirements.txt
@@ -70,7 +70,7 @@ test:
 	python -m pytest -v tests
 
 security-check:
-	bandit 
+	bandit -r -l ./src
 
 snapshot:
 	python -m pytest -v --snapshot-update
