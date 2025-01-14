@@ -127,7 +127,7 @@ stevedore==5.4.0
 tavily-python==0.3.3
 tenacity==8.2.3
 testcontainers==4.4.0
-tiktoken==0.7.0
+tiktoken==0.8.0
 toml==0.10.2
 tomli==2.0.1
 tomlkit==0.12.4
