@@ -124,7 +124,7 @@ soupsieve==2.6
 SQLAlchemy==2.0.29
 starlette==0.40.0
 stevedore==5.4.0
-tavily-python==0.3.3
+tavily-python==0.5.0
 tenacity==8.2.3
 testcontainers==4.4.0
 tiktoken==0.8.0
