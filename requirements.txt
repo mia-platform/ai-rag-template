@@ -21,7 +21,7 @@ coverage==7.5.0
 cycler==0.12.1
 cyclonedx-python-lib==7.6.2
 dataclasses-json==0.6.4
-datamodel-code-generator==0.26.3
+datamodel-code-generator==0.26.5
 defusedxml==0.7.1
 dill==0.3.8
 distlib==0.3.8
