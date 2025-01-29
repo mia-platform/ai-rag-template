@@ -1,4 +1,4 @@
-from typing import Dict, Final
+from typing import Dict
 
 # Constants related to the vector index
 VECTOR_INDEX_TYPE = "vectorSearch"

@@ -1,4 +1,3 @@
-from enum import Enum
 import gzip
 import io
 from logging import Logger
@@ -71,7 +70,7 @@ class FileParser:
             yield from self._convert_from_doc_to_str(doc)
         elif file_extension == TEXT_EXTENSION:
             yield self._convert_bytes_to_str(file_content)
-        elif file_extension == MD_EXTENSION or file_extension == MDX_EXTENSION:
+        elif file_extension in (MD_EXTENSION, MDX_EXTENSION):
             yield self._convert_bytes_to_str(file_content)
     
     def _extract_documents_from_zip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
