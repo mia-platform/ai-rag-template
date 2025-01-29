@@ -1,3 +1,4 @@
+from enum import Enum
 import gzip
 import io
 from logging import Logger
@@ -9,10 +10,11 @@ import tarfile
 from pymupdf import Document
 from fastapi import File, UploadFile
 
+from src.application.embeddings.file_parser.get_file_type import FileType, get_file_type
 from src.constants import (
     MD_EXTENSION,
+    MDX_EXTENSION,
     PDF_EXTENSION,
-    SUPPORTED_CONTENT_TYPES_TUPLE,
     SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE,
     TEXT_EXTENSION,
 )
@@ -62,13 +64,14 @@ class FileParser:
 
     def _convert_file_to_str(self, file: IO[bytes], file_name: str) -> Generator[str, None, None]:
         file_content = file.read()
+        file_extension = file_name.split('.')[-1]
 
-        if file_name.endswith(PDF_EXTENSION):
+        if file_extension == PDF_EXTENSION:
             doc = Document(stream=file_content)
             yield from self._convert_from_doc_to_str(doc)
-        if file_name.endswith(TEXT_EXTENSION):
+        elif file_extension == TEXT_EXTENSION:
             yield self._convert_bytes_to_str(file_content)
-        if file_name.endswith(MD_EXTENSION):
+        elif file_extension == MD_EXTENSION or file_extension == MDX_EXTENSION:
             yield self._convert_bytes_to_str(file_content)
     
     def _extract_documents_from_zip_file(self, file: UploadFile = File(...)) -> Generator[str, None, None]:
@@ -185,21 +188,23 @@ class FileParser:
         """
         self.logger.info(f"Extracting documents from file {file.filename}")
 
-        if file.content_type not in SUPPORTED_CONTENT_TYPES_TUPLE:
+        file_type = get_file_type(file)
+
+        if file_type is None:
             raise InvalidFileError(filename=file.filename)
         
         result: list[str] | Generator[str, None, None] = []
 
-        match file.content_type:
-            case "text/plain" | "text/markdown":
+        match file_type:
+            case FileType.TEXT:
                 result = [self._convert_text_to_str(file)]
-            case "application/pdf":
+            case FileType.PDF:
                 result = self._convert_pdf_to_str(file)
-            case "application/zip":
+            case FileType.ZIP:
                 result = self._extract_documents_from_zip_file(file)
-            case "application/x-tar":
+            case FileType.TAR:
                 result = self._extract_documents_from_tar_file(file)
-            case "application/gzip":
+            case FileType.GZIP:
                 result = self._extract_documents_from_gzip_file(file)
             case _:
                 raise InvalidFileError(filename=file.filename)
