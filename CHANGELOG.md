@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- At service startup, if the Vector Search collection does not exist, it is automatically created
+
 ## 0.5.1 - 2024-12-20
 
 ## 0.5.0 - 2024-12-19
