@@ -13,7 +13,7 @@ from src.constants import (
     TEXT_CONTENT_TYPE,
     ZIP_CONTENT_TYPE
 )
-from src.application.embeddings.errors import InvalidFileError
+from src.application.embeddings.file_parser.errors import InvalidFileError
 from src.application.embeddings.file_parser.file_parser import FileParser
 
 ASSETS_FOLDER = "assets"

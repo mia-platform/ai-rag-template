@@ -9,6 +9,7 @@ import tarfile
 from pymupdf import Document
 from fastapi import File, UploadFile
 
+from src.application.embeddings.file_parser.errors import InvalidFileError
 from src.application.embeddings.file_parser.get_file_type import FileType, get_file_type
 from src.constants import (
     MD_EXTENSION,
@@ -17,7 +18,6 @@ from src.constants import (
     SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE,
     TEXT_EXTENSION,
 )
-from src.application.embeddings.errors import InvalidFileError
 
 
 class FileParser:
