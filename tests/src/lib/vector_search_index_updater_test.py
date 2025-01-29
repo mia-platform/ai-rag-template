@@ -15,7 +15,7 @@ class MockDatabase(dict):
         Mock method to return the list of existing collections. Returns the list
         of keys of the TypedDict instacnce
         """
-        return [key for key in self.keys()]
+        return list(self.keys())
 
 
 def test_update_vector_index_requires_no_changes(app_context):
