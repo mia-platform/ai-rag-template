@@ -13,7 +13,7 @@ from src.constants import (
     TEXT_CONTENT_TYPE,
     ZIP_CONTENT_TYPE
 )
-from src.application.embeddings.errors import InvalidFileExtensionError
+from src.application.embeddings.errors import InvalidFileError
 from src.application.embeddings.file_parser import FileParser
 
 ASSETS_FOLDER = "assets"
@@ -170,7 +170,7 @@ def test_fail_open_file_with_wrong_extension(logger):
 
     file_parser = FileParser(logger)
 
-    with pytest.raises(InvalidFileExtensionError):
+    with pytest.raises(InvalidFileError):
         document_generator = file_parser.extract_documents_from_file(upload_file)
         for _ in document_generator:
             # We are not supposed to get here

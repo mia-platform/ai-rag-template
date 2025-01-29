@@ -16,7 +16,7 @@ from src.constants import (
     SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE,
     TEXT_EXTENSION,
 )
-from src.application.embeddings.errors import InvalidFileExtensionError
+from src.application.embeddings.errors import InvalidFileError
 
 
 class FileParser:
@@ -184,8 +184,9 @@ class FileParser:
         
         """
         self.logger.info(f"Extracting documents from file {file.filename}")
+
         if file.content_type not in SUPPORTED_CONTENT_TYPES_TUPLE:
-            raise InvalidFileExtensionError(filename=file.filename)
+            raise InvalidFileError(filename=file.filename)
         
         result: list[str] | Generator[str, None, None] = []
 
@@ -201,7 +202,7 @@ class FileParser:
             case "application/gzip":
                 result = self._extract_documents_from_gzip_file(file)
             case _:
-                raise InvalidFileExtensionError(filename=file.filename)
+                raise InvalidFileError(filename=file.filename)
             
         self.logger.info(f"Completed documents extraction from file {file.filename}")
         yield from result
