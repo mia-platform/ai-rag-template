@@ -1,8 +1,8 @@
 
-from src.constants import SUPPORTED_EXT_TUPLE
+from src.constants import SUPPORTED_EXT_TUPLE, SUPPORTED_CONTENT_TYPES_TUPLE
 
 
-class InvalidFileExtensionError(Exception):
+class InvalidFileError(Exception):
     """
         Exception raised when a file does not have the expected extension.
 
@@ -13,5 +13,5 @@ class InvalidFileExtensionError(Exception):
         - archive files (.zip files, *.tar files or *.gz files) that includes only the above extensions.
     """
     def __init__(self, filename):
-        self.message = f"The file {filename} cannot be processed. Supported extensions are: {", ".join(SUPPORTED_EXT_TUPLE)}."
+        self.message = f"The file {filename} cannot be processed. File must include one of the specific ContentType: {", ".join(SUPPORTED_CONTENT_TYPES_TUPLE)}. Otherwise can have the following extensions: {", ".join(SUPPORTED_EXT_TUPLE)}."
         super().__init__(self.message)
