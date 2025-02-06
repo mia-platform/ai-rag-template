@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.5.2 - 2025-01-29
+
+### Fixed
+
+- At service startup, if the Vector Search collection does not exist, it is automatically created
+- Support file extension `mdx` for embedding generation
+- File uploaded for embedding generation is validated either from the content-type or the file extension
+
 ## 0.5.1 - 2024-12-20
 
 ## 0.5.0 - 2024-12-19
