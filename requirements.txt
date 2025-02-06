@@ -21,7 +21,7 @@ coverage==7.5.0
 cycler==0.12.1
 cyclonedx-python-lib==7.6.2
 dataclasses-json==0.6.4
-datamodel-code-generator==0.26.3
+datamodel-code-generator==0.26.5
 defusedxml==0.7.1
 dill==0.3.8
 distlib==0.3.8
@@ -55,11 +55,11 @@ jsonpointer==3.0.0
 jsonschema==4.21.1
 jsonschema-specifications==2023.12.1
 kiwisolver==1.4.5
-langchain==0.3.12
+langchain==0.3.17
 langchain-community==0.3.12
-langchain-core==0.3.25
+langchain-core==0.3.33
 langchain-experimental==0.3.3
-langchain-openai==0.2.12
+langchain-openai==0.3.3
 langchain-text-splitters==0.3.3
 langsmith==0.1.147
 license-expression==30.4.0
@@ -135,8 +135,8 @@ tqdm==4.66.3
 typing-inspect==0.9.0
 typing_extensions==4.12.2
 urllib3==2.2.2
-uvicorn==0.29.0
 virtualenv==20.29.1
+uvicorn==0.34.0
 webencodings==0.5.1
 wrapt==1.16.0
 yarl==1.18.3
