@@ -124,7 +124,7 @@ soupsieve==2.6
 SQLAlchemy==2.0.29
 starlette==0.40.0
 stevedore==5.4.0
-tavily-python==0.3.3
+tavily-python==0.5.0
 tenacity==8.2.3
 testcontainers==4.4.0
 tiktoken==0.8.0
@@ -135,8 +135,8 @@ tqdm==4.66.3
 typing-inspect==0.9.0
 typing_extensions==4.12.2
 urllib3==2.2.2
+virtualenv==20.29.1
 uvicorn==0.34.0
-virtualenv==20.26.6
 webencodings==0.5.1
 wrapt==1.16.0
 yarl==1.18.3
