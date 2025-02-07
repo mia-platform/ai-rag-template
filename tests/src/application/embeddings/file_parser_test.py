@@ -37,7 +37,7 @@ PDF_FILE_CONTENT = "this is a PDF (portable document format) file\n"
             (TXT_FILE_NAME, TEXT_CONTENT_TYPE, TXT_FILE_CONTENT),
             (MD_FILE_NAME, MD_CONTENT_TYPE, MD_FILE_CONTENT),
             (MD_FILE_NAME, None, MD_FILE_CONTENT),
-            (MDX_FILE_NAME, "application/javascript", MDX_FILE_CONTENT),
+            (MDX_FILE_NAME, "application/x-genesis-32x-rom", MDX_FILE_CONTENT),
             (PDF_FILE_NAME, PDF_CONTENT_TYPE, PDF_FILE_CONTENT),
         ]
 )

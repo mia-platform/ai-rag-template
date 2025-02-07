@@ -130,7 +130,7 @@ The `/embeddings/generateFromFile` endpoint is a HTTP POST method that takes as 
 The file must be of format:
 
 - a text file (`.txt`)
-- a markdown file (`.md`)
+- a markdown file (`.md` or `.mdx`)
 - a PDF file (`.pdf`)
 - a zip file (formats available: `.zip`, `.tar`, `.gz`) containing files of the same formats as above (folders and other files will be skipped).
 
