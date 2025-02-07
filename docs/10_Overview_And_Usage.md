@@ -103,6 +103,7 @@ Description of configuration parameters:
 | Vector Store Text Key | Name of the field used to save the raw document (or chunk of document). |
 | Vector Store Max. Documents To Retrieve | Maximum number of documents to retrieve from the Vector Store. |
 | Vector Store Min. Score Distance | Minimum distance beyond which retrieved documents from the Vector Store are discarded. |
+| Chain Aggregate Max Token Number | Maximum number of tokens extracted from the retrieved documents from the Vector Store to be included in the prompt (1 token is approximately 4 characters). Default is `2000`. |
 | Chain RAG System Prompts File Path | Path to the file containing system prompts for the RAG model. If omitted, the application will use a standard system prompt. More details in the [dedicated paragraph](#configure-your-own-system-and-user-prompts). |
 | Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. If omitted, the application will use a standard system prompt. More details in the [dedicated paragraph](#configure-your-own-system-and-user-prompts). |
 

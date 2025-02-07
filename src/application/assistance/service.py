@@ -92,7 +92,7 @@ class AssistantService:
         return AggregateDocsChunksChain(
             context=self.app_context,
             tokenizer_model_name=tokenizer_config.name,
-            aggreate_max_token_number=chain_config.aggregateMaxTokenNumber
+            aggregate_max_token_number=chain_config.aggregateMaxTokenNumber
         )
         
     def _build_prompt(self) -> AssistantPromptTemplate:

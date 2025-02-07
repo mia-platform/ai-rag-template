@@ -47,5 +47,5 @@ def test_combine_docs_exceeds_max_tokens(app_context):
     
     # Check that a warning was logged
     app_context.logger.warning.assert_called_with(
-        f"Combined text length exceeded {chain.aggreate_max_token_number} tokens"
+        f"Combined text length exceeded {chain.aggregate_max_token_number} tokens"
     )
