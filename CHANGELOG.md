@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.5.3 - 2025-02-07
+
 ### Fixed
 
 - Version `0.5.2` included an error with the `mdx` files for embedding generation from `generateFromFile` API. This has been fixed.
