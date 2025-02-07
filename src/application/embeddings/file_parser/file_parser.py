@@ -178,7 +178,7 @@ class FileParser:
             Generator[str, None, None]: A generator that yields strings of text content
             
         Raises:
-            InvalidFileExtensionError: If the file extension is not supported
+            InvalidFileError: If the file extension is not supported
             BadZipFile: If the zip file is corrupted or invalid
             TarError: If the tar file is corrupted or invalid
             BadGzipFile: If the gzip file is corrupted or invalid
