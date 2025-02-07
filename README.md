@@ -3,7 +3,7 @@
 [![Python
 version](https://img.shields.io/badge/python-v3.12.3-blue)](.coverage/html/index.html)
 [![FastAPI
-version](https://img.shields.io/badge/fastapi-v0.112.1-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/fastapi-v0.115.6-blue)](.coverage/html/index.html)
 
 ---
 
@@ -310,8 +310,8 @@ Description of configuration parameters:
 | Vector Store Text Key | Name of the field used to save the raw document (or chunk of document). |
 | Vector Store Max. Documents To Retrieve | Maximum number of documents to retrieve from the Vector Store. |
 | Vector Store Min. Score Distance | Minimum distance beyond which retrieved documents from the Vector Store are discarded. |
-| Chain RAG System Prompts File Path | ath to the file containing system prompts for the RAG model. If omitted, the application will use a standard system prompt. |
-| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. If omitted, the application will use a standard system prompt. |
+| Chain RAG System Prompts File Path | Path to the file containing system prompts for the RAG model. If omitted, the application will use a standard system prompt. More details in the [dedicated paragraph](#configure-your-own-system-and-user-prompts). |
+| Chain RAG User Prompts File Path | Path to the file containing user prompts for the RAG model. If omitted, the application will use a standard system prompt. More details in the [dedicated paragraph](#configure-your-own-system-and-user-prompts). |
 
 ### Supported LLM providers
 
@@ -378,6 +378,32 @@ Currently, the supported Embeddings providers are:
   | `deploymentName` | Name of the deployment to use. |
   | `url` | URL of the Azure OpenAI service to call. |
   | `apiVersion` | API version of the Azure OpenAI service. |
+
+### Configure your own system and user prompts
+
+The application sends to the LLM a prompt that is composed of a _system prompt_ and a _user prompt_:
+
+- the _system prompt_ is a message that provides instructions to the LLM on how to respond to the user's input.
+- the _user prompt_ is a message that contains the user's input.
+
+A default version of these prompts are included in the application, but you can also use your own prompts to instruct the LLM to behave in a more specific way, such as behaving as a generic assistant in any field or as an expert in a specific field related to the embedding documents you are using.
+
+Both the system and user prompts are optional, but if you want to use your own prompts, you need to create a text file with the content of the prompt and specify the path to the file in the configuration at `chain.rag.systemPromptsFilePath` and `chain.rag.userPromptsFilePath` respectively.
+
+Moreover, the _system prompt_ must include the following placeholders:
+
+- `{chat_history}`: placeholder that will be replaced by the chat history, which is a list of messages exchanged between the user and the chatbot until then (received via the `chat_history` property from the body of the [`/chat/completions` endpoint](#chat-endpoint-chatcompletions))
+- `{output_text}`: placeholder that will be replaced by the text extracted from the embedding documents
+
+> **Note**
+>
+> The application already includes some context text to explain what the chat history is and what the output text is, so you don't need to add your explanation to the system prompt.
+
+Also, the _user prompt_ must include the following placeholder:
+
+- `{query}`: placeholder that will be replaced by the user's input (received via the `chat_query` property from the body of the [`/chat/completions` endpoint](#chat-endpoint-chatcompletions))
+
+Generally speaking, it is suggested to have a _system prompt_ tailored to the needs of your application, to specify what type of information the chatbot should provide and the tone and style of the responses. The _user prompt_ can be omitted unless you need to specify particular instructions or constraints specific to each question.
 
 ## Local Development
 
