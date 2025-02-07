@@ -3,7 +3,7 @@
 [![Python
 version](https://img.shields.io/badge/python-v3.12.3-blue)](.coverage/html/index.html)
 [![FastAPI
-version](https://img.shields.io/badge/fastapi-v0.112.1-blue)](.coverage/html/index.html)
+version](https://img.shields.io/badge/fastapi-v0.115.6-blue)](.coverage/html/index.html)
 
 ---
 

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Fixed
+
+- Version `0.5.2` included an error with the `mdx` files for embedding generation from `generateFromFile` API. This has been fixed.
+- Fixed several typos related to the `aggregateMaxTokenNumber` configurable parameter.s
+
+### Changed
+
+- Updated documentation related to the Aggregate Max Token Number and custom prompts (both system and user prompts)
+
+## 0.5.2 - 2025-01-29
+
+
+### Fixed
+
+- At service startup, if the Vector Search collection does not exist, it is automatically created
+- Support file extension `mdx` for embedding generation
+- File uploaded for embedding generation is validated either from the content-type or the file extension
+
 ## 0.5.1 - 2024-12-20
 
 ## 0.5.0 - 2024-12-19

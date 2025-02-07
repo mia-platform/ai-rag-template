@@ -4,9 +4,10 @@ from typing import Generator
 from zipfile import BadZipFile
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile, status
 
+from src.application.embeddings.file_parser.errors import InvalidFileError
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
-from src.application.embeddings.file_parser import FileParser
+from src.application.embeddings.file_parser.file_parser import FileParser
 from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.constants import SUPPORTED_CONTENT_TYPES_TUPLE
 from src.context import AppContext
@@ -145,9 +146,6 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         file (UploadFile): The file received.
         background_tasks (BackgroundTasks): The background tasks object.
     """
-
-    if file.content_type not in SUPPORTED_CONTENT_TYPES_TUPLE:
-        raise HTTPException(status_code=400, detail=f"Application does not support this file type (content type: {file.content_type}).")
     
     request_context: AppContext = request.state.app_context
     request_context.logger.info(f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})")
@@ -157,6 +155,8 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         docs = list(file_parser.extract_documents_from_file(file))
     except (BadZipFile, BadGzipFile, TarError) as ex:
         raise HTTPException(status_code=400, detail="The file uploaded is not a valid archive file.") from ex
+    except InvalidFileError as ex:
+        raise HTTPException(status_code=400, detail=str(ex)) from ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error parsing file: {str(ex)}") from ex
 
