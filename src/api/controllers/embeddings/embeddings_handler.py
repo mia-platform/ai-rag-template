@@ -9,7 +9,6 @@ from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
 from src.application.embeddings.file_parser.file_parser import FileParser
 from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
-from src.constants import SUPPORTED_CONTENT_TYPES_TUPLE
 from src.context import AppContext
 
 router = APIRouter()
