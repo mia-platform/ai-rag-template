@@ -62,7 +62,7 @@ langchain-experimental==0.3.3
 langchain-openai==0.3.3
 langchain-text-splitters==0.3.3
 langsmith==0.1.147
-license-expression==30.4.0
+license-expression==30.4.1
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 marshmallow==3.21.1
