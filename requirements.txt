@@ -29,7 +29,7 @@ distro==1.9.0
 dnspython==2.6.1
 docker==7.0.0
 email_validator==2.1.1
-exceptiongroup==1.2.0
+exceptiongroup==1.2.2
 fastapi==0.115.6
 filelock==3.13.4
 fonttools==4.51.0
