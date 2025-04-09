@@ -1,4 +1,4 @@
-FROM python:3.12.3-slim
+FROM python:3.13.0-slim
 
 RUN useradd -s /bin/bash python
 
