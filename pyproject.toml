@@ -9,7 +9,7 @@ dependencies = [
     "dataclasses-json==0.6.4",
     "datamodel-code-generator==0.50.0",
     "fastapi==0.128.0",
-    "httpcore==1.0.5",
+    "httpcore==1.0.9",
     "httpx==0.27.0",
     "httpx-sse==0.4.0",
     "jsonschema==4.21.1",
