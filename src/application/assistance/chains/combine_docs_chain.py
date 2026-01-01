@@ -33,7 +33,6 @@ class AggregateDocsChunksChain(BaseCombineDocumentsChain):
         return combined_text, {}
 
     def _aggregate_docs_until_token_limit(self, docs):
-        print(self.aggregate_max_token_number)
         combined_text = ''
         token_count = 0
         limit_exceeded = False
