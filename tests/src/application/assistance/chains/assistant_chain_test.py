@@ -4,10 +4,10 @@ from unittest.mock import patch
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 
-from src.application.assistance.chains.assistant_chain import AssistantChain
-from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder
-from src.application.assistance.chains.combine_docs_chain import AggregateDocsChunksChain
-from src.application.assistance.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
+from src.application.assistant.chains.assistant_chain import AssistantChain
+from src.application.assistant.chains.assistant_prompt import AssistantPromptBuilder
+from src.application.assistant.chains.combine_docs_chain import AggregateDocsChunksChain
+from src.application.assistant.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
 from tests.src.utils.fake_llm import FakeLLM
 
 # pylint: disable=fixme
@@ -15,7 +15,7 @@ from tests.src.utils.fake_llm import FakeLLM
 
 
 @patch(
-    "src.application.assistance.chains.retriever_chain.RetrieverChain._call",
+    "src.application.assistant.chains.retriever_chain.RetrieverChain._call",
 )
 def test_call(mock_retreive_call, app_context, snapshot):
     # Arrange
@@ -69,7 +69,7 @@ def test_call(mock_retreive_call, app_context, snapshot):
 
 
 @patch(
-    "src.application.assistance.chains.retriever_chain.RetrieverChain._call",
+    "src.application.assistant.chains.retriever_chain.RetrieverChain._call",
 )
 def test_call_without_documents(mock_retreive_call, app_context, snapshot):
     # Arrange
@@ -123,7 +123,7 @@ def test_call_without_documents(mock_retreive_call, app_context, snapshot):
 
 
 @patch(
-    "src.application.assistance.chains.retriever_chain.RetrieverChain._call",
+    "src.application.assistant.chains.retriever_chain.RetrieverChain._call",
 )
 def test_call_with_custom_prompt(mock_retreive_call, app_context, snapshot):
     # Arrange
@@ -196,7 +196,7 @@ def test_call_with_custom_prompt(mock_retreive_call, app_context, snapshot):
 
 
 @patch(
-    "src.application.assistance.chains.retriever_chain.RetrieverChain._call",
+    "src.application.assistant.chains.retriever_chain.RetrieverChain._call",
 )
 def test_call_without_chat_history(mock_retreive_call, app_context, snapshot):
     # Arrange

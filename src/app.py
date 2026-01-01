@@ -13,7 +13,7 @@ from src.configurations.configuration import get_configuration
 from src.configurations.variables import get_variables
 from src.context import AppContext, AppContextParams
 from src.infrastracture.logger import get_logger
-from src.infrastracture.metrics.manager import MetricsManager
+from src.infrastracture.metrics_manager.metrics_manager import MetricsManager
 from src.lib.vector_search_index_updater import VectorSearchIndexUpdater
 
 

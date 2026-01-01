@@ -15,7 +15,7 @@ from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsM
 HTTP_URL_PATTERN = r"^http[s]*://.+"
 
 
-class EmbeddingGenerator:
+class EmbeddingsService:
     """
     Class to generate embeddings for text data.
     """

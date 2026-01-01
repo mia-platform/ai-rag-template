@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, status
 
 from src.api.schemas.chat_completion_schemas import ChatCompletionInputSchema, ChatCompletionOutputSchema
-from src.application.assistance.service import AssistantService, AssistantServiceChatCompletionResponse
+from src.application.assistant.assistant_service import AssistantService, AssistantServiceChatCompletionResponse
 from src.context import AppContext
 
 router = APIRouter()

@@ -13,8 +13,8 @@ from langchain_core.runnables import Runnable, RunnableConfig, RunnablePassthrou
 from langchain_core.runnables.utils import create_model
 from pydantic import BaseModel
 
-from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
-from src.application.assistance.chains.retriever_chain import RetrieverChain
+from src.application.assistant.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
+from src.application.assistant.chains.retriever_chain import RetrieverChain
 
 
 class AssistantChain(Chain):

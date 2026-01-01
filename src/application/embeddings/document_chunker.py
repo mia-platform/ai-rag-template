@@ -1,5 +1,5 @@
 """
-Module to include the EmbeddingGenerator class, a class that generates embeddings for text data.
+Module to include the EmbeddingsService class, a class that generates embeddings for text data.
 """
 
 import hashlib

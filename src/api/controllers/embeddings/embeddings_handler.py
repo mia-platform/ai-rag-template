@@ -7,7 +7,7 @@ from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, Up
 
 from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
-from src.application.embeddings.embedding_generator import EmbeddingGenerator
+from src.application.embeddings.embedding_service import EmbeddingsService
 from src.application.embeddings.file_parser.errors import InvalidFileError
 from src.application.embeddings.file_parser.file_parser import FileParser
 from src.context import AppContext
@@ -40,7 +40,7 @@ def generate_embeddings_from_url_background_task(app_context: AppContext, url: s
     try:
         logger.debug("Locking router for embedding generation.")
         router.lock = True
-        embedding_generator = EmbeddingGenerator(app_context=app_context)
+        embedding_generator = EmbeddingsService(app_context=app_context)
         logger.info("Starting embedding generation process.")
         embedding_generator.generate_from_url(url, filter_path)
         logger.info("Embedding generation process finished.")
@@ -104,7 +104,7 @@ def generate_embeddings_from_file_background_task(app_context: AppContext, docum
     try:
         logger.debug("Locking router for embedding generation.")
         router.lock = True
-        embedding_generator = EmbeddingGenerator(app_context=app_context)
+        embedding_generator = EmbeddingsService(app_context=app_context)
         logger.info("Starting embedding generation process.")
         for doc in document_generator:
             embedding_generator.generate_from_text(doc)

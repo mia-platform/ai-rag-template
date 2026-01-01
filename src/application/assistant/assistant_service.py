@@ -4,10 +4,10 @@ from langchain_community.callbacks.manager import get_openai_callback
 from langchain_core.embeddings import Embeddings
 from pymongo.uri_parser import parse_uri
 
-from src.application.assistance.chains.assistant_chain import AssistantChain
-from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
-from src.application.assistance.chains.combine_docs_chain import AggregateDocsChunksChain
-from src.application.assistance.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
+from src.application.assistant.chains.assistant_chain import AssistantChain
+from src.application.assistant.chains.assistant_prompt import AssistantPromptBuilder, AssistantPromptTemplate
+from src.application.assistant.chains.combine_docs_chain import AggregateDocsChunksChain
+from src.application.assistant.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
 from src.context import AppContext
 from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
 from src.infrastracture.llm_manager.llm_manager import LlmManager

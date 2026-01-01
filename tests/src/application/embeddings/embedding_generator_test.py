@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import requests_mock
 
-from src.application.embeddings.embedding_generator import EmbeddingGenerator
+from src.application.embeddings.embedding_service import EmbeddingsService
 
 TEXT_HTML_HEADERS = {"Content-type": "text/html"}
 IMAGE_PNG_HEADERS = {"Content-type": "image/png"}
@@ -24,7 +24,7 @@ def test_generate_from_url_without_domain(app_context):
         ):
             mock_split_text.return_value = ["chunk1", "chunk2"]
 
-            embedding_generator = EmbeddingGenerator(app_context)
+            embedding_generator = EmbeddingsService(app_context)
             embedding_generator.generate_from_url("http://example.com")
 
             mock_split_text.assert_called_once()
@@ -50,7 +50,7 @@ def test_generate_from_url_with_domain(app_context):
         ):
             mock_split_text.return_value = ["chunk1", "chunk2"]
 
-            embedding_generator = EmbeddingGenerator(app_context)
+            embedding_generator = EmbeddingsService(app_context)
             embedding_generator.generate_from_url("http://example.com", filter_path="http://example.com/domain")
 
             assert mock_split_text.call_count == 2
@@ -63,7 +63,7 @@ def test_generate_from_text(app_context):
         patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text,
         patch("langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents") as mock_add_documents,
     ):
-        embedding_generator = EmbeddingGenerator(app_context)
+        embedding_generator = EmbeddingsService(app_context)
         embedding_generator.generate_from_text("This is a text example\n")
 
         assert mock_split_text.call_count == 1

@@ -6,7 +6,7 @@ from httpx import Response
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 
-from src.application.assistance.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
+from src.application.assistant.chains.retriever_chain import RetrieverChain, RetrieverChainConfiguration
 
 
 def load_json_response(file_name):

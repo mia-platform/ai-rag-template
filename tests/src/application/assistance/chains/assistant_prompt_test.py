@@ -1,6 +1,6 @@
 import pytest
 
-from src.application.assistance.chains.assistant_prompt import (
+from src.application.assistant.chains.assistant_prompt import (
     DEFAULT_SYSTEM_TEMPLATE,
     DEFAULT_USER_TEMPLATE,
     AssistantPromptBuilder,

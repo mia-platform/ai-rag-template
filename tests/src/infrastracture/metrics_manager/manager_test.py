@@ -1,6 +1,6 @@
 from fastapi import Response
 
-from src.infrastracture.metrics.manager import MetricsManager
+from src.infrastracture.metrics_manager.metrics_manager import MetricsManager
 
 
 def test_expose_metrics():

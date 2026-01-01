@@ -6,8 +6,8 @@ import pytest
 from httpx import Response
 from langchain_core.documents import Document
 
-from src.application.assistance.chains.assistant_prompt import AssistantPromptBuilder
-from src.application.assistance.service import AssistantService, AssistantServiceConfiguration
+from src.application.assistant.assistant_service import AssistantService, AssistantServiceConfiguration
+from src.application.assistant.chains.assistant_prompt import AssistantPromptBuilder
 from src.configurations.service_model import PromptsFilePath, Rag
 
 

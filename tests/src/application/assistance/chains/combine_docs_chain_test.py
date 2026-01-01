@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from src.application.assistance.chains.combine_docs_chain import AggregateDocsChunksChain
+from src.application.assistant.chains.combine_docs_chain import AggregateDocsChunksChain
 
 
 def test_instance_creation(app_context):

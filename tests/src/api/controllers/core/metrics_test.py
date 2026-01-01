@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 
 from src.app import create_app
 from src.context import AppContext, AppContextParams
-from src.infrastracture.metrics.manager import MetricsManager
+from src.infrastracture.metrics_manager.metrics_manager import MetricsManager
 
 
 def test_metrics_handler(app_context):

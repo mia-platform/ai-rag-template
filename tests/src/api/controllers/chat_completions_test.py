@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from langchain_core.documents import Document
 
-from src.application.assistance.service import AssistantServiceChatCompletionResponse
+from src.application.assistant.assistant_service import AssistantServiceChatCompletionResponse
 
 
 def read_txt(file_name):
@@ -15,7 +15,7 @@ def read_txt(file_name):
 
 
 @patch(
-    "src.application.assistance.service.AssistantService.chat_completion",
+    "src.application.assistant.assistant_service.AssistantService.chat_completion",
 )
 def test_chat_completions(chat_completion_mock, test_client):
     # Arrange

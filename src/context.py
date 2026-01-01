@@ -5,7 +5,7 @@ from starlette.requests import Request
 
 from src.configurations.service_model import RagTemplateConfigSchema
 from src.configurations.variables_model import Variables
-from src.infrastracture.metrics.manager import MetricsManager
+from src.infrastracture.metrics_manager.metrics_manager import MetricsManager
 
 
 class RequestContext:
