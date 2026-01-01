@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated several key libraries for the application to startup (Uvicorn, FastAPI, Starlette, requests, urllib3)
 - Updated library _datamodel-code-generator_ to improve generation of Python definitions from JSON Schema
 to validate the configuration file
-
+- Updated langchain dependencies to solve vulnerability issues
 
 ## 0.5.3 - 2025-02-07
 
