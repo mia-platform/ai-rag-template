@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "RAG-template config schema",
+  "title": "Rag-template config schema",
   "description": "Schema for configuring AI Rag Template, an intelligent virtual assistant.",
   "type": "object",
   "properties": {
@@ -8,7 +8,7 @@
       "type": "object",
       "oneOf": [
         {
-          "title": "AzureLlm",
+          "title": "AzureLlmConfiguration",
           "type": "object",
           "properties": {
             "apiVersion": {
@@ -38,10 +38,16 @@
               "default": 0.7
             }
           },
-          "required": ["apiVersion", "deploymentName", "name", "type", "url"]
+          "required": [
+            "apiVersion",
+            "deploymentName",
+            "name",
+            "type",
+            "url"
+          ]
         },
         {
-          "title": "OpenAILlm",
+          "title": "OpenAILlmConfiguration",
           "type": "object",
           "properties": {
             "type": {
@@ -59,7 +65,9 @@
               "default": 0.7
             }
           },
-          "required": ["name"]
+          "required": [
+            "name"
+          ]
         }
       ]
     },
@@ -80,7 +88,7 @@
       "type": "object",
       "oneOf": [
         {
-          "title": "AzureEmbeddings",
+          "title": "AzureEmbeddingsConfiguration",
           "properties": {
             "apiVersion": {
               "description": "The API version of the Azure OpenAI service to be used.",
@@ -104,10 +112,16 @@
               "type": "string"
             }
           },
-          "required": ["apiVersion", "deploymentName", "name", "type", "url"]
+          "required": [
+            "apiVersion",
+            "deploymentName",
+            "name",
+            "type",
+            "url"
+          ]
         },
         {
-          "title": "OpenAIEmbeddings",
+          "title": "OpenAIEmbeddingsConfiguration",
           "properties": {
             "type": {
               "description": "The type of language model to be used by AI RAG Template for the embeddings generation.",
@@ -119,7 +133,9 @@
               "description": "The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity."
             }
           },
-          "required": ["name"]
+          "required": [
+            "name"
+          ]
         }
       ]
     },

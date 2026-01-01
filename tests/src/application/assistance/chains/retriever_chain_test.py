@@ -28,9 +28,7 @@ def setup_test(app_context, mock_server, max_score_distance=None, min_score_dist
 
     embedding_reply_mock = load_json_response("openai_embedding.json")
 
-    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(
-        return_value=Response(200, json=embedding_reply_mock)
-    )
+    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(return_value=Response(200, json=embedding_reply_mock))
 
     vector_store_configuration = RetrieverChainConfiguration(
         mongodb_cluster_uri="mongodb://localhost:27017",

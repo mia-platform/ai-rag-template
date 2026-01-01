@@ -50,9 +50,7 @@ def test_chat_completions(chat_completion_mock, test_client):
     assert response_data["message"] == expected["message"]
     assert response_data["references"] == expected["references"]
 
-    chat_completion_mock.assert_called_once_with(
-        query=request_data["chat_query"], chat_history=request_data["chat_history"]
-    )
+    chat_completion_mock.assert_called_once_with(query=request_data["chat_query"], chat_history=request_data["chat_history"])
 
 
 def test_chat_completions_chat_query_validation(test_client):

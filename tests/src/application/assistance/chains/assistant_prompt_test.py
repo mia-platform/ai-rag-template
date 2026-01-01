@@ -12,11 +12,7 @@ from src.application.assistance.chains.assistant_prompt import (
 
 def test_assistant_prompt_builder():
     builder = AssistantPromptBuilder()
-    assistant_prompt = (
-        builder.add_variable("new_variable")
-        .append_to_system_template("\nYou MUST also consider this new variable: {new_variable}.")
-        .build()
-    )
+    assistant_prompt = builder.add_variable("new_variable").append_to_system_template("\nYou MUST also consider this new variable: {new_variable}.").build()
 
     assert isinstance(assistant_prompt, AssistantPromptTemplate)
     assert "new_variable" in assistant_prompt.input_variables
@@ -39,10 +35,7 @@ def test_assistant_prompt_builder_unused_variable():
     with pytest.raises(UserDefinedVariableMissingError) as excinfo:
         builder.build()
 
-    assert (
-        str(excinfo.value)
-        == "User-defined variable 'unused_variable' is not used in either the system or user template."
-    )
+    assert str(excinfo.value) == "User-defined variable 'unused_variable' is not used in either the system or user template."
 
 
 def test_missing_required_variable():

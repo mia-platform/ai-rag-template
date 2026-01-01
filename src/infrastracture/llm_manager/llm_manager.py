@@ -15,7 +15,7 @@ class LlmManager:
 
         match llm_configuration.type:
             case "openai":
-                return ChatOpenAI(openai_api_key=llm_api_key, model=llm_configuration.name)
+                return ChatOpenAI(openai_api_key=llm_api_key, model=llm_configuration.name, temperature=llm_configuration.temperature)
             case "azure":
                 return AzureChatOpenAI(
                     api_key=llm_api_key,
@@ -23,6 +23,7 @@ class LlmManager:
                     azure_deployment=llm_configuration.deploymentName,
                     azure_endpoint=llm_configuration.url,
                     model=llm_configuration.name,
+                    temperature=llm_configuration.temperature,
                 )
             case _:
                 raise UnsupportedLlmProviderError(llm_configuration.type)

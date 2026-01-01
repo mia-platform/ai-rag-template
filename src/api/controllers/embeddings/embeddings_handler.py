@@ -52,12 +52,8 @@ def generate_embeddings_from_url_background_task(app_context: AppContext, url: s
         logger.debug("Router unlocked after embedding generation.")
 
 
-@router.post(
-    "/embeddings/generate", response_model=StatusOkResponseSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"]
-)
-def generate_embeddings_from_url(
-    request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks
-):
+@router.post("/embeddings/generate", response_model=StatusOkResponseSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"])
+def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks):
     """
     Generate embeddings for a given URL. It starts from a single web page and generates embeddings for the text data of that page and
     for every page connected via hyperlinks (anchor tags).
@@ -92,9 +88,7 @@ def generate_embeddings_from_url(
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
 
-def generate_embeddings_from_file_background_task(
-    app_context: AppContext, document_generator: Generator[str, None, None]
-):
+def generate_embeddings_from_file_background_task(app_context: AppContext, document_generator: Generator[str, None, None]):
     """
     Generate embeddings for an uploaded file.
 
@@ -153,9 +147,7 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     """
 
     request_context: AppContext = request.state.app_context
-    request_context.logger.info(
-        f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})"
-    )
+    request_context.logger.info(f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})")
 
     try:
         file_parser = FileParser(request_context.logger)
@@ -175,9 +167,7 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
 
-@router.get(
-    "/embeddings/status", response_model=GenerateStatusOutputSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"]
-)
+@router.get("/embeddings/status", response_model=GenerateStatusOutputSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"])
 def embeddings_status():
     """
     Get the status of the embeddings generation process.

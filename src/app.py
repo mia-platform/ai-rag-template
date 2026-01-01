@@ -40,11 +40,7 @@ if __name__ == "__main__":
     env_vars = get_variables(logger)
     configurations = get_configuration(env_vars.CONFIGURATION_PATH, logger)
 
-    app_context = AppContext(
-        params=AppContextParams(
-            logger=logger, metrics_manager=metrics_manager, env_vars=env_vars, configurations=configurations
-        )
-    )
+    app_context = AppContext(params=AppContextParams(logger=logger, metrics_manager=metrics_manager, env_vars=env_vars, configurations=configurations))
 
     application = create_app(app_context)
 

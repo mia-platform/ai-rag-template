@@ -20,9 +20,7 @@ def test_generate_from_url_without_domain(app_context):
 
         with (
             patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text,
-            patch(
-                "langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents"
-            ) as mock_add_documents,
+            patch("langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents") as mock_add_documents,
         ):
             mock_split_text.return_value = ["chunk1", "chunk2"]
 
@@ -48,9 +46,7 @@ def test_generate_from_url_with_domain(app_context):
 
         with (
             patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text,
-            patch(
-                "langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents"
-            ) as mock_add_documents,
+            patch("langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents") as mock_add_documents,
         ):
             mock_split_text.return_value = ["chunk1", "chunk2"]
 
@@ -65,9 +61,7 @@ def test_generate_from_url_with_domain(app_context):
 def test_generate_from_text(app_context):
     with (
         patch("langchain_experimental.text_splitter.SemanticChunker.split_text") as mock_split_text,
-        patch(
-            "langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents"
-        ) as mock_add_documents,
+        patch("langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch.add_documents") as mock_add_documents,
     ):
         embedding_generator = EmbeddingGenerator(app_context)
         embedding_generator.generate_from_text("This is a text example\n")

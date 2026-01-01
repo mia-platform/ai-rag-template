@@ -18,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12.3'
+          python-version: '3.13'
           check-latest: true
 
       - name: Install uv
@@ -43,7 +43,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           file: coverage.xml
-          flag-name: python-3.12.3
+          flag-name: python-3.13
           parallel: true
 
   post-tests:
