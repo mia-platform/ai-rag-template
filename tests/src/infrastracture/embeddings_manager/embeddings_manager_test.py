@@ -4,7 +4,6 @@ from pydantic import ValidationError
 
 from src.configurations.service_model import AzureEmbeddingsConfiguration, OpenAIEmbeddingsConfiguration
 from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
-from src.infrastracture.embeddings_manager.errors import UnsupportedEmbeddingsProviderError
 
 
 def test_get_embeddings_instance_from_default_configuration(app_context):

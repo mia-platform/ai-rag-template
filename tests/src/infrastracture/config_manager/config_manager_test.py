@@ -36,9 +36,7 @@ def setup_config_manager(model, config_filename: str, schema_filename: str, logg
     config_path = current_dir / "assets" / config_filename
     schema_path = current_dir / "assets" / schema_filename
 
-    params = ConfigManagerParams(
-        config_path=str(config_path), config_schema_path=str(schema_path), model=model, logger=logger
-    )
+    params = ConfigManagerParams(config_path=str(config_path), config_schema_path=str(schema_path), model=model, logger=logger)
     return ConfigManager[model](params)
 
 

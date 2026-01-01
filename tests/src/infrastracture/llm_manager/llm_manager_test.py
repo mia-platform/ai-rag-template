@@ -3,7 +3,6 @@ from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from pydantic import ValidationError
 
 from src.configurations.service_model import AzureLlmConfiguration, OpenAILlmConfiguration
-from src.infrastracture.llm_manager.errors import UnsupportedLlmProviderError
 from src.infrastracture.llm_manager.llm_manager import LlmManager
 
 

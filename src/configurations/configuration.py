@@ -10,9 +10,7 @@ schema_path = current_dir / CONFIG_SCHEMA_FILE_NAME
 
 
 def get_configuration(config_path, logger):
-    params = ConfigManagerParams(
-        config_path=config_path, config_schema_path=schema_path, model=RagTemplateConfigSchema, logger=logger
-    )
+    params = ConfigManagerParams(config_path=config_path, config_schema_path=schema_path, model=RagTemplateConfigSchema, logger=logger)
 
     conf_manager = ConfigManager[RagTemplateConfigSchema](params)
 

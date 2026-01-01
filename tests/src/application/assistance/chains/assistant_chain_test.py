@@ -20,9 +20,7 @@ from tests.src.utils.fake_llm import FakeLLM
 def test_call(mock_retreive_call, app_context, snapshot):
     # Arrange
     # Mocking the dependencies that require connection to external services
-    mock_retreive_call.return_value = {
-        "input_documents": [Document(page_content="doc1"), Document(page_content="doc2"), Document(page_content="doc3")]
-    }
+    mock_retreive_call.return_value = {"input_documents": [Document(page_content="doc1"), Document(page_content="doc2"), Document(page_content="doc3")]}
     # Atlas and Embeddings
     mock_response = "test response"
     llm = FakeLLM(sequential_responses=True, queries={"1": mock_response})  # LLM service
@@ -43,16 +41,12 @@ def test_call(mock_retreive_call, app_context, snapshot):
 
     retriever_chain = RetrieverChain(context=app_context, configuration=vector_store_configuration)
 
-    assistant_chain = AssistantChain(
-        retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm
-    )
+    assistant_chain = AssistantChain(retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm)
 
     mock_query = "test query"
     mock_chat_history = ["chat message 1", "chat message 2", "chat message 3", "chat message 4"]
 
-    expected_chat_history = "\n".join(
-        [("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)]
-    )
+    expected_chat_history = "\n".join([("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)])
 
     expected_chat_history = f"\nReferring to the previous conversation messages:\n\n{expected_chat_history}\n\n---\n"
 
@@ -101,16 +95,12 @@ def test_call_without_documents(mock_retreive_call, app_context, snapshot):
 
     retriever_chain = RetrieverChain(context=app_context, configuration=vector_store_configuration)
 
-    assistant_chain = AssistantChain(
-        retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm
-    )
+    assistant_chain = AssistantChain(retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm)
 
     mock_query = "test query"
     mock_chat_history = ["chat message 1", "chat message 2", "chat message 3", "chat message 4"]
 
-    expected_chat_history = "\n".join(
-        [("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)]
-    )
+    expected_chat_history = "\n".join([("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)])
 
     expected_chat_history = f"\nReferring to the previous conversation messages:\n\n{expected_chat_history}\n\n---\n"
 
@@ -138,9 +128,7 @@ def test_call_without_documents(mock_retreive_call, app_context, snapshot):
 def test_call_with_custom_prompt(mock_retreive_call, app_context, snapshot):
     # Arrange
     # Mocking the dependencies that require connection to external services
-    mock_retreive_call.return_value = {
-        "input_documents": [Document(page_content="doc1"), Document(page_content="doc2"), Document(page_content="doc3")]
-    }
+    mock_retreive_call.return_value = {"input_documents": [Document(page_content="doc1"), Document(page_content="doc2"), Document(page_content="doc3")]}
     # Atlas and Embeddings
     mock_response = "test response"
     llm = FakeLLM(sequential_responses=True, queries={"1": mock_response})  # LLM service
@@ -178,9 +166,7 @@ def test_call_with_custom_prompt(mock_retreive_call, app_context, snapshot):
     mock_query = "test query"
     mock_chat_history = ["chat message 1", "chat message 2", "chat message 3", "chat message 4"]
 
-    expected_chat_history = "\n".join(
-        [("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)]
-    )
+    expected_chat_history = "\n".join([("Human: " if i % 2 == 0 else "AI: ") + message for i, message in enumerate(mock_chat_history)])
 
     expected_chat_history = f"\nReferring to the previous conversation messages:\n\n{expected_chat_history}\n\n---\n"
 
@@ -236,9 +222,7 @@ def test_call_without_chat_history(mock_retreive_call, app_context, snapshot):
 
     retriever_chain = RetrieverChain(context=app_context, configuration=vector_store_configuration)
 
-    assistant_chain = AssistantChain(
-        retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm
-    )
+    assistant_chain = AssistantChain(retriever_chain=retriever_chain, aggregate_docs_chain=aggregate_docs_chain, llm=llm)
 
     mock_query = "test query"
     mock_chat_history = []
