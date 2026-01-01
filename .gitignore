@@ -2,6 +2,10 @@
 __pycache__
 .venv
 
+# uv files
+uv.lock
+.python-version
+
 # Test and coverage files
 **.pytest_cache
 .coverage
@@ -18,3 +22,6 @@ __pycache__
 
 # Visual Studio Code configurations
 .vscode
+
+# Local file
+data
