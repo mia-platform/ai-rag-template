@@ -46,7 +46,7 @@ CONFIGURATION_SCHEMA = service_config.json
 CONFIGURATION_MODEL = service_model.py
 
 install:
-	uv sync
+	uv sync --python 3.12
 
 clear-deps:
 	rm -rf .venv uv.lock
