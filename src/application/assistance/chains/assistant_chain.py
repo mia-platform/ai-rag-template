@@ -2,14 +2,14 @@ from typing import Any
 
 from langchain.chains.base import Chain
 from langchain.chains.combine_documents.base import BaseCombineDocumentsChain
-from langchain.chains.llm import LLMChain
 from langchain.memory import ConversationTokenBufferMemory
 from langchain_core.callbacks import CallbackManagerForChainRun
 from langchain_core.documents import Document
 from langchain_core.language_models.base import LanguageModelInput
 from langchain_core.messages import BaseMessage
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_core.runnables import Runnable, RunnableConfig
+from langchain_core.runnables import Runnable, RunnableConfig, RunnablePassthrough
 from langchain_core.runnables.utils import create_model
 from pydantic import BaseModel
 
@@ -76,27 +76,31 @@ class AssistantChain(Chain):
         return AssistantPromptBuilder().build()
 
     def _create_llm_chain(self):
-        if not self.prompt_template:
-            self.prompt_template = self._build_default_prompt()
-
-        return LLMChain(llm=self.llm, prompt=self.prompt_template)
+        return self.prompt_template | self.llm
+        # return LLMChain(llm=self.llm, prompt=self.prompt_template)
 
     def _create_chain(self, llm_chain):
         return self.retriever_chain | self.aggregate_docs_chain | llm_chain
-
-    def _invoke_chain(self, chain, chat_history, query, custom_prompt_variables):
-        return chain.invoke(
-            input={"chat_history": self._process_chat_history(chat_history), "query": query, **custom_prompt_variables},
-            config=None,
-        )
 
     def _call(self, inputs: dict[str, Any], run_manager: CallbackManagerForChainRun | None = None) -> dict[str, Any]:
         query, chat_history = inputs[self.query_key], inputs[self.chat_history_key]
         custom_prompt_variables = inputs.get(self.prompt_custom_variables_key, {})
 
-        llm_chain = self._create_llm_chain()
-        chain = self._create_chain(llm_chain)
-        chain_response = self._invoke_chain(chain, chat_history, query, custom_prompt_variables)
+        if not self.prompt_template:
+            self.prompt_template = self._build_default_prompt()
+
+        # Build the chain: retriever -> aggregate_docs -> (merge with inputs) -> prompt -> llm
+        chain = (
+            RunnablePassthrough.assign(**{self.chat_history_key: lambda x: self._process_chat_history(x[self.chat_history_key])})
+            | self.retriever_chain
+            | self.aggregate_docs_chain
+            | RunnablePassthrough.assign(**{self.response_key: self.prompt_template | self.llm | StrOutputParser()})
+        )
+
+        chain_response = chain.invoke(
+            input={self.query_key: query, self.chat_history_key: chat_history, **custom_prompt_variables},
+            config=None,
+        )
 
         return chain_response
 
