@@ -1,7 +1,8 @@
-from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from langchain_core.language_models.chat_models import BaseChatModel
-from src.infrastracture.llm_manager.errors import UnsupportedLlmProviderError
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
+
 from src.context import AppContext
+from src.infrastracture.llm_manager.errors import UnsupportedLlmProviderError
 
 
 class LlmManager:
@@ -14,17 +15,14 @@ class LlmManager:
 
         match llm_configuration.type:
             case "openai":
-                return ChatOpenAI(
-                    openai_api_key=llm_api_key, 
-                    model=llm_configuration.name
-                )
+                return ChatOpenAI(openai_api_key=llm_api_key, model=llm_configuration.name)
             case "azure":
                 return AzureChatOpenAI(
                     api_key=llm_api_key,
                     api_version=llm_configuration.apiVersion,
                     azure_deployment=llm_configuration.deploymentName,
                     azure_endpoint=llm_configuration.url,
-                    model=llm_configuration.name
+                    model=llm_configuration.name,
                 )
             case _:
                 raise UnsupportedLlmProviderError(llm_configuration.type)

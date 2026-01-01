@@ -1,7 +1,8 @@
-from langchain_openai import AzureOpenAIEmbeddings, OpenAIEmbeddings
 from langchain_core.embeddings import Embeddings
-from src.infrastracture.embeddings_manager.errors import UnsupportedEmbeddingsProviderError
+from langchain_openai import AzureOpenAIEmbeddings, OpenAIEmbeddings
+
 from src.context import AppContext
+from src.infrastracture.embeddings_manager.errors import UnsupportedEmbeddingsProviderError
 
 
 class EmbeddingsManager:
@@ -14,17 +15,14 @@ class EmbeddingsManager:
 
         match embeddings_configuration.type:
             case "openai":
-                return OpenAIEmbeddings(
-                    openai_api_key=embeddings_api_key, 
-                    model=embeddings_configuration.name
-                )
+                return OpenAIEmbeddings(openai_api_key=embeddings_api_key, model=embeddings_configuration.name)
             case "azure":
                 return AzureOpenAIEmbeddings(
                     api_key=embeddings_api_key,
                     api_version=embeddings_configuration.apiVersion,
                     azure_deployment=embeddings_configuration.deploymentName,
                     azure_endpoint=embeddings_configuration.url,
-                    model=embeddings_configuration.name
+                    model=embeddings_configuration.name,
                 )
             case _:
                 raise UnsupportedEmbeddingsProviderError(embeddings_configuration.type)

@@ -1,8 +1,9 @@
 from pathlib import Path
+
 import pytest
 
-from src.infrastracture.config_manager.errors import ConfigValidationError
 from src.configurations.configuration import get_configuration
+from src.infrastracture.config_manager.errors import ConfigValidationError
 
 
 def generate_file_path(file_path: str):
@@ -21,7 +22,7 @@ def get_test_configuration(path, logger):
         ("with minimal configuration", "assets/correct_config.json"),
         ("with OpenAI configuration", "assets/openai_config.json"),
         ("with Azure OpenAI configuration", "assets/azure_config.json"),
-    ]
+    ],
 )
 # pylint: disable=unused-argument
 def test_get_valid_configuration(title, config_path, logger):

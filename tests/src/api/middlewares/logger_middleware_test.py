@@ -1,15 +1,17 @@
-from fastapi import FastAPI, APIRouter, Request
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.testclient import TestClient
 
+from src.api.middlewares.logger_middleware import LoggerMiddleware
 from src.infrastracture.logger import get_logger
-from src.api.middlewares.logger_middleware import LoggerMiddleware 
 
 router = APIRouter()
+
 
 @router.get("/")
 def read_root(request: Request):
     request.state.logger.info("Root path called")
     return {"Hello": "World"}
+
 
 def setup_test_app():
     app = FastAPI()
@@ -18,6 +20,7 @@ def setup_test_app():
     app.include_router(router)
     client = TestClient(app)
     return client
+
 
 def test_logger_middleware_req_id(capfd):
     # Arrange

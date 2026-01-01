@@ -5,157 +5,128 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Optional, Union
 
 from pydantic import BaseModel, Field
 
 
 class AzureLlmConfiguration(BaseModel):
-    apiVersion: str = Field(
-        ..., description='The API version of the Azure OpenAI service to be used.'
-    )
+    apiVersion: str = Field(..., description="The API version of the Azure OpenAI service to be used.")
     deploymentName: str = Field(
         ...,
-        description='The name of the configured deployment model to be used by AI RAG Template.',
+        description="The name of the configured deployment model to be used by AI RAG Template.",
     )
     name: str = Field(
         ...,
-        description='The name of the language model (LLM) to be used. Check the Azure OpenAI documentation for available models.',
+        description="The name of the language model (LLM) to be used. Check the Azure OpenAI documentation for available models.",
     )
     type: str = Field(
-        'azure',
-        description='The type of language model to be used by AI RAG Template for natural language processing and understanding.',
+        "azure",
+        description="The type of language model to be used by AI RAG Template for natural language processing and understanding.",
     )
-    url: str = Field(
-        ..., description='The URL of the Azure OpenAI service to connect with.'
-    )
-    temperature: Optional[float] = Field(
+    url: str = Field(..., description="The URL of the Azure OpenAI service to connect with.")
+    temperature: float | None = Field(
         0.7,
-        description='The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.',
+        description="The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
     )
 
 
 class OpenAILlmConfiguration(BaseModel):
     type: str = Field(
-        'openai',
-        description='The type of language model to be used by AI RAG Template for natural language processing and understanding.',
+        "openai",
+        description="The type of language model to be used by AI RAG Template for natural language processing and understanding.",
     )
     name: str = Field(
         ...,
-        description='The name of the language model (LLM) to be used. Check the OpenAI documentation for available models.',
+        description="The name of the language model (LLM) to be used. Check the OpenAI documentation for available models.",
     )
-    temperature: Optional[float] = Field(
+    temperature: float | None = Field(
         0.7,
-        description='The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.',
+        description="The temperature parameter for sampling from the language model. A higher value increases the randomness of the generated text.",
     )
 
 
 class Tokenizer(BaseModel):
-    name: Optional[str] = Field(
-        'gpt-3.5-turbo', description='The name of the tokenizer'
-    )
+    name: str | None = Field("gpt-3.5-turbo", description="The name of the tokenizer")
 
 
 class AzureEmbeddingsConfiguration(BaseModel):
-    apiVersion: str = Field(
-        ..., description='The API version of the Azure OpenAI service to be used.'
-    )
+    apiVersion: str = Field(..., description="The API version of the Azure OpenAI service to be used.")
     deploymentName: str = Field(
         ...,
-        description='The name of the configured deployment model to be used by AI RAG Template.',
+        description="The name of the configured deployment model to be used by AI RAG Template.",
     )
     name: str = Field(
         ...,
-        description='The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity.',
+        description="The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity.",
     )
     type: str = Field(
-        'azure',
-        description='The type of language model to be used by AI RAG Template for the embeddings generation.',
+        "azure",
+        description="The type of language model to be used by AI RAG Template for the embeddings generation.",
     )
-    url: str = Field(
-        ..., description='The URL of the Azure OpenAI service to connect with.'
-    )
+    url: str = Field(..., description="The URL of the Azure OpenAI service to connect with.")
 
 
 class OpenAIEmbeddingsConfiguration(BaseModel):
     type: str = Field(
-        'openai',
-        description='The type of language model to be used by AI RAG Template for the embeddings generation.',
+        "openai",
+        description="The type of language model to be used by AI RAG Template for the embeddings generation.",
     )
     name: str = Field(
         ...,
-        description='The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity.',
+        description="The name of the embeddings model to be used by RAG-template for various tasks such as text representation and similarity.",
     )
 
 
 class RelevanceScoreFn(Enum):
-    euclidean = 'euclidean'
-    cosine = 'cosine'
-    dotProduct = 'dotProduct'
+    euclidean = "euclidean"
+    cosine = "cosine"
+    dotProduct = "dotProduct"
 
 
 class VectorStore(BaseModel):
-    dbName: Optional[str] = Field(
-        None, description='The name of the database where the vector store is hosted.'
-    )
+    dbName: str | None = Field(None, description="The name of the database where the vector store is hosted.")
     collectionName: str = Field(
         ...,
-        description='The name of the collection of vectors to be used by RAG-template for various tasks such as text representation and similarity.',
+        description="The name of the collection of vectors to be used by RAG-template for various tasks such as text representation and similarity.",
     )
     indexName: str = Field(
         ...,
-        description='The name of the index to be used by RAG-template for various tasks such as text representation and similarity.',
+        description="The name of the index to be used by RAG-template for various tasks such as text representation and similarity.",
     )
-    relevanceScoreFn: Optional[RelevanceScoreFn] = Field(
-        'euclidean',
+    relevanceScoreFn: RelevanceScoreFn | None = Field(
+        "euclidean",
         description="The function used to calculate relevance scores for vectors. Options: 'euclidean', 'cosine', 'dotProduct'.",
     )
-    embeddingKey: str = Field(
-        ..., description='The key used to identify embeddings in the vector store.'
-    )
-    textKey: str = Field(
-        ..., description='The key used to store text data in the vector store.'
-    )
-    maxDocumentsToRetrieve: Optional[int] = Field(
+    embeddingKey: str = Field(..., description="The key used to identify embeddings in the vector store.")
+    textKey: str = Field(..., description="The key used to store text data in the vector store.")
+    maxDocumentsToRetrieve: int | None = Field(
         4,
-        description='The maximum number of documents to be retrieved from the vector store.',
+        description="The maximum number of documents to be retrieved from the vector store.",
     )
-    maxScoreDistance: Optional[float] = Field(
-        None, description='The maximum score distance for the vectors.'
-    )
-    minScoreDistance: Optional[float] = Field(
-        None, description='The maximum score distance for the vectors.'
-    )
+    maxScoreDistance: float | None = Field(None, description="The maximum score distance for the vectors.")
+    minScoreDistance: float | None = Field(None, description="The maximum score distance for the vectors.")
 
 
 class PromptsFilePath(BaseModel):
-    system: Optional[str] = Field(
-        None, description='The system prompt to be used for the RAG chain.'
-    )
-    user: Optional[str] = Field(
-        None, description='The user prompt to be used for the RAG chain.'
-    )
+    system: str | None = Field(None, description="The system prompt to be used for the RAG chain.")
+    user: str | None = Field(None, description="The user prompt to be used for the RAG chain.")
 
 
 class Rag(BaseModel):
-    promptsFilePath: Optional[PromptsFilePath] = None
+    promptsFilePath: PromptsFilePath | None = None
 
 
 class Chain(BaseModel):
-    aggregateMaxTokenNumber: Optional[int] = Field(
+    aggregateMaxTokenNumber: int | None = Field(
         2000,
-        description='The maximum number of tokens to be used for aggregation of multiple responses from different services.',
+        description="The maximum number of tokens to be used for aggregation of multiple responses from different services.",
     )
-    rag: Optional[Rag] = Field(None, description='RAG chain configuration')
+    rag: Rag | None = Field(None, description="RAG chain configuration")
 
 
 class RagTemplateConfigSchema(BaseModel):
-    llm: Union[AzureLlmConfiguration, OpenAILlmConfiguration]
-    tokenizer: Optional[Tokenizer] = Field(
-        default_factory=lambda: Tokenizer.model_validate({'name': 'gpt-3.5-turbo'})
-    )
-    embeddings: Union[AzureEmbeddingsConfiguration, OpenAIEmbeddingsConfiguration]
+    llm: AzureLlmConfiguration | OpenAILlmConfiguration
+    tokenizer: Tokenizer | None = Field(default_factory=lambda: Tokenizer.model_validate({"name": "gpt-3.5-turbo"}))
+    embeddings: AzureEmbeddingsConfiguration | OpenAIEmbeddingsConfiguration
     vectorStore: VectorStore
-    chain: Optional[Chain] = Field(
-        default_factory=lambda: Chain.model_validate({'aggregateMaxTokenNumber': 2000})
-    )
+    chain: Chain | None = Field(default_factory=lambda: Chain.model_validate({"aggregateMaxTokenNumber": 2000}))

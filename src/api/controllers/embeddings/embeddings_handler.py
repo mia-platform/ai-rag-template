@@ -1,14 +1,15 @@
+from collections.abc import Generator
 from gzip import BadGzipFile
 from tarfile import TarError
-from typing import Generator
 from zipfile import BadZipFile
+
 from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Request, UploadFile, status
 
-from src.application.embeddings.file_parser.errors import InvalidFileError
+from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.api.schemas.status_ok_schema import StatusOkResponseSchema
 from src.application.embeddings.embedding_generator import EmbeddingGenerator
+from src.application.embeddings.file_parser.errors import InvalidFileError
 from src.application.embeddings.file_parser.file_parser import FileParser
-from src.api.schemas.embeddings_schemas import GenerateEmbeddingsInputSchema, GenerateStatusOutputSchema
 from src.context import AppContext
 
 router = APIRouter()
@@ -21,10 +22,11 @@ router = APIRouter()
 # you might want to use a more sophisticated mechanism to handle this.
 router.lock = False
 
+
 def generate_embeddings_from_url_background_task(app_context: AppContext, url: str, filter_path: str | None):
     """
-    Generate embeddings for a given URL. 
-    
+    Generate embeddings for a given URL.
+
     This method is intended to be called as a background task. Includes management of the lock mechanism
     of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
 
@@ -49,13 +51,13 @@ def generate_embeddings_from_url_background_task(app_context: AppContext, url: s
         router.lock = False
         logger.debug("Router unlocked after embedding generation.")
 
+
 @router.post(
-    "/embeddings/generate",
-    response_model=StatusOkResponseSchema,
-    status_code=status.HTTP_200_OK,
-    tags=["Embeddings"]
+    "/embeddings/generate", response_model=StatusOkResponseSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"]
 )
-def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks):
+def generate_embeddings_from_url(
+    request: Request, data: GenerateEmbeddingsInputSchema, background_tasks: BackgroundTasks
+):
     """
     Generate embeddings for a given URL. It starts from a single web page and generates embeddings for the text data of that page and
     for every page connected via hyperlinks (anchor tags).
@@ -86,13 +88,16 @@ def generate_embeddings_from_url(request: Request, data: GenerateEmbeddingsInput
         background_tasks.add_task(generate_embeddings_from_url_background_task, request_context, url, filter_path)
         request_context.logger.info("Generation embeddings process started.")
         return {"statusOk": True}
-    
+
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
-def generate_embeddings_from_file_background_task(app_context: AppContext, document_generator: Generator[str, None, None]):
+
+def generate_embeddings_from_file_background_task(
+    app_context: AppContext, document_generator: Generator[str, None, None]
+):
     """
-    Generate embeddings for an uploaded file. 
-    
+    Generate embeddings for an uploaded file.
+
     This method is intended to be called as a background task. Includes managmement of the lock mechanism
     of this router, which is locked when the embedding generation process is running, and unlocked when it finishes.
 
@@ -118,16 +123,17 @@ def generate_embeddings_from_file_background_task(app_context: AppContext, docum
         router.lock = False
         logger.debug("Router unlocked after embedding generation.")
 
+
 @router.post(
     "/embeddings/generateFromFile",
     response_model=StatusOkResponseSchema,
     status_code=status.HTTP_200_OK,
-    tags=["Embeddings"]
+    tags=["Embeddings"],
 )
 def generate_embeddings_from_file(request: Request, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     """
-    Generate embeddings for a given file. 
-    
+    Generate embeddings for a given file.
+
     The file must be uploaded with content type "multipart/form-data" request and must have one of the following content type:
         - text/plain (such as .txt files)
         - text/markdown (such as .md files)
@@ -145,10 +151,12 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         file (UploadFile): The file received.
         background_tasks (BackgroundTasks): The background tasks object.
     """
-    
+
     request_context: AppContext = request.state.app_context
-    request_context.logger.info(f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})")
-    
+    request_context.logger.info(
+        f"Generate embeddings request received for file {file.filename} (content type: {file.content_type})"
+    )
+
     try:
         file_parser = FileParser(request_context.logger)
         docs = list(file_parser.extract_documents_from_file(file))
@@ -163,14 +171,12 @@ def generate_embeddings_from_file(request: Request, background_tasks: Background
         background_tasks.add_task(generate_embeddings_from_file_background_task, request_context, docs)
         request_context.logger.info("Generation embeddings process started.")
         return {"statusOk": True}
-    
+
     raise HTTPException(status_code=409, detail="A process to generate embeddings is already in progress.")
 
+
 @router.get(
-    "/embeddings/status",
-    response_model=GenerateStatusOutputSchema,
-    status_code=status.HTTP_200_OK,
-    tags=["Embeddings"]
+    "/embeddings/status", response_model=GenerateStatusOutputSchema, status_code=status.HTTP_200_OK, tags=["Embeddings"]
 )
 def embeddings_status():
     """

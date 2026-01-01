@@ -58,11 +58,11 @@ start:
 	uv run dotenv -f local.env run -- python -m src.app
 
 lint:
-	uv run pylint src
-	uv run pylint tests
+	uv run ruff check src tests
 
 lint-fix:
-	uv run autopep8 --in-place --aggressive --aggressive */**/*.py
+	uv run ruff check --fix --unsafe-fixes src tests
+	uv run ruff format src tests
 
 test:
 	uv run pytest -v tests

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 from src.configurations.variables import get_variables

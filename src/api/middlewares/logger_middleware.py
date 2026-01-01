@@ -1,8 +1,10 @@
 import logging
 import time
+
 from starlette.middleware.base import BaseHTTPMiddleware
 
 REQUEST_ID_HEADER = "x-request-id"
+
 
 class ReqIdLoggerAdapter(logging.LoggerAdapter):
     """
@@ -13,6 +15,7 @@ class ReqIdLoggerAdapter(logging.LoggerAdapter):
         if "extra" in kwargs:
             kwargs["extra"]["reqId"] = self.extra["reqId"]
         return msg, kwargs
+
 
 class LoggerMiddleware(BaseHTTPMiddleware):
     """
@@ -25,14 +28,14 @@ class LoggerMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request, call_next):
         excluded_paths = [
-            '/-/ready',
-            '/-/healthz',
-            '/-/check-up',
-            '/-/metrics',
+            "/-/ready",
+            "/-/healthz",
+            "/-/check-up",
+            "/-/metrics",
         ]
-        
-        request_id = request.headers.get(REQUEST_ID_HEADER, '')
-        request_logger = ReqIdLoggerAdapter(self.logger, {'reqId': request_id})
+
+        request_id = request.headers.get(REQUEST_ID_HEADER, "")
+        request_logger = ReqIdLoggerAdapter(self.logger, {"reqId": request_id})
 
         if request.url.path not in excluded_paths:
             request_logger.info(
@@ -42,7 +45,7 @@ class LoggerMiddleware(BaseHTTPMiddleware):
                         "method": request.method,
                         "path": request.url.path,
                     }
-                }
+                },
             )
             start_time = time.time()
 
@@ -58,9 +61,9 @@ class LoggerMiddleware(BaseHTTPMiddleware):
                         "method": request.method,
                         "path": request.url.path,
                         "status": response.status_code,
-                        "duration": duration,   
+                        "duration": duration,
                     }
-                }
+                },
             )
 
         return response
