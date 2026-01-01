@@ -3,7 +3,6 @@ __pycache__
 .venv
 
 # uv files
-uv.lock
 .python-version
 
 # Test and coverage files
