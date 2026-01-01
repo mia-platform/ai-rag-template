@@ -46,40 +46,38 @@ CONFIGURATION_SCHEMA = service_config.json
 CONFIGURATION_MODEL = service_model.py
 
 install:
-	pip install -r requirements.txt
+	uv sync
 
 clear-deps:
-	pip freeze > to-uninstall.txt
-	pip uninstall -y -r to-uninstall.txt
-	rm to-uninstall.txt
+	rm -rf .venv uv.lock
 
 freeze:
-	pip freeze > requirements.txt
+	uv pip freeze > requirements.txt
 
 start:
-	dotenv -f local.env run -- python -m src.app
+	uv run dotenv -f local.env run -- python -m src.app
 
 lint:
-	python -m pylint src
-	python -m pylint tests
+	uv run pylint src
+	uv run pylint tests
 
 lint-fix:
-	autopep8 --in-place --aggressive --aggressive */**/*.py
+	uv run autopep8 --in-place --aggressive --aggressive */**/*.py
 
 test:
-	python -m pytest -v tests
+	uv run pytest -v tests
 
 security-check:
-	bandit -r -l ./src
+	uv run bandit -r -l ./src
 
 snapshot:
-	python -m pytest -v --snapshot-update
+	uv run pytest -v --snapshot-update
 
 coverage:
-	coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest tests
-	coverage html --data-file ${COVERAGE_DATA_FILE} -d ${COVERAGE_HTML_DIR}
-	coverage xml --data-file ${COVERAGE_DATA_FILE} -o ${COVERAGE_XML_FILE}
-	genbadge coverage -i ${COVERAGE_XML_FILE} -o ${COVERAGE_BADGE_FILE}
+	uv run coverage run --data-file ${COVERAGE_DATA_FILE} --source=src -m pytest tests
+	uv run coverage html --data-file ${COVERAGE_DATA_FILE} -d ${COVERAGE_HTML_DIR}
+	uv run coverage xml --data-file ${COVERAGE_DATA_FILE} -o ${COVERAGE_XML_FILE}
+	uv run genbadge coverage -i ${COVERAGE_XML_FILE} -o ${COVERAGE_BADGE_FILE}
 
 # make update-version SV=<patch | minor | major>
 update-version:
@@ -107,7 +105,7 @@ update-version:
 	@git tag v${NEW_SERVICE_VERSION}
 
 build-service-config:
-	datamodel-codegen \
+	uv run datamodel-codegen \
 	--input ${CONFIGURATION_PATH}/${CONFIGURATION_SCHEMA} \
 	--input-file-type jsonschema \
 	--output ${CONFIGURATION_PATH}/${CONFIGURATION_MODEL}
