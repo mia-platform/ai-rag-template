@@ -46,7 +46,7 @@ CONFIGURATION_SCHEMA = service_config.json
 CONFIGURATION_MODEL = service_model.py
 
 install:
-	uv sync --python 3.12
+	uv sync
 
 clear-deps:
 	rm -rf .venv uv.lock
@@ -101,8 +101,12 @@ update-version:
 	@git commit -m "upgrade: service v${NEW_SERVICE_VERSION}"
 	@git tag v${NEW_SERVICE_VERSION}
 
+
 build-service-config:
 	uv run datamodel-codegen \
 	--input ${CONFIGURATION_PATH}/${CONFIGURATION_SCHEMA} \
 	--input-file-type jsonschema \
-	--output ${CONFIGURATION_PATH}/${CONFIGURATION_MODEL}
+	--output ${CONFIGURATION_PATH}/${CONFIGURATION_MODEL} \
+	--use-title-as-name \
+	--output-model-type pydantic_v2.BaseModel \
+	--set-default-enum-member

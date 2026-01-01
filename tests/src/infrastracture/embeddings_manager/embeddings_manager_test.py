@@ -1,5 +1,6 @@
 import pytest
 from langchain_openai import AzureOpenAIEmbeddings, OpenAIEmbeddings
+from pydantic import ValidationError
 
 from src.configurations.service_model import AzureEmbeddingsConfiguration, OpenAIEmbeddingsConfiguration
 from src.infrastracture.embeddings_manager.embeddings_manager import EmbeddingsManager
@@ -41,10 +42,5 @@ def test_get_embeddings_instance_from_azure_configuration(app_context):
 
 
 def test_fail_to_get_embeddings_instance_from_unsupported_configuration(app_context):
-    app_context.configurations.embeddings = OpenAIEmbeddingsConfiguration(
-        type="unsupported", name="text-embeddings-3-small"
-    )
-
-    embeddings_manager = EmbeddingsManager(app_context)
-    with pytest.raises(UnsupportedEmbeddingsProviderError):
-        embeddings_manager.get_embeddings_instance()
+    with pytest.raises(ValidationError):
+        OpenAIEmbeddingsConfiguration(type="unsupported", name="text-embeddings-3-small")

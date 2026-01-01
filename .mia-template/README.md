@@ -39,14 +39,14 @@ cp default.configuration.json local.configuration.json
 
 > *NOTE*
 >
-> Before to start, please ensure you have Python 3.12 installed and defined as a default python version.
+> Before to start, please ensure you have Python 3.13 installed and defined as a default python version.
 
 Since we are using [uv](https://github.com/astral-sh/uv) as a package manager and environment manager, you can simply start the application using the command defined in the [Makefile](./Makefile) file. To generate the environment and install all the required dependencies please run:
 
 ```sh
 make install
 # Or you can manually run:
-uv sync --python 3.12
+uv sync
 ```
 
 You can run the web server with this command
