@@ -7,8 +7,8 @@ from langchain_core.callbacks import CallbackManagerForChainRun
 from langchain_core.documents import Document
 from langchain_core.language_models.base import LanguageModelInput
 from langchain_core.messages import BaseMessage
-from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig, RunnablePassthrough
 from langchain_core.runnables.utils import create_model
 from pydantic import BaseModel
