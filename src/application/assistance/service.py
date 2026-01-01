@@ -104,9 +104,7 @@ class AssistantService:
             if self.app_context.configurations.chain.rag.promptsFilePath:
                 builder = AssistantPromptBuilder()
                 if self.app_context.configurations.chain.rag.promptsFilePath.system:
-                    builder.load_system_template_from_file(
-                        self.app_context.configurations.chain.rag.promptsFilePath.system
-                    )
+                    builder.load_system_template_from_file(self.app_context.configurations.chain.rag.promptsFilePath.system)
                 if self.app_context.configurations.chain.rag.promptsFilePath.user:
                     builder.load_user_template_from_file(self.app_context.configurations.chain.rag.promptsFilePath.user)
                 return builder.build()
@@ -133,9 +131,7 @@ class AssistantService:
             prompt_template=prompt_template,
         )
 
-    def chat_completion(
-        self, query: str, chat_history: list[str], custom_template_variables: dict[str, str] = None
-    ) -> AssistantServiceChatCompletionResponse:
+    def chat_completion(self, query: str, chat_history: list[str], custom_template_variables: dict[str, str] = None) -> AssistantServiceChatCompletionResponse:
         """
         Chat completion using Assistant Chain
         """

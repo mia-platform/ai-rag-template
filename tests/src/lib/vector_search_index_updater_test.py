@@ -38,11 +38,7 @@ def test_update_vector_index_requires_no_changes(app_context):
             {"name": "another_vector_index", "latestDefinition": {"fields": []}},
             {
                 "name": "openai_vector_index",
-                "latestDefinition": {
-                    "fields": [
-                        {"numDimensions": 1536, "path": "embedding", "similarity": "euclidean", "type": "vector"}
-                    ]
-                },
+                "latestDefinition": {"fields": [{"numDimensions": 1536, "path": "embedding", "similarity": "euclidean", "type": "vector"}]},
             },
         ]
 
@@ -102,9 +98,7 @@ def test_update_vector_index_requires_update(app_context):
         mock_collection.list_search_indexes.return_value = [
             {
                 "name": "openai_vector_index",
-                "latestDefinition": {
-                    "fields": [{"numDimensions": 3072, "path": "embedding", "similarity": "cosine", "type": "vector"}]
-                },
+                "latestDefinition": {"fields": [{"numDimensions": 3072, "path": "embedding", "similarity": "cosine", "type": "vector"}]},
             }
         ]
 

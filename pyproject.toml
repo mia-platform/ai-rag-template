@@ -2,14 +2,14 @@
 name = "ai-rag-template"
 version = "0.5.3"
 description = "RAG template for AI applications"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "attrs==23.2.0",
     "beautifulsoup4==4.12.3",
     "dataclasses-json==0.6.4",
-    "datamodel-code-generator==0.26.5",
-    "fastapi==0.115.6",
-    "httpcore==1.0.5",
+    "datamodel-code-generator==0.50.0",
+    "fastapi==0.128.0",
+    "httpcore==1.0.9",
     "httpx==0.27.0",
     "httpx-sse==0.4.0",
     "jsonschema==4.21.1",
@@ -29,13 +29,13 @@ dependencies = [
     "pydantic_core==2.20.1",
     "pymongo==4.8.0",
     "PyMuPDF==1.24.14",
-    "requests==2.32.0",
-    "starlette==0.40.0",
+    "requests==2.32.5",
+    "starlette==0.50.0",
     "tiktoken==0.8.0",
     "typing_extensions==4.12.2",
-    "urllib3==2.2.2",
+    "urllib3==2.6.0",
     "virtualenv==20.29.1",
-    "uvicorn==0.34.0",
+    "uvicorn==0.40.0",
     "python-multipart==0.0.19",
 ]
 

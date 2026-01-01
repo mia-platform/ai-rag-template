@@ -57,18 +57,14 @@ def test_chat_completion(similarity_search_with_score, app_context, mock_server,
     embedding_reply_mock = load_json_response("openai_embedding.json")
     chat_completion_reply_mock = load_json_response("openai_chat_completion.json")
 
-    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(
-        return_value=Response(200, json=embedding_reply_mock)
-    )
+    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(return_value=Response(200, json=embedding_reply_mock))
 
     chat_completion = mock_server.respx_mock.post("https://api.openai.com/v1/chat/completions").mock(
         return_value=Response(200, json=chat_completion_reply_mock)
     )
 
     # Act
-    result = assistant_service.chat_completion(
-        query="query", chat_history=["Chat message 1", "Chat message 2", "Chat message 3", "Chat message 4"]
-    )
+    result = assistant_service.chat_completion(query="query", chat_history=["Chat message 1", "Chat message 2", "Chat message 3", "Chat message 4"])
 
     # Assert
 
@@ -100,9 +96,7 @@ def test_chat_completion_with_custom_template(similarity_search_with_score, app_
     embedding_reply_mock = load_json_response("openai_embedding.json")
     chat_completion_reply_mock = load_json_response("openai_chat_completion.json")
 
-    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(
-        return_value=Response(200, json=embedding_reply_mock)
-    )
+    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(return_value=Response(200, json=embedding_reply_mock))
 
     chat_completion = mock_server.respx_mock.post("https://api.openai.com/v1/chat/completions").mock(
         return_value=Response(200, json=chat_completion_reply_mock)
@@ -125,9 +119,7 @@ def test_chat_completion_with_custom_template(similarity_search_with_score, app_
 @patch(
     "langchain_community.vectorstores.mongodb_atlas.MongoDBAtlasVectorSearch._similarity_search_with_score",
 )
-def test_chat_completion_with_prompts_from_file(
-    similarity_search_with_score, app_context, mock_server, snapshot, tmp_path
-):
+def test_chat_completion_with_prompts_from_file(similarity_search_with_score, app_context, mock_server, snapshot, tmp_path):
     # Create prompt template files
     system_template = "{output_text} {chat_history} {custom_variable} you MUST reply to Human question"
     user_template = "{query}"
@@ -141,9 +133,7 @@ def test_chat_completion_with_prompts_from_file(
 
     # Patch configuration to use prompt templates from file
     app_context.configurations.chain.rag = Rag(
-        promptsFilePath=PromptsFilePath(
-            system=str(system_template_file.absolute()), user=str(user_template_file.absolute())
-        )
+        promptsFilePath=PromptsFilePath(system=str(system_template_file.absolute()), user=str(user_template_file.absolute()))
     )
 
     # Arrange
@@ -158,9 +148,7 @@ def test_chat_completion_with_prompts_from_file(
     embedding_reply_mock = load_json_response("openai_embedding.json")
     chat_completion_reply_mock = load_json_response("openai_chat_completion.json")
 
-    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(
-        return_value=Response(200, json=embedding_reply_mock)
-    )
+    mock_server.respx_mock.post("https://api.openai.com/v1/embeddings").mock(return_value=Response(200, json=embedding_reply_mock))
 
     chat_completion = mock_server.respx_mock.post("https://api.openai.com/v1/chat/completions").mock(
         return_value=Response(200, json=chat_completion_reply_mock)

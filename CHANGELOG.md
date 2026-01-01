@@ -9,8 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
+- Using Python v3.13
 - Using [`uv`](https://github.com/astral-sh/uv) as a package and project manager
 - Using [`ruff`](https://docs.astral.sh/ruff/) as a linter
+- Updated several key libraries for the application to startup (Uvicorn, FastAPI, Starlette, requests, urllib3)
+- Updated library _datamodel-code-generator_ to improve generation of Python definitions from JSON Schema
+to validate the configuration file
 
 
 ## 0.5.3 - 2025-02-07

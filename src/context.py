@@ -88,8 +88,6 @@ class AppContext:
             metrics_manager=self._metrics_manager,
             env_vars=self._env_vars,
             configurations=self._configurations,
-            request_context=RequestContext(
-                logger=request_logger, env_vars=self._env_vars, request=request if request else None
-            ),
+            request_context=RequestContext(logger=request_logger, env_vars=self._env_vars, request=request if request else None),
         )
         return AppContext(params)

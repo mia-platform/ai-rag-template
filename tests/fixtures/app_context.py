@@ -31,7 +31,5 @@ def app_context():
         },
     )
 
-    app_context_params = AppContextParams(
-        logger=MagicMock(), metrics_manager=MagicMock(), env_vars=mock_env_vars, configurations=mock_configurations
-    )
+    app_context_params = AppContextParams(logger=MagicMock(), metrics_manager=MagicMock(), env_vars=mock_env_vars, configurations=mock_configurations)
     return AppContext(params=app_context_params)

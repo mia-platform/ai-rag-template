@@ -11,9 +11,7 @@ def test_generate_embeddings_from_url_success(test_client):
     url = "http://example.com"
     data = {"url": url}
 
-    with patch(
-        "src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_url"
-    ) as mock_generate:
+    with patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_url") as mock_generate:
         response = test_client.post("/embeddings/generate", json=data)
 
         assert response.status_code == 200
@@ -43,12 +41,8 @@ def test_generate_embeddings_from_url_conflict(test_client):
 )
 def test_generate_embeddings_from_file(test_client, file_name, file_content, content_type):
     with (
-        patch(
-            "src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text"
-        ) as mock_generate_from_text,
-        patch(
-            "src.application.embeddings.file_parser.file_parser.FileParser.extract_documents_from_file"
-        ) as mock_extract_documents_from_file,
+        patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text") as mock_generate_from_text,
+        patch("src.application.embeddings.file_parser.file_parser.FileParser.extract_documents_from_file") as mock_extract_documents_from_file,
     ):
         mock_extract_documents_from_file.return_value = ["Mock content"]
 
@@ -70,12 +64,8 @@ def test_generate_embeddings_from_zip_file(test_client):
     buffer.seek(0)
 
     with (
-        patch(
-            "src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text"
-        ) as mock_generate_from_text,
-        patch(
-            "src.application.embeddings.file_parser.file_parser.FileParser.extract_documents_from_file"
-        ) as mock_extract_documents_from_file,
+        patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text") as mock_generate_from_text,
+        patch("src.application.embeddings.file_parser.file_parser.FileParser.extract_documents_from_file") as mock_extract_documents_from_file,
     ):
         mock_extract_documents_from_file.return_value = ["This is a text file", "This is a markdown file"]
         files = {"file": ("zip_file.zip", buffer, "application/zip")}
@@ -100,9 +90,7 @@ def test_generate_embeddings_from_zip_file(test_client):
     ],
 )
 def test_fail_for_bad_archive_file(test_client, file_name, content_type):
-    with patch(
-        "src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text"
-    ) as mock_generate_from_text:
+    with patch("src.api.controllers.embeddings.embeddings_handler.EmbeddingGenerator.generate_from_text") as mock_generate_from_text:
         files = {"file": (file_name, b"This is not a valid archive file", content_type)}
         response = test_client.post("/embeddings/generateFromFile", files=files)
 
@@ -113,9 +101,7 @@ def test_fail_for_bad_archive_file(test_client, file_name, content_type):
 
 def test_fail_generate_embeddings_from_file_for_conflicts(test_client):
     router.lock = True  # Simulate a process already in progress
-    response = test_client.post(
-        "/embeddings/generateFromFile", files={"file": ("test.txt", io.BytesIO(b"Plain text content."), "text/plain")}
-    )
+    response = test_client.post("/embeddings/generateFromFile", files={"file": ("test.txt", io.BytesIO(b"Plain text content."), "text/plain")})
 
     assert response.status_code == 409
     assert response.json() == {"detail": "A process to generate embeddings is already in progress."}

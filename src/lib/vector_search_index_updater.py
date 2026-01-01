@@ -38,12 +38,8 @@ class VectorSearchIndexUpdater:
         self.collection = db[collection_name]
 
     def _create_vector_index(self, new_index_definition: SearchIndexModel) -> None:
-        self.logger.info(
-            f'Vector Search index "{self.index_name}" missing in {self.collection.name}, it will be created now'
-        )
-        self.logger.debug(
-            f'Creating Vector Search index to the following definition: "{new_index_definition.document.get("definition")}"'
-        )
+        self.logger.info(f'Vector Search index "{self.index_name}" missing in {self.collection.name}, it will be created now')
+        self.logger.debug(f'Creating Vector Search index to the following definition: "{new_index_definition.document.get("definition")}"')
         self.collection.create_search_index(model=new_index_definition)
         self.logger.info(f'Created Vector Search index "{self.index_name}"')
 
@@ -69,17 +65,11 @@ class VectorSearchIndexUpdater:
         if vector_index is None:
             return None
 
-        return SearchIndexModel(
-            definition=vector_index.get("latestDefinition"), name=vector_index.get("name"), type="vectorSearch"
-        )
+        return SearchIndexModel(definition=vector_index.get("latestDefinition"), name=vector_index.get("name"), type="vectorSearch")
 
     def _get_updated_vector_index_definition(self) -> SearchIndexModel:
-        configured_similarity_fn = (
-            self.app_context.configurations.vectorStore.relevanceScoreFn or RelevanceScoreFn.cosine
-        )
-        num_dimensions = DIMENSIONS_DICT.get(
-            self.app_context.configurations.embeddings.name, DEFAULT_NUM_DIMENSIONS_VALUE
-        )
+        configured_similarity_fn = self.app_context.configurations.vectorStore.relevanceScoreFn or RelevanceScoreFn.cosine
+        num_dimensions = DIMENSIONS_DICT.get(self.app_context.configurations.embeddings.name, DEFAULT_NUM_DIMENSIONS_VALUE)
 
         return SearchIndexModel(
             definition={
