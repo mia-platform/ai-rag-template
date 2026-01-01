@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 to validate the configuration file
 - Updated langchain dependencies to solve vulnerability issues
 
+## Fixed
+
+- `temperature` property from configured LLM is now effectively used during text generation
+
 ## 0.5.3 - 2025-02-07
 
 ### Fixed
