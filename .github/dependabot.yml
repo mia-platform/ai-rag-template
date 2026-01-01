@@ -20,8 +20,7 @@ updates:
 - package-ecosystem: docker
   directory: /
   schedule:
-    interval: daily
-    time: "07:00"
+    interval: monthly
     timezone: Europe/Rome
   commit-message:
     include: scope
@@ -29,10 +28,12 @@ updates:
 
 # keep up with pip packages
 - package-ecosystem: pip
-  directory: /
+  directories:
+    - /
   schedule:
     interval: weekly
     timezone: Europe/Rome
   commit-message:
     include: scope
     prefix: deps
+  versioning-strategy: lockfile-only

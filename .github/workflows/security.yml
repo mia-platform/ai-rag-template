@@ -18,14 +18,17 @@ jobs:
         with:
           python-version: "3.12.3"
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          uv sync --frozen
 
       - name: Run Bandit Security Scanner
-        run: bandit -r -l /src
+        run: uv run bandit -r -l ./src
 
       - name: Run pip-audit Security Scanner
-        run: pip-audit
-
+        run: uv run pip-audit

@@ -51,9 +51,6 @@ install:
 clear-deps:
 	rm -rf .venv uv.lock
 
-freeze:
-	uv pip freeze > requirements.txt
-
 start:
 	uv run dotenv -f local.env run -- python -m src.app
 

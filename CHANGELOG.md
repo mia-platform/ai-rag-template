@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## Changed
+
+- Using [`uv`](https://github.com/astral-sh/uv) as a package and project manager
+- Using [`ruff`](https://docs.astral.sh/ruff/) as a linter
+
+
 ## 0.5.3 - 2025-02-07
 
 ### Fixed
