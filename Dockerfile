@@ -5,10 +5,13 @@ RUN useradd -s /bin/bash python
 EXPOSE 3000
 WORKDIR /app
 
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 ADD  . /app
 
-RUN pip install --upgrade pip 
-RUN pip install -r requirements.txt
+# Install dependencies using uv
+RUN uv sync --frozen --no-cache
 
 ARG COMMIT_SHA=<not-specified>
 RUN echo "ai-rag-template: $COMMIT_SHA" >> ./commit.sha
@@ -21,4 +24,4 @@ LABEL maintainer="%CUSTOM_PLUGIN_CREATOR_USERNAME%" \
 
 USER python
 
-CMD ["python", "-m", "src.app"]
+CMD ["uv", "run", "python", "-m", "src.app"]

@@ -1,0 +1,20 @@
+exclude = ["tests/conftest.py", "src/configurations/service_model.py"]
+extend-include = ["*.ipynb"]
+
+line-length = 160
+
+lint.select = [
+    "F", # Pyflakes
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "A", # flake8-builtins
+    "PLC", # pylint conventions
+    "PLE", # pylint errors
+    "PLR", # pylint refactor
+    "PLW", # pylint warnings
+    "I" # isort
+]
+
+[lint.per-file-ignores]
+"benchmarks/*" = ["PLR"]
+"tests/*" = ["PLR"]

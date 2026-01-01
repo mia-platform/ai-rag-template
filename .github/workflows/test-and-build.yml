@@ -21,19 +21,23 @@ jobs:
           python-version: '3.12.3'
           check-latest: true
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest pytest-cov coveralls
+          uv sync --frozen
+          uv pip install coveralls
 
       - name: Run linting
         run: |
-          python -m pylint src
-          python -m pylint tests
+          uv run ruff check src tests
+
       - name: Run tests with coverage
         run: |
-          python -m pytest -v tests --cov=src --cov-report=term --cov-report=xml
+          uv run pytest -v tests --cov=src --cov-report=term --cov-report=xml
 
       - name: Send coverage to Coveralls
         uses: coverallsapp/github-action@v2
@@ -131,7 +135,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         cache-from: type=gha
         cache-to: type=gha,mode=max
-    
+
     - name: Generate SBOM
       uses: anchore/sbom-action@55dc4ee22412511ee8c3142cbea40418e6cec693 # v0.17.8
       if: github.ref_type == 'tag'

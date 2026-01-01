@@ -3,19 +3,19 @@ Module to include the EmbeddingGenerator class, a class that generates embedding
 """
 
 import hashlib
-from typing import List
+
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_experimental.text_splitter import SemanticChunker
 
 
-class DocumentChunker():
+class DocumentChunker:
     """
     Initialize the DocumentChunker class.
     """
 
     def __init__(self, embedding: Embeddings) -> None:
-        self._chunker = SemanticChunker(embeddings=embedding, breakpoint_threshold_type='percentile')
+        self._chunker = SemanticChunker(embeddings=embedding, breakpoint_threshold_type="percentile")
 
     def _remove_consecutive_newlines(self, text: str) -> str:
         """
@@ -29,7 +29,7 @@ class DocumentChunker():
         """
         return hashlib.sha256(content.encode()).hexdigest()
 
-    def split_text_into_chunks(self, text: str, url: str | None = None) -> List[Document]:
+    def split_text_into_chunks(self, text: str, url: str | None = None) -> list[Document]:
         """
         Generate chunks via semantic separation from a given text
 

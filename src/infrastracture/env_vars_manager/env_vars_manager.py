@@ -1,23 +1,23 @@
 import os
 from logging import Logger
-from typing import TypeVar, Generic, Type
+from typing import Generic, TypeVar
+
 from attr import dataclass
-from pydantic import ValidationError as PydanticValidationError, BaseModel
+from pydantic import BaseModel
+from pydantic import ValidationError as PydanticValidationError
 
 from src.infrastracture.env_vars_manager.errors import ModelValidationError
 
-
-T = TypeVar('T', bound=BaseModel)
+T = TypeVar("T", bound=BaseModel)
 
 
 @dataclass
 class EnvVarsParams:
-    model: Type[T]
+    model: type[T]
     logger: Logger
 
 
 class EnvVarsManager(Generic[T]):
-
     def __init__(self, params: EnvVarsParams):
         self.model = params.model
         self.logger = params.logger
@@ -30,8 +30,7 @@ class EnvVarsManager(Generic[T]):
         try:
             return self.model(**self.env_vars)
         except PydanticValidationError as err:
-            self.logger.error(
-                f'Pydantic model validation error: {err.errors()}')
+            self.logger.error(f"Pydantic model validation error: {err.errors()}")
             raise ModelValidationError(err.errors())
 
     def get_env_vars(self) -> T:

@@ -1,24 +1,22 @@
-from typing import Dict
-
 # Constants related to the vector index
 VECTOR_INDEX_TYPE = "vectorSearch"
 DEFAULT_NUM_DIMENSIONS_VALUE = 1536
 
-DIMENSIONS_DICT: Dict[str, int] = {
+DIMENSIONS_DICT: dict[str, int] = {
     "text-embedding-3-small": 1536,
     "text-embedding-3-large": 3072,
 }
 
 # Constants related to the embeddings generation via uploaded file
 
-ZIP_CONTENT_TYPE = 'application/zip'
-ZIP_COMPRESSED_CONTENT_TYPE = 'application/zip-compressed'
-TAR_CONTENT_TYPE = 'application/x-tar'
-GZIP_CONTENT_TYPE = 'application/gzip'
-GZIP_COMPRESSED_CONTENT_TYPE = 'application/gzip-compressed'
-PDF_CONTENT_TYPE = 'application/pdf'
-TEXT_CONTENT_TYPE = 'text/plain'
-MD_CONTENT_TYPE = 'text/markdown'
+ZIP_CONTENT_TYPE = "application/zip"
+ZIP_COMPRESSED_CONTENT_TYPE = "application/zip-compressed"
+TAR_CONTENT_TYPE = "application/x-tar"
+GZIP_CONTENT_TYPE = "application/gzip"
+GZIP_COMPRESSED_CONTENT_TYPE = "application/gzip-compressed"
+PDF_CONTENT_TYPE = "application/pdf"
+TEXT_CONTENT_TYPE = "text/plain"
+MD_CONTENT_TYPE = "text/markdown"
 
 SUPPORTED_CONTENT_TYPES_TUPLE = (
     ZIP_CONTENT_TYPE,
@@ -31,13 +29,13 @@ SUPPORTED_CONTENT_TYPES_TUPLE = (
     MD_CONTENT_TYPE,
 )
 
-ZIP_EXTENSION = 'zip'
-TAR_EXTENSION = 'tar'
-GZIP_EXTENSION = 'gz'
-PDF_EXTENSION = 'pdf'
-TEXT_EXTENSION = 'txt'
-MD_EXTENSION = 'md'
-MDX_EXTENSION = 'mdx'
+ZIP_EXTENSION = "zip"
+TAR_EXTENSION = "tar"
+GZIP_EXTENSION = "gz"
+PDF_EXTENSION = "pdf"
+TEXT_EXTENSION = "txt"
+MD_EXTENSION = "md"
+MDX_EXTENSION = "mdx"
 
 SUPPORTED_EXT_IN_COMPRESSED_FILE_TUPLE = PDF_EXTENSION, TEXT_EXTENSION, MD_EXTENSION, MDX_EXTENSION
 SUPPORTED_COMPRESSED_EXT_TUPLE = ZIP_EXTENSION, TAR_EXTENSION, GZIP_EXTENSION

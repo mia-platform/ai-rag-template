@@ -1,8 +1,8 @@
-import pytest
 import httpretty
+import pytest
 
 
-class MockServer():
+class MockServer:
     """
     A simple mock server for testing purposes.
     """
@@ -33,7 +33,7 @@ class MockServer():
         responses=None,
         match_querystring=False,
         priority=0,
-        **headers
+        **headers,
     ):
         httpretty.register_uri(
             method,
@@ -45,7 +45,7 @@ class MockServer():
             responses,
             match_querystring,
             priority,
-            **headers
+            **headers,
         )
 
     @property

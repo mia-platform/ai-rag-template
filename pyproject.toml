@@ -1,0 +1,67 @@
+[project]
+name = "ai-rag-template"
+version = "0.5.3"
+description = "RAG template for AI applications"
+requires-python = ">=3.12"
+dependencies = [
+    "attrs==23.2.0",
+    "beautifulsoup4==4.12.3",
+    "dataclasses-json==0.6.4",
+    "datamodel-code-generator==0.26.5",
+    "fastapi==0.115.6",
+    "httpcore==1.0.5",
+    "httpx==0.27.0",
+    "httpx-sse==0.4.0",
+    "jsonschema==4.21.1",
+    "langchain==0.3.17",
+    "langchain-community==0.3.12",
+    "langchain-core==0.3.33",
+    "langchain-experimental==0.3.3",
+    "langchain-openai==0.3.3",
+    "langchain-text-splitters==0.3.3",
+    "langsmith==0.1.147",
+    "markdown-it-py==3.0.0",
+    "openai==1.58.1",
+    "pathspec==0.12.1",
+    "prometheus_client==0.21.1",
+    "pydantic==2.8.2",
+    "pydantic-settings==2.7.0",
+    "pydantic_core==2.20.1",
+    "pymongo==4.8.0",
+    "PyMuPDF==1.24.14",
+    "requests==2.32.0",
+    "starlette==0.40.0",
+    "tiktoken==0.8.0",
+    "typing_extensions==4.12.2",
+    "urllib3==2.2.2",
+    "virtualenv==20.29.1",
+    "uvicorn==0.34.0",
+    "python-multipart==0.0.19",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.uv]
+dev-dependencies = [
+    "bandit==1.8.0",
+    "coverage==7.5.0",
+    "genbadge==1.1.1",
+    "httpretty==1.1.4",
+    "isort==5.13.2",
+    "pip-audit>=2.10.0",
+    "python-json-logger==2.0.7",
+    "pytest==8.3.4",
+    "pytest-asyncio==0.23.6",
+    "pytest-cov==5.0.0",
+    "pytest-snapshot==0.9.0",
+    "requests-mock==1.12.1",
+    "responses==0.25.0",
+    "respx==0.21.1",
+    "ruff==0.8.4",
+    "testcontainers==4.4.0",
+]

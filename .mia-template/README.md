@@ -7,7 +7,7 @@ version](https://img.shields.io/badge/fastapi-v0.115.6-blue)](.coverage/html/ind
 
 ---
 
-mia_template_service_name_placeholder is a template meant to be a based for the implementation of a RAG (retrieval augmented generation) system.  
+mia_template_service_name_placeholder is a template meant to be a based for the implementation of a RAG (retrieval augmented generation) system.
 This repository contains the backend code, which consists of a web server that provides REST APIs to primarily support one type of operation:
 
 - **Chat**: Provides a conversation feature, allowing users to ask questions and get responses from the chatbot.
@@ -37,22 +37,16 @@ cp default.configuration.json local.configuration.json
 
 ### Startup
 
-- Create a virtual environment to install project dependencies
+> *NOTE*
+>
+> Before to start, please ensure you have Python 3.12 installed and defined as a default python version.
 
-```sh
-python3 -m venv .venv
-```
-
-- Activate the new virtual environment
-
-```sh
-source .venv/bin/activate
-```
-
-- Install project dependencies
+Since we are using [uv](https://github.com/astral-sh/uv) as a package manager and environment manager, you can simply start the application using the command defined in the [Makefile](./Makefile) file. To generate the environment and install all the required dependencies please run:
 
 ```sh
 make install
+# Or you can manually run:
+uv sync --python 3.12
 ```
 
 You can run the web server with this command
@@ -61,7 +55,7 @@ You can run the web server with this command
 # This uses the environment variable located to `local.env`
 make start
 # Or you can run:
-dotenv -f <<YOUR_ENV_FILE>> run -- python -m src.app
+uv run dotenv -f <<YOUR_ENV_FILE>> run -- python -m src.app
 ```
 
 You can reivew the API using the Swagger UI exposed at `http://localhost:3000/docs`
@@ -92,7 +86,7 @@ Please make sure you include new tests or update the existing ones, according to
 
 #### Lint
 
-We use [pylint](https://pypi.org/project/pylint/) as a linter. Please, try to follow the lint rules. You can run:
+We use [ruff](https://docs.astral.sh/ruff/) as a linter. Please, try to follow the lint rules. You can run:
 
 ```sh
 make lint
@@ -113,16 +107,11 @@ or manually fix your code according to the errors and warning received.
 You can add new dependencies, according to your needs, with the following command:
 
 ```sh
-python -m pip install <<module_name>>
+uv add <<module_name>>
 ```
 
-However, the package manager `pip` does not update automatically the list of dependencies included in the `requirements.txt` file. You have to do it by yourself with:
-
-```sh
-make freeze
-# Or:
-python -m pip freeze > requirements.txt
-```
+Consider that we are using [uv](https://github.com/astral-sh/uv) as Package Manager and as an environment manager.
+Please refer to the [pyproject.toml](./pyproject.toml) file to read more about existing dependencies and project configuration.
 
 ### Startup with Docker
 

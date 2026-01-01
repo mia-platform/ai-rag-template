@@ -1,29 +1,26 @@
 """Fake LLM wrapper for testing purposes."""
-from typing import Any, Dict, List, Mapping, Optional, cast
 
-from langchain_core.language_models.llms import LLM
-from pydantic import ValidationInfo, field_validator
+from collections.abc import Mapping
+from typing import Any, cast
 
 from langchain.callbacks.manager import CallbackManagerForLLMRun
+from langchain_core.language_models.llms import LLM
+from pydantic import ValidationInfo, field_validator
 
 
 class FakeLLM(LLM):
     """Fake LLM wrapper for testing purposes."""
 
-    queries: Optional[Mapping] = None
-    sequential_responses: Optional[bool] = False
+    queries: Mapping | None = None
+    sequential_responses: bool | None = False
     response_index: int = 0
-    prompts_received: List[str] = []  # received prompts for testing
+    prompts_received: list[str] = []  # received prompts for testing
 
     @field_validator("queries", check_fields=True)
     # pylint: disable=no-self-argument
-    def check_queries_required(
-        cls, queries: Optional[Mapping], values: ValidationInfo
-    ) -> Optional[Mapping]:
+    def check_queries_required(cls, queries: Mapping | None, values: ValidationInfo) -> Mapping | None:
         if values.data.get("sequential_response") and not queries:
-            raise ValueError(
-                "queries is required when sequential_response is set to True"
-            )
+            raise ValueError("queries is required when sequential_response is set to True")
         return queries
 
     def get_num_tokens(self, text: str) -> int:
@@ -38,11 +35,11 @@ class FakeLLM(LLM):
     def _call(
         self,
         prompt: str,
-        stop: Optional[List[str]] = None,
-        run_manager: Optional[CallbackManagerForLLMRun] = None,
+        stop: list[str] | None = None,
+        run_manager: CallbackManagerForLLMRun | None = None,
         **kwargs: Any,
     ) -> str:
-        self.prompts_received.append(prompt) # store received prompts for testing
+        self.prompts_received.append(prompt)  # store received prompts for testing
         if self.sequential_responses:
             return self._get_next_response_in_sequence
         if self.queries is not None:
@@ -52,7 +49,7 @@ class FakeLLM(LLM):
         return "bar"
 
     @property
-    def _identifying_params(self) -> Dict[str, Any]:
+    def _identifying_params(self) -> dict[str, Any]:
         return {}
 
     @property
@@ -61,13 +58,13 @@ class FakeLLM(LLM):
         response = queries[list(queries.keys())[self.response_index]]
         self.response_index = self.response_index + 1
         return response
-    
+
     @property
-    def get_received_prompts(self) -> List[str]:
+    def get_received_prompts(self) -> list[str]:
         return self.prompts_received
-    
+
     def get_last_received_prompt(self) -> str:
         return self.prompts_received[-1] if len(self.prompts_received) > 0 else ""
-    
+
     def clear_received_prompts(self):
         self.prompts_received = []

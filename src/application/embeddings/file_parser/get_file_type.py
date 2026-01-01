@@ -2,7 +2,23 @@ from enum import Enum
 
 from fastapi import UploadFile
 
-from src.constants import GZIP_COMPRESSED_CONTENT_TYPE, GZIP_CONTENT_TYPE, GZIP_EXTENSION, MD_CONTENT_TYPE, MD_EXTENSION, MDX_EXTENSION, PDF_CONTENT_TYPE, PDF_EXTENSION, TAR_CONTENT_TYPE, TAR_EXTENSION, TEXT_CONTENT_TYPE, TEXT_EXTENSION, ZIP_COMPRESSED_CONTENT_TYPE, ZIP_CONTENT_TYPE, ZIP_EXTENSION
+from src.constants import (
+    GZIP_COMPRESSED_CONTENT_TYPE,
+    GZIP_CONTENT_TYPE,
+    GZIP_EXTENSION,
+    MD_CONTENT_TYPE,
+    MD_EXTENSION,
+    MDX_EXTENSION,
+    PDF_CONTENT_TYPE,
+    PDF_EXTENSION,
+    TAR_CONTENT_TYPE,
+    TAR_EXTENSION,
+    TEXT_CONTENT_TYPE,
+    TEXT_EXTENSION,
+    ZIP_COMPRESSED_CONTENT_TYPE,
+    ZIP_CONTENT_TYPE,
+    ZIP_EXTENSION,
+)
 
 
 class FileType(Enum):
@@ -11,6 +27,7 @@ class FileType(Enum):
     ZIP = "zip"
     TAR = "tar"
     GZIP = "gzip"
+
 
 CONTENT_TYPE_MAP = {
     TEXT_CONTENT_TYPE: FileType.TEXT,
@@ -33,8 +50,9 @@ EXTENSION_TYPE_MAP = {
     GZIP_EXTENSION: FileType.GZIP,
 }
 
+
 def get_file_type(file: UploadFile):
     content_type = file.content_type
-    file_extension = file.filename.split('.')[-1]
+    file_extension = file.filename.split(".")[-1]
 
     return CONTENT_TYPE_MAP.get(content_type, None) or EXTENSION_TYPE_MAP.get(file_extension, None)

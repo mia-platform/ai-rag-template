@@ -13,17 +13,10 @@ class AppContextMiddleware(BaseHTTPMiddleware):
         self.app_context = app_context
 
     async def dispatch(self, request, call_next):
-        excluded_paths = [
-            '/-/ready',
-            '/-/healthz',
-            '/-/check-up'
-        ]
+        excluded_paths = ["/-/ready", "/-/healthz", "/-/check-up"]
 
         if request.url.path not in excluded_paths:
-            request.state.app_context = self.app_context.create_request_context(
-                request.state.logger,
-                request=request
-            )
+            request.state.app_context = self.app_context.create_request_context(request.state.logger, request=request)
 
         response = await call_next(request)
 

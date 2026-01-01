@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import pytest
 from dotenv import load_dotenv
 from pydantic import BaseModel
@@ -24,27 +25,17 @@ class WrongEnvVars(BaseModel):
     port: int
 
 
-def setup_env_vars_manager(
-    model,
-    logger
-) -> EnvVarsManager:
-    params = EnvVarsParams(
-        model=model,
-        logger=logger
-    )
+def setup_env_vars_manager(model, logger) -> EnvVarsManager:
+    params = EnvVarsParams(model=model, logger=logger)
 
     return EnvVarsManager[model](params)
 
 
 class TestEnvVarsManager:
-
     def test_get_env_vars(self, logger):
         load_env_vars("test.env")
 
-        env_vars_manager = setup_env_vars_manager(
-            RightEnvVars,
-            logger
-        )
+        env_vars_manager = setup_env_vars_manager(RightEnvVars, logger)
 
         env_vars = env_vars_manager.get_env_vars()
 
@@ -54,7 +45,4 @@ class TestEnvVarsManager:
 
     def test_get_env_vars_error_invalid_schema(self, logger):
         with pytest.raises(ModelValidationError):
-            setup_env_vars_manager(
-                WrongEnvVars,
-                logger
-            )
+            setup_env_vars_manager(WrongEnvVars, logger)

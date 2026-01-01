@@ -1,28 +1,29 @@
 # pylint: disable=W0511
-from prometheus_client import Counter, generate_latest
 from fastapi import Response
+from prometheus_client import Counter, generate_latest
+
 
 class MetricsManager:
-    def __init__(self): # TODO: add namespace
+    def __init__(self):  # TODO: add namespace
         self._embeddings_tokens_consumed = Counter(
-            'embeddings_tokens_consumed',
-            'Number of embeddings tokens consumed',
-            namespace='console' # TODO: add to configurations
+            "embeddings_tokens_consumed",
+            "Number of embeddings tokens consumed",
+            namespace="console",  # TODO: add to configurations
         )
         self._requests_tokens_consumed = Counter(
-            'requests_tokens_consumed',
-            'Number of requests tokens consumed',
-            namespace='console' # TODO: add to configurations
+            "requests_tokens_consumed",
+            "Number of requests tokens consumed",
+            namespace="console",  # TODO: add to configurations
         )
         self._reply_tokens_consumed = Counter(
-            'reply_tokens_consumed',
-            'Number of reply tokens consumed',
-            namespace='console' # TODO: add to configurations
+            "reply_tokens_consumed",
+            "Number of reply tokens consumed",
+            namespace="console",  # TODO: add to configurations
         )
         self._ingestion_tokens_consumed = Counter(
-            'ingestion_tokens_consumed',
-            'Number of ingestion tokens consumed',
-            namespace='console' # TODO: add to configurations
+            "ingestion_tokens_consumed",
+            "Number of ingestion tokens consumed",
+            namespace="console",  # TODO: add to configurations
         )
 
     @property
@@ -34,7 +35,7 @@ class MetricsManager:
     def reply_tokens_consumed(self) -> Counter:
         """Counter representing the total number of tokens consumed when generating replies."""
         return self._reply_tokens_consumed
-    
+
     @property
     def requests_tokens_consumed(self) -> Counter:
         """Counter representing the total number of tokens consumed when making requests."""

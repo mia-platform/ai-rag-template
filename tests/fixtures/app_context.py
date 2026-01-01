@@ -1,14 +1,14 @@
 from unittest.mock import MagicMock
+
 import pytest
 
-from src.configurations.variables_model import Variables
 from src.configurations.service_model import RagTemplateConfigSchema
+from src.configurations.variables_model import Variables
 from src.context import AppContext, AppContextParams
 
 
 @pytest.fixture
 def app_context():
-
     mock_env_vars = Variables(
         PORT="3000",
         LOG_LEVEL="DEBUG",
@@ -19,26 +19,19 @@ def app_context():
     )
 
     mock_configurations = RagTemplateConfigSchema(
-        llm={
-            "name": "gpt-3.5-turbo"
-        },
-        embeddings={
-            "name": "embeddings_name"
-        },
+        llm={"name": "gpt-3.5-turbo"},
+        embeddings={"name": "embeddings_name"},
         vectorStore={
             "dbName": "sample_mflix",
             "collectionName": "movies",
             "indexName": "openai_vector_index",
             "relevanceScoreFn": "euclidean",
             "embeddingKey": "embedding",
-            "textKey": "page_content"
-        }
+            "textKey": "page_content",
+        },
     )
 
     app_context_params = AppContextParams(
-        logger=MagicMock(),
-        metrics_manager=MagicMock(),
-        env_vars=mock_env_vars,
-        configurations=mock_configurations
+        logger=MagicMock(), metrics_manager=MagicMock(), env_vars=mock_env_vars, configurations=mock_configurations
     )
     return AppContext(params=app_context_params)

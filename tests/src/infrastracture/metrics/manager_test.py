@@ -2,6 +2,7 @@ from fastapi import Response
 
 from src.infrastracture.metrics.manager import MetricsManager
 
+
 def test_expose_metrics():
     metrics_manager = MetricsManager()
 
@@ -10,8 +11,9 @@ def test_expose_metrics():
 
     # Check that the response contains the metrics data
     assert isinstance(response, Response)
-    assert 'embeddings_tokens_consumed' in body
-    assert response.media_type == 'text/plain'
+    assert "embeddings_tokens_consumed" in body
+    assert response.media_type == "text/plain"
+
 
 def test_embeddings_tokens_consumed_counter():
     metrics_manager = MetricsManager()
@@ -24,7 +26,8 @@ def test_embeddings_tokens_consumed_counter():
     metrics_data = response.body.decode()
 
     # Check that the counter value is correct
-    assert 'embeddings_tokens_consumed_total 1.0' in metrics_data
+    assert "embeddings_tokens_consumed_total 1.0" in metrics_data
+
 
 def test_embeddings_tokens_consumed_counter_0():
     metrics_manager = MetricsManager()
@@ -34,4 +37,4 @@ def test_embeddings_tokens_consumed_counter_0():
     metrics_data = response.body.decode()
 
     # Check that the counter value is correct
-    assert 'embeddings_tokens_consumed_total 0.0' in metrics_data
+    assert "embeddings_tokens_consumed_total 0.0" in metrics_data
