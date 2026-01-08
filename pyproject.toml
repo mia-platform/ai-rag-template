@@ -4,6 +4,7 @@ version = "0.5.3"
 description = "RAG template for AI applications"
 requires-python = ">=3.13"
 dependencies = [
+    "aiohttp==3.13.3",
     "attrs==23.2.0",
     "beautifulsoup4==4.12.3",
     "dataclasses-json==0.6.4",
@@ -28,15 +29,15 @@ dependencies = [
     "pydantic-settings==2.7.0",
     "pydantic_core==2.20.1",
     "pymongo==4.8.0",
+    "python-multipart==0.0.19",
     "PyMuPDF==1.24.14",
     "requests==2.32.5",
     "starlette==0.50.0",
     "tiktoken==0.8.0",
     "typing_extensions==4.12.2",
-    "urllib3==2.6.0",
+    "urllib3==2.6.3",
     "virtualenv==20.29.1",
     "uvicorn==0.40.0",
-    "python-multipart==0.0.19",
 ]
 
 [build-system]
