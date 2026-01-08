@@ -18,7 +18,7 @@ from src.lib.vector_search_index_updater import VectorSearchIndexUpdater
 
 
 def create_app(context: AppContext) -> FastAPI:
-    app = FastAPI(openapi_url="/documentation/json", redoc_url=None, title="ai-rag-template", version="0.5.3")
+    app = FastAPI(openapi_url="/documentation/json", redoc_url=None, title="ai-rag-template", version="0.5.4")
 
     app.add_middleware(AppContextMiddleware, app_context=context)
     app.add_middleware(LoggerMiddleware, logger=context.logger)

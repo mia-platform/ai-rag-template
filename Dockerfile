@@ -20,7 +20,7 @@ LABEL maintainer="%CUSTOM_PLUGIN_CREATOR_USERNAME%" \
       name="ai-rag-template" \
       description="%CUSTOM_PLUGIN_SERVICE_DESCRIPTION%" \
       eu.mia-platform.url="https://www.mia-platform.eu" \
-      eu.mia-platform.version="0.5.3"
+      eu.mia-platform.version="0.5.4"
 
 USER python
 
