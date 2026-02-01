@@ -72,20 +72,20 @@ jobs:
         show-progress: false
 
     - name: Docker Login to GitHub Repository
-      uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Docker Login to DockerHub
-      uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
       with:
         username: ${{ secrets.BOT_DOCKER_USERNAME }}
         password: ${{ secrets.BOT_DOCKER_TOKEN }}
 
     - name: Login to Mia registry
-      uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
       with:
         registry: nexus.mia-platform.eu
         username: ${{ secrets.NEXUS_USER }}
@@ -137,7 +137,7 @@ jobs:
         cache-to: type=gha,mode=max
 
     - name: Generate SBOM
-      uses: anchore/sbom-action@a930d0ac434e3182448fe678398ba5713717112a # v0.21.0
+      uses: anchore/sbom-action@deef08a0db64bfad603422135db61477b16cef56 # v0.22.1
       if: github.ref_type == 'tag'
       with:
         artifact-name: rag-chatbot-api-sbom.spdx.json
