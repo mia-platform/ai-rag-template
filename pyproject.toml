@@ -20,7 +20,7 @@ dependencies = [
     "langchain-experimental==0.3.3",
     "langchain-openai==0.3.3",
     "langchain-text-splitters==0.3.9",
-    "langsmith==0.3.45",
+    "langsmith==0.7.31",
     "markdown-it-py==3.0.0",
     "openai==1.58.1",
     "pathspec==0.12.1",
