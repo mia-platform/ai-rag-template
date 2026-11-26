@@ -4,6 +4,9 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
+# Upgrade the pip bundled with the system Python (vendored msgpack/urllib3 CVEs)
+RUN python -m pip install --no-cache-dir --root-user-action=ignore --upgrade pip
+
 RUN useradd -s /bin/bash python
 
 EXPOSE 3000
