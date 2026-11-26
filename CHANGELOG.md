@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Security
+
+- Updated Python dependencies (aiohttp, anyio, certifi, datamodel-code-generator, dnspython, langchain, langchain-core, langsmith, msgpack, orjson, pillow, pymongo, python-multipart, setuptools, soupsieve, urllib3) and the Docker base image (`python:3.13.18-slim-trixie` with OS packages upgraded) to fix critical and high vulnerabilities
+
 ## 0.6.0 - 2026-01-08
 
 ## 0.5.4 - 2026-01-08
