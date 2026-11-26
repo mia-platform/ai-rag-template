@@ -95,7 +95,7 @@ requires-dist = [
     { name = "pydantic-settings", specifier = "==2.7.0" },
     { name = "pymongo", specifier = "==4.18.3" },
     { name = "pymupdf", specifier = "==1.24.14" },
-    { name = "python-multipart", specifier = "==0.0.19" },
+    { name = "python-multipart", specifier = "==0.0.30" },
     { name = "requests", specifier = "==2.32.5" },
     { name = "starlette", specifier = "==0.50.0" },
     { name = "tiktoken", specifier = "==0.8.0" },
@@ -1943,11 +1943,11 @@ wheels = [
 
 [[package]]
 name = "python-multipart"
-version = "0.0.19"
+version = "0.0.30"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c1/19/93bfb43a3c41b1dd0fa1fa66a08286f6467d36d30297a7aaab8c0b176a26/python_multipart-0.0.19.tar.gz", hash = "sha256:905502ef39050557b7a6af411f454bc19526529ca46ae6831508438890ce12cc", size = 36886, upload-time = "2024-12-01T07:00:44.33Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4b/82/c8cd43a6e0719bf5a3b034f6726dd701f75829c08944c83d4b95d02ed0e8/python_multipart-0.0.30.tar.gz", hash = "sha256:0edfe0475c1f46ddd3ff7785a626f6118af32bdcf359bb21260367313bb32118", size = 46316, upload-time = "2026-05-31T19:24:55.198Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/f4/ddd0fcdc454cf3870153ae16a818256523d31c3c8136e216bc6836ed4cd1/python_multipart-0.0.19-py3-none-any.whl", hash = "sha256:f8d5b0b9c618575bf9df01c684ded1d94a338839bdd8223838afacfb4bb2082d", size = 24448, upload-time = "2024-12-01T07:00:40.031Z" },
+    { url = "https://files.pythonhosted.org/packages/1c/fd/0318007beb234790993d3ec5afd051d1dbceb733e81e3afe2b981ece3f37/python_multipart-0.0.30-py3-none-any.whl", hash = "sha256:830964def8c90607ac5daa00514e3987815865713ade8d20febc9177ac0c3c5b", size = 29730, upload-time = "2026-05-31T19:24:53.814Z" },
 ]
 
 [[package]]
