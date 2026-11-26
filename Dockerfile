@@ -1,4 +1,4 @@
-FROM python:3.13-slim
+FROM python:3.13.18-slim-trixie
 
 RUN useradd -s /bin/bash python
 
