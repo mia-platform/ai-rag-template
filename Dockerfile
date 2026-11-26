@@ -1,5 +1,9 @@
 FROM python:3.13.18-slim-trixie
 
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN useradd -s /bin/bash python
 
 EXPOSE 3000
