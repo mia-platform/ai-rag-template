@@ -28,7 +28,7 @@ dependencies = [
     "pydantic==2.12.5",
     "pydantic-settings==2.7.0",
     "pydantic_core==2.41.5",
-    "pymongo==4.8.0",
+    "pymongo==4.18.3",
     "python-multipart==0.0.19",
     "PyMuPDF==1.24.14",
     "requests==2.32.5",
